@@ -1,0 +1,135 @@
+module Engage.Form.Company.Json exposing
+    ( decoder
+    , emptyCompanies
+    , emptyCompany
+    , encoder
+    , encoderWith
+    )
+
+import Date exposing (Date)
+import Date.Extra.Format
+import Engage.Entity.Address as Address
+import Engage.Form.Company.Types exposing (CompaniesData, CompanyData)
+import Json.Decode as Decode exposing (Decoder)
+import Json.Decode.Pipeline exposing (decode, required)
+import Json.Encode as Encode
+import String
+
+
+encoder : { a | participantId : Int, companies : CompaniesData {} } -> Encode.Value
+encoder =
+    encoderWith []
+
+
+encoderWith : List ( String, Encode.Value ) -> { a | participantId : Int, companies : CompaniesData {} } -> Encode.Value
+encoderWith additional { participantId, companies } =
+    Encode.object
+        (additional
+            ++ [ ( "participantId", Encode.int participantId )
+               , ( "companies"
+                 , Encode.list
+                    [ companyEncoder True companies.currentCompany
+                    , companyEncoder False companies.previousCompany
+                    ]
+                 )
+               ]
+        )
+
+
+companyEncoder : Bool -> CompanyData -> Encode.Value
+companyEncoder isCurrent company =
+    if String.isEmpty company.name then
+        Encode.null
+
+    else
+        Encode.object
+            [ ( "companyId", Maybe.map Encode.int company.companyId |> Maybe.withDefault Encode.null )
+            , ( "participantCompanyId", Maybe.map Encode.int company.participantCompanyId |> Maybe.withDefault Encode.null )
+            , ( "name", Encode.string company.name )
+            , ( "position", Encode.string company.position )
+            , ( "startDate"
+              , company.startDate
+                    |> Maybe.map (Date.Extra.Format.isoString >> Encode.string)
+                    |> Maybe.withDefault Encode.null
+              )
+            , ( "endDate"
+              , company.endDate
+                    |> Maybe.map (Date.Extra.Format.isoString >> Encode.string)
+                    |> Maybe.withDefault Encode.null
+              )
+            , ( "address1", Encode.string company.address.address1 )
+            , ( "address2", Encode.string company.address.address2 )
+            , ( "city", Encode.string company.address.city )
+            , ( "regionId"
+              , company.address.region
+                    |> Maybe.map (Tuple.first >> Encode.int)
+                    |> Maybe.withDefault Encode.null
+              )
+            , ( "countryId"
+              , company.address.country
+                    |> Maybe.map (Tuple.first >> Encode.int)
+                    |> Maybe.withDefault Encode.null
+              )
+            , ( "postalCode", Encode.string company.address.postalCode )
+            , ( "isCurrent", Encode.bool isCurrent )
+            ]
+
+
+decoder : Decoder (CompaniesData {})
+decoder =
+    let
+        listToCompanies companies =
+            case companies of
+                current :: previous :: _ ->
+                    Decode.succeed { currentCompany = current, previousCompany = previous }
+
+                current :: [] ->
+                    Decode.succeed { currentCompany = current, previousCompany = emptyCompany }
+
+                _ ->
+                    Decode.fail <| "Need at least 2 companies"
+    in
+    Decode.field "companies" (Decode.list companyDecoder)
+        |> Decode.andThen listToCompanies
+
+
+companyDecoder : Decoder CompanyData
+companyDecoder =
+    decode CompanyData
+        |> required "companyId" (Decode.maybe Decode.int)
+        |> required "participantCompanyId" (Decode.maybe Decode.int)
+        |> required "name" Decode.string
+        |> required "position" (Decode.maybe Decode.string |> Decode.map (Maybe.withDefault ""))
+        |> required "startDate" (Decode.maybe isoDateDecoder)
+        |> required "endDate" (Decode.maybe isoDateDecoder)
+        |> required "address" (Decode.maybe Address.decoder |> Decode.map (Maybe.withDefault Address.empty))
+
+
+isoDateDecoder : Decoder Date
+isoDateDecoder =
+    Decode.string
+        |> Decode.andThen
+            (\str ->
+                Date.fromString str
+                    |> Result.map Decode.succeed
+                    |> Result.withDefault (Decode.fail "Invalid date format")
+            )
+
+
+emptyCompanies : CompaniesData {}
+emptyCompanies =
+    { currentCompany = emptyCompany
+    , previousCompany = emptyCompany
+    }
+
+
+emptyCompany : CompanyData
+emptyCompany =
+    { companyId = Nothing
+    , participantCompanyId = Nothing
+    , name = ""
+    , position = ""
+    , startDate = Nothing
+    , endDate = Nothing
+    , address = Address.empty
+    }

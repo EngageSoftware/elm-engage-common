@@ -1,0 +1,218 @@
+module Engage.UI.PictureUpload exposing
+    ( Attribute
+    , File
+    , PortOutKey(..)
+    , browse
+    , dropZone
+    , onFiles
+    , onLoad
+    , picture
+    , pictureUpload
+    , remove
+    )
+
+import Engage.Html.Extra as HtmlExtra
+import Engage.Namespace as Namespace exposing (Namespace)
+import Engage.UI.Attribute as Attribute
+import Engage.UI.Button as Button
+import Engage.UI.PictureUpload.Css exposing (Class(..))
+import Engage.UI.Svg as Svg
+import Html exposing (..)
+import Html.Attributes exposing (..)
+import Html.CssHelpers
+import Html.Events exposing (onClick)
+import Html.Keyed
+import Json.Decode
+import Svg.Attributes
+import Time exposing (Time)
+
+
+type PortOutKey
+    = PictureUploadLoaded
+
+
+type alias File =
+    { lastModified : Maybe Time
+    , name : String
+    , size : Int
+    , mimeType : String
+    , dataURL : String
+    }
+
+
+fileDecoder : Json.Decode.Decoder File
+fileDecoder =
+    Json.Decode.map5 File
+        (Json.Decode.maybe (Json.Decode.field "lastModified" Json.Decode.float))
+        (Json.Decode.field "name" Json.Decode.string)
+        (Json.Decode.field "size" Json.Decode.int)
+        (Json.Decode.field "mimeType" Json.Decode.string)
+        (Json.Decode.field "dataURL" Json.Decode.string)
+
+
+type alias InternalAttribute msg =
+    { browseButton : Maybe { text : String, msg : msg }
+    , dropZoneText : String
+    , onLoad : Maybe (String -> msg)
+    , onFiles : Maybe (List File -> msg)
+    , pictureData : String
+    , onRemove : Maybe ( String, msg )
+    }
+
+
+emptyAttribute : InternalAttribute msg
+emptyAttribute =
+    { browseButton = Nothing
+    , dropZoneText = "Drop your file here"
+    , onLoad = Nothing
+    , onFiles = Nothing
+    , pictureData = ""
+    , onRemove = Nothing
+    }
+
+
+type alias Attribute msg =
+    InternalAttribute msg -> InternalAttribute msg
+
+
+browse : String -> msg -> Attribute msg
+browse text msg =
+    \attribute -> { attribute | browseButton = Just { text = text, msg = msg } }
+
+
+dropZone : String -> Attribute msg
+dropZone text =
+    \attribute -> { attribute | dropZoneText = text }
+
+
+onLoad : (String -> msg) -> Attribute msg
+onLoad msg =
+    \attribute -> { attribute | onLoad = Just msg }
+
+
+onFiles : (List File -> msg) -> Attribute msg
+onFiles msg =
+    \attribute -> { attribute | onFiles = Just msg }
+
+
+picture : String -> Attribute msg
+picture pictureData =
+    \attribute -> { attribute | pictureData = pictureData }
+
+
+remove : String -> msg -> Attribute msg
+remove text msg =
+    \attribute -> { attribute | onRemove = Just ( text, msg ) }
+
+
+pictureUpload : Namespace -> String -> List (Attribute msg) -> Html msg
+pictureUpload namespace domId attributes =
+    let
+        { class } =
+            namespace
+                |> Namespace.toString
+                |> Html.CssHelpers.withNamespace
+
+        attribute =
+            Attribute.process emptyAttribute attributes
+    in
+    Html.Keyed.node "div"
+        [ class [ PictureUpload ] ]
+        [ ( domId, dropZoneView namespace attribute domId )
+        , ( "removeButton", removeButton namespace attribute )
+
+        --, ( "browseButton", browseButton namespace attribute )
+        ]
+
+
+dropZoneView : Namespace -> InternalAttribute msg -> String -> Html msg
+dropZoneView namespace attribute domId =
+    let
+        { class } =
+            namespace
+                |> Namespace.toString
+                |> Html.CssHelpers.withNamespace
+
+        onFiles : (List File -> msg) -> Html.Attribute msg
+        onFiles msg =
+            Html.Events.on "files"
+                (Json.Decode.map msg
+                    (Json.Decode.field "detail"
+                        (Json.Decode.list fileDecoder)
+                    )
+                )
+    in
+    div
+        ([ class [ PictureUploadDropZone ]
+         , id domId
+         , style
+            (if String.isEmpty attribute.pictureData then
+                []
+
+             else
+                [ ( "background-image", "url(" ++ attribute.pictureData ++ ")" )
+                ]
+            )
+         ]
+            ++ (attribute.onFiles
+                    |> Maybe.map (onFiles >> List.singleton)
+                    |> Maybe.withDefault []
+               )
+        )
+        [ if String.isEmpty attribute.pictureData then
+            Svg.upload namespace "Upload" [ width 50, height 50 ]
+
+          else
+            text ""
+        , if String.isEmpty attribute.pictureData then
+            text <| attribute.dropZoneText
+
+          else
+            text ""
+        , attribute.onLoad
+            |> Maybe.map (\msg -> HtmlExtra.domLoadNotifier (msg domId))
+            |> Maybe.withDefault HtmlExtra.none
+        ]
+
+
+removeButton : Namespace -> InternalAttribute msg -> Html msg
+removeButton namespace attribute =
+    let
+        { class } =
+            namespace
+                |> Namespace.toString
+                |> Html.CssHelpers.withNamespace
+    in
+    if String.isEmpty attribute.pictureData then
+        text ""
+
+    else
+        attribute.onRemove
+            |> Maybe.map
+                (\( text, msg ) ->
+                    button [ type_ "button", class [ PictureUploadRemoveButton ], onClick msg, title text ]
+                        [ Svg.remove namespace text [ Svg.Attributes.width "100%", Svg.Attributes.height "100%" ] ]
+                )
+            |> Maybe.withDefault (text "")
+
+
+pictureView : Namespace -> String -> Html msg
+pictureView namespace pictureData =
+    let
+        { class } =
+            namespace
+                |> Namespace.toString
+                |> Html.CssHelpers.withNamespace
+    in
+    if String.isEmpty pictureData then
+        HtmlExtra.none
+
+    else
+        img [ class [ PictureUploadPreview ], src pictureData ] []
+
+
+browseButton : Namespace -> InternalAttribute msg -> Html msg
+browseButton namespace attribute =
+    attribute.browseButton
+        |> Maybe.map (\{ text, msg } -> Button.standardSmall { attributes = [ onClick msg ], text = text, namespace = namespace })
+        |> Maybe.withDefault HtmlExtra.none

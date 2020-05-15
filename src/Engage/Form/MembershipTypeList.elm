@@ -1,0 +1,66 @@
+module Engage.Form.MembershipTypeList exposing
+    ( MembershipType
+    , form
+    )
+
+import Engage.Namespace as Namespace
+import Engage.UI.Accordion as Accordion
+import Engage.UI.Error as Error
+import Html exposing (Html)
+import String
+
+
+type alias MembershipType =
+    { name : String
+    , value : Int
+    , description : String
+    , price : String
+    }
+
+
+type alias Args a msg =
+    { a
+        | id : String
+        , priceText : String
+        , membershipTypeList : List MembershipType
+        , labelText : String
+        , helpText : String
+        , requiredText : Maybe String
+        , accordionExpandButtonText : String
+        , onChange : { onlyStateChange : Bool } -> Accordion.State -> Maybe MembershipType -> msg
+        , status : Error.Status
+    }
+
+
+form : Args a msg -> Accordion.State -> Maybe MembershipType -> Html msg
+form ({ id, membershipTypeList, labelText, onChange, status, helpText, accordionExpandButtonText, requiredText } as args) state membershipType =
+    let
+        onChangeHandler { onlyStateChange } state value =
+            onChange { onlyStateChange = onlyStateChange } state (membershipTypeList |> List.filter (.value >> toString >> (==) value) |> List.head)
+
+        toAccordionItem membershipType =
+            { id = toString membershipType.value
+            , text = membershipType.name
+            , description =
+                membershipType.description
+                    ++ (if String.isEmpty membershipType.price then
+                            ""
+
+                        else
+                            "\n\n" ++ args.priceText ++ membershipType.price
+                       )
+            }
+    in
+    Accordion.accordionRadioList
+        { namespace = Namespace.engagecore
+        , id = id
+        , labelText = labelText
+        , helpText = helpText
+        , requiredText = requiredText
+        , onChange = onChangeHandler
+        , status = status
+        , items = membershipTypeList |> List.map toAccordionItem
+        , accordionExpandButtonText = accordionExpandButtonText
+        }
+        state
+        (membershipType |> Maybe.map (.value >> toString) |> Maybe.withDefault "")
