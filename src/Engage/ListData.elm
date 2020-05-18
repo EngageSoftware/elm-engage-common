@@ -17,41 +17,63 @@ module Engage.ListData exposing
     , view
     )
 
+{-| ListData
+
+@docs ListData, Edit
+
+@docs cancelEdit, decoder, dict, editView, empty, fromList, getEdit, isEditing, isEmpty, mapEdit, newData, setEdit, setState, view
+
+-}
+
 import Dict exposing (Dict)
 import Html exposing (Html)
 import Json.Decode as JD exposing (Decoder)
 
 
+{-| A ListData type
+-}
 type ListData state a comparable
     = ListData (Dict comparable a) (Edit state a)
 
 
+{-| An Edit type
+-}
 type Edit state a
     = NoEdit
     | Edit state a
 
 
+{-| Get the dict from the list data
+-}
 dict : ListData state a comparable -> Dict comparable a
 dict (ListData dict _) =
     dict
 
 
+{-| Check if the list is empty
+-}
 isEmpty : ListData state a comparable -> Bool
 isEmpty (ListData dict _) =
     Dict.isEmpty dict
 
 
+{-| Get an empty ListData
+-}
 empty : ListData state a comparable
 empty =
     ListData Dict.empty NoEdit
 
 
+{-| ListData decoder
+-}
 decoder : (a -> comparable) -> Decoder (List a) -> Decoder (ListData state a comparable)
 decoder toKey listDecoder =
     listDecoder
         |> JD.map (fromList toKey)
 
 
+{-| Get a ListData from a List
+-}
 fromList : (a -> comparable) -> List a -> ListData state a comparable
 fromList toKey list =
     let
@@ -63,6 +85,8 @@ fromList toKey list =
     ListData dict NoEdit
 
 
+{-| View helper for a ListData
+-}
 view : (a -> comparable) -> (a -> comparable) -> (a -> Html msg) -> ListData state a comparable -> List (Html msg)
 view sorter toKey viewer (ListData dict edit) =
     let
@@ -94,11 +118,15 @@ view sorter toKey viewer (ListData dict edit) =
         |> List.map viewer
 
 
+{-| Get a new list data from new data
+-}
 newData : state -> a -> ListData state a comparable -> ListData state a comparable
 newData state a (ListData dict edit) =
     ListData dict (Edit state a)
 
 
+{-| Set the edit of the ListData
+-}
 setEdit : state -> comparable -> ListData state a comparable -> ListData state a comparable
 setEdit state key (ListData dict edit) =
     case Dict.get key dict of
@@ -109,6 +137,8 @@ setEdit state key (ListData dict edit) =
             ListData dict edit
 
 
+{-| Get the edit of the ListData
+-}
 getEdit : ListData state a comparable -> Maybe ( state, a )
 getEdit (ListData dict edit) =
     case edit of
@@ -119,6 +149,8 @@ getEdit (ListData dict edit) =
             Just ( state, a )
 
 
+{-| Check if the ListData is editing
+-}
 isEditing : ListData state a comparable -> Bool
 isEditing (ListData dict edit) =
     case edit of
@@ -129,6 +161,8 @@ isEditing (ListData dict edit) =
             True
 
 
+{-| Edit view helper
+-}
 editView : (state -> a -> Html msg) -> ListData state a comparable -> Html msg
 editView viewer (ListData dict edit) =
     case edit of
@@ -139,6 +173,8 @@ editView viewer (ListData dict edit) =
             viewer state a
 
 
+{-| Map an edit to a ListData
+-}
 mapEdit : (state -> a -> ( state, a )) -> ListData state a comparable -> ListData state a comparable
 mapEdit update (ListData dict edit) =
     case edit of
@@ -153,11 +189,15 @@ mapEdit update (ListData dict edit) =
             ListData dict (Edit newState newA)
 
 
+{-| Cancel an edit
+-}
 cancelEdit : ListData state a comparable -> ListData state a comparable
 cancelEdit (ListData dict edit) =
     ListData dict NoEdit
 
 
+{-| Set the editing state
+-}
 setState : state -> ListData state a comparable -> ListData state a comparable
 setState state (ListData dict edit) =
     case edit of

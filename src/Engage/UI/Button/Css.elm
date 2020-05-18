@@ -5,7 +5,9 @@ module Engage.UI.Button.Css exposing
     )
 
 import Css exposing (..)
-import Css.Namespace
+import Css.Foreign exposing (Snippet, class)
+import DEPRECATED.Css.Namespace
+import DEPRECATED.Css.File
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Importance(..), Size(..))
 import Engage.Styles.Css as BaseCss
@@ -18,9 +20,9 @@ type Class
     | Button Importance Size
 
 
-css : Namespace -> Theme -> Stylesheet
+css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
-    (stylesheet << Css.Namespace.namespace (Namespace.toString namespace))
+    (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
@@ -58,14 +60,14 @@ snippets theme =
     ]
 
 
-buttonMixin : Theme -> Mixin
+buttonMixin : Theme -> Style
 buttonMixin theme =
     case theme of
         Theme.None ->
-            mixin []
+            batch []
 
         _ ->
-            mixin
+            batch
                 [ BaseCss.normalizeMixin
                 , fontSize (em 0.875)
                 , lineHeight (num 1.2)
@@ -82,7 +84,7 @@ buttonMixin theme =
 -- SIZES
 
 
-smallMixin : Theme -> Mixin
+smallMixin : Theme -> Style
 smallMixin theme =
     let
         padding =
@@ -94,14 +96,14 @@ smallMixin theme =
         margin =
             Theme.margin theme (.button >> .margin)
     in
-    mixin
+    batch
         [ padding.small
         , fontSize.small
         , margin.small
         ]
 
 
-largeMixin : Theme -> Mixin
+largeMixin : Theme -> Style
 largeMixin theme =
     let
         padding =
@@ -113,7 +115,7 @@ largeMixin theme =
         margin =
             Theme.margin theme (.button >> .margin)
     in
-    mixin
+    batch
         [ padding.base
         , fontSize.base
         , margin.base
@@ -124,13 +126,13 @@ largeMixin theme =
 -- IMPORTANCe
 
 
-primaryMixin : Theme -> Mixin
+primaryMixin : Theme -> Style
 primaryMixin theme =
     let
         palette =
             Theme.palette theme
     in
-    mixin
+    batch
         [ Theme.backgroundColor palette.buttonPrimary.base
         , Theme.color palette.buttonPrimary.contrast
         , Theme.border3 (px 2) solid palette.buttonPrimary.tertiary
@@ -142,13 +144,13 @@ primaryMixin theme =
         ]
 
 
-standardMixin : Theme -> Mixin
+standardMixin : Theme -> Style
 standardMixin theme =
     let
         palette =
             Theme.palette theme
     in
-    mixin
+    batch
         [ Theme.backgroundColor palette.buttonStandard.base
         , Theme.color palette.buttonStandard.contrast
         , Theme.border3 (px 2) solid palette.buttonStandard.tertiary
@@ -160,13 +162,13 @@ standardMixin theme =
         ]
 
 
-divertMixin : Theme -> Mixin
+divertMixin : Theme -> Style
 divertMixin theme =
     let
         palette =
             Theme.palette theme
     in
-    mixin
+    batch
         [ Theme.backgroundColor palette.buttonDivert.contrast
         , Theme.color palette.buttonDivert.base
         ]

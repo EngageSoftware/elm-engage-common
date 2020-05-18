@@ -49,10 +49,10 @@ toCss size =
             toString number ++ "px"
 
 
-fontSize : Size -> Css.Mixin
+fontSize : Size -> Css.Style
 fontSize size =
     if size == NotSet then
-        Css.mixin []
+        Css.batch []
 
     else
         Css.property "font-size" (toCss size)

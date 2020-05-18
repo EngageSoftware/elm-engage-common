@@ -75,11 +75,11 @@ fromList units =
             padding unit1
 
 
-toCss : Padding -> Css.Mixin
+toCss : Padding -> Css.Style
 toCss padding =
     case padding of
         NotSet ->
-            Css.mixin []
+            Css.batch []
 
         Padding size ->
             Css.property "padding" (Size.toCss size)

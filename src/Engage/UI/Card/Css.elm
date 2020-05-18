@@ -4,7 +4,9 @@ module Engage.UI.Card.Css exposing
     )
 
 import Css exposing (..)
-import Css.Namespace
+import Css.Foreign exposing (Snippet, class, descendants)
+import DEPRECATED.Css.Namespace
+import DEPRECATED.Css.File
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Importance(..), Size(..))
 import Engage.Styles.Css as BaseCss
@@ -22,9 +24,9 @@ type Class
     | CardSubtitle
 
 
-css : Namespace -> Theme -> Stylesheet
+css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
-    (stylesheet << Css.Namespace.namespace (Namespace.toString namespace))
+    (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
@@ -47,9 +49,9 @@ snippets theme =
     ]
 
 
-cardMixin : Theme -> Mixin
+cardMixin : Theme -> Style
 cardMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , border3 (px 1) solid (rgba 0 0 0 0.15)
         , displayFlex
@@ -61,9 +63,9 @@ cardMixin theme =
         ]
 
 
-headerMixin : Theme -> Mixin
+headerMixin : Theme -> Style
 headerMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , padding (px 15)
         , fontWeight bold
@@ -72,18 +74,18 @@ headerMixin theme =
         ]
 
 
-bodyMixin : Theme -> Mixin
+bodyMixin : Theme -> Style
 bodyMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , width (pct 100)
         , padding2 (em 1.5) (em 1.5)
         ]
 
 
-editMixin : Theme -> Mixin
+editMixin : Theme -> Style
 editMixin theme =
-    mixin
+    batch
         [ descendants
             [ class (ButtonCss.Button Primary Small)
                 [ margin zero ]

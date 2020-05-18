@@ -16,6 +16,18 @@ module Engage.ThemeHelper exposing
     , spacing
     )
 
+{-| ThemeHelper
+
+@docs backgroundColor
+
+@docs border3, borderBottom3, borderLeft3, borderRight3, borderTop3
+    
+@docs color, fill, fontFamily, fontSize
+
+@docs margin, messagePalette, padding, palette, spacing
+
+-}
+
 import Css
 import Engage.Styles.Class exposing (MessageType(..))
 import Engage.Theme as Theme exposing (ColorPalette, Theme)
@@ -31,6 +43,8 @@ import Engage.Unit.Relative as Relative exposing (..)
 import Engage.Unit.Size as Size exposing (Size)
 
 
+{-| Get the Palette from the theme
+-}
 palette : Theme -> Theme.Palette
 palette theme =
     case theme of
@@ -47,6 +61,8 @@ palette theme =
             ISMA.palette
 
 
+{-| Get the Spacing from the theme
+-}
 spacing : Theme -> Theme.Spacing
 spacing theme =
     case theme of
@@ -63,6 +79,8 @@ spacing theme =
             ISMA.spacing
 
 
+{-| Get the Style from the theme
+-}
 style : Theme -> Theme.Style
 style theme =
     case theme of
@@ -79,6 +97,8 @@ style theme =
             ISMA.style
 
 
+{-| Get the ColorPalette from the theme
+-}
 messagePalette : MessageType -> Theme -> ColorPalette
 messagePalette messageType theme =
     let
@@ -99,7 +119,9 @@ messagePalette messageType theme =
             themePalette.info
 
 
-padding : Theme -> (Theme.Spacing -> { base : Padding, small : Relative }) -> { base : Css.Mixin, small : Css.Mixin }
+{-| Get the padding from the theme
+-}
+padding : Theme -> (Theme.Spacing -> { base : Padding, small : Relative }) -> { base : Css.Style, small : Css.Style }
 padding theme section =
     let
         themeSpacing =
@@ -113,7 +135,9 @@ padding theme section =
     }
 
 
-fontSize : Theme -> (Theme.Style -> { base : Size, small : Relative }) -> { base : Css.Mixin, small : Css.Mixin, baseSize : String, smallSize : String }
+{-| Get the font size from the theme
+-}
+fontSize : Theme -> (Theme.Style -> { base : Size, small : Relative }) -> { base : Css.Style, small : Css.Style, baseSize : String, smallSize : String }
 fontSize theme section =
     let
         themeStyle =
@@ -129,13 +153,15 @@ fontSize theme section =
     }
 
 
-fontFamily : Theme -> (Theme.Style -> FontFamily) -> Css.Mixin
+{-| Get the font family from the theme
+-}
+fontFamily : Theme -> (Theme.Style -> FontFamily) -> Css.Style
 fontFamily theme section =
     let
         toCss fontFamily =
             case fontFamily of
                 FontFamily.NotSet ->
-                    Css.mixin []
+                    Css.batch []
 
                 FontFamily fonts ->
                     Css.fontFamilies fonts
@@ -146,7 +172,9 @@ fontFamily theme section =
         |> toCss
 
 
-margin : Theme -> (Theme.Spacing -> { base : Margin, small : Relative }) -> { base : Css.Mixin, small : Css.Mixin }
+{-| Get the margin from the theme
+-}
+margin : Theme -> (Theme.Spacing -> { base : Margin, small : Relative }) -> { base : Css.Style, small : Css.Style }
 margin theme section =
     let
         themeSpacing =
@@ -163,77 +191,85 @@ margin theme section =
     }
 
 
-themeColor : (Css.Color -> Css.Mixin) -> Color.Color -> Css.Mixin
+{-| Get the theme color from the theme
+-}
+themeColor : (Css.Color -> Css.Style) -> Color.Color -> Css.Style
 themeColor f color =
     case color of
         Color.ColorNotSet ->
-            Css.mixin []
+            Css.batch []
 
         Color.Color cssColor ->
             f cssColor
 
 
-backgroundColor : Color.Color -> Css.Mixin
+{-| Get the background color from the theme
+-}
+backgroundColor : Color.Color -> Css.Style
 backgroundColor =
     themeColor Css.backgroundColor
 
 
-color : Color.Color -> Css.Mixin
+{-| Get the color from the theme
+-}
+color : Color.Color -> Css.Style
 color =
     themeColor Css.color
 
 
-fill : Color.Color -> Css.Mixin
+{-| Get the fill from the theme
+-}
+fill : Color.Color -> Css.Style
 fill =
     themeColor Css.fill
 
 
-themeBorder : (a -> b -> Css.ColorValue { alpha : Float, blue : Int, green : Int, red : Int } -> Css.Mixin) -> a -> b -> Color.Color -> Css.Mixin
+{-| Get the theme border from the theme
+-}
+themeBorder : (a -> b -> Css.ColorValue { alpha : Float, blue : Int, green : Int, red : Int } -> Css.Style) -> a -> b -> Color.Color -> Css.Style
 themeBorder f width style color =
     case color of
         Color.ColorNotSet ->
-            Css.mixin []
+            Css.batch []
 
         Color.Color cssColor ->
             f width style cssColor
 
 
 
--- NOTE: Css.BorderStyle is not exposed, so these functions cannot be annotated
---border3 : Css.Length compatibleA unitsA -> Css.BorderStyle compatibleB -> Color.Color -> Css.Mixin
-
-
+{-| Get a Css border 3
+-}
+border3 : Css.Length compatibleA unitsA -> Css.BorderStyle compatibleB -> Color.Color -> Css.Style
 border3 =
     themeBorder Css.border3
 
 
 
---borderBottom3 : Css.Length compatibleA unitsA -> Css.BorderStyle compatibleB -> Color.Color -> Css.Mixin
-
-
+{-| Get a Css border bottom 3
+-}
+borderBottom3 : Css.Length compatibleA unitsA -> Css.BorderStyle compatibleB -> Color.Color -> Css.Style
 borderBottom3 =
     themeBorder Css.borderBottom3
 
 
 
---borderRight3 : Css.Length compatibleA unitsA -> Css.BorderStyle compatibleB -> Color.Color -> Css.Mixin
-
-
+{-| Get a Css border right 3
+-}
+borderRight3 : Css.Length compatibleA unitsA -> Css.BorderStyle compatibleB -> Color.Color -> Css.Style
 borderRight3 =
     themeBorder Css.borderRight3
 
 
 
---borderTop3 : Css.Length compatibleA unitsA -> Css.BorderStyle compatibleB -> Color.Color -> Css.Mixin
-
-
+{-| Get a Css border top 3
+-}
+borderTop3 : Css.Length compatibleA unitsA -> Css.BorderStyle compatibleB -> Color.Color -> Css.Style
 borderTop3 =
     themeBorder Css.borderTop3
 
 
-
---borderLeft3 : Css.Length compatibleA unitsA -> Css.BorderStyle compatibleB -> Color.Color -> Css.Mixin
-
-
+{-| Get a Css border left 3
+-}
+borderLeft3 : Css.Length compatibleA unitsA -> Css.BorderStyle compatibleB -> Color.Color -> Css.Style
 borderLeft3 =
     themeBorder Css.borderLeft3

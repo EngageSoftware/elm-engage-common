@@ -4,19 +4,21 @@ module Engage.Styles.Css exposing
     )
 
 import Css exposing (..)
-import Css.Namespace
+import Css.Foreign exposing (descendants, everything)
+import DEPRECATED.Css.Namespace
+import DEPRECATED.Css.File
 import Engage.Namespace as Namespace exposing (Namespace)
 
 
-css : Namespace -> Stylesheet
+css : Namespace -> DEPRECATED.Css.File.Stylesheet
 css namespace =
-    (stylesheet << Css.Namespace.namespace (Namespace.toString namespace))
+    (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         []
 
 
-normalizeMixin : Mixin
+normalizeMixin : Style
 normalizeMixin =
-    mixin
+    batch
         [ boxSizing borderBox
         , descendants
             [ everything

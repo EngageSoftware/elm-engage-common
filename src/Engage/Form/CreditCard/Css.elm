@@ -1,8 +1,9 @@
 module Engage.Form.CreditCard.Css exposing (Class(..), Visibility(..), css, toVisibility)
 
 import Css exposing (..)
-import Css.Elements exposing (legend)
-import Css.Namespace
+import Css.Foreign exposing (legend, class, descendants, Snippet)
+import DEPRECATED.Css.Namespace
+import DEPRECATED.Css.File
 import Engage.Custom.Form.Css as CustomFormCss
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Css as BaseCss
@@ -35,9 +36,9 @@ toVisibility bool =
         Hidden
 
 
-css : Namespace -> Theme -> Stylesheet
+css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
-    (stylesheet << Css.Namespace.namespace (Namespace.toString namespace))
+    (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
@@ -72,7 +73,7 @@ snippets theme =
                         , displayFlex
                         , justifyContent center
                         , descendants
-                            [ Css.Elements.svg
+                            [ Css.Foreign.svg
                                 [ maxWidth (px 350)
                                 , width (pct 100)
                                 , height (pct 100)

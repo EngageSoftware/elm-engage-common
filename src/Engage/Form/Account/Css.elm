@@ -4,7 +4,9 @@ module Engage.Form.Account.Css exposing
     )
 
 import Css exposing (..)
-import Css.Namespace
+import Css.Foreign exposing (Snippet, class)
+import DEPRECATED.Css.Namespace
+import DEPRECATED.Css.File
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Css as BaseCss
 import Engage.Styles.MediaQuery as MediaQuery
@@ -22,12 +24,12 @@ type Class
     | AccountEditButton
 
 
-css : Namespace -> Theme -> Stylesheet
+css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
     namespace
         |> Namespace.toString
-        |> (\ns -> Css.Namespace.namespace ns (snippets theme))
-        |> stylesheet
+        |> (\ns -> DEPRECATED.Css.Namespace.namespace ns (snippets theme))
+        |> DEPRECATED.Css.File.stylesheet
 
 
 snippets : Theme -> List Snippet
@@ -44,9 +46,9 @@ snippets theme =
     ]
 
 
-accountMixin : Theme -> Mixin
+accountMixin : Theme -> Style
 accountMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , position relative
         , displayFlex
@@ -54,14 +56,14 @@ accountMixin theme =
         ]
 
 
-largeAccountMixin : Theme -> Mixin
+largeAccountMixin : Theme -> Style
 largeAccountMixin theme =
-    mixin [ flexDirection row ]
+    batch [ flexDirection row ]
 
 
-accountHeaderMixin : Theme -> Mixin
+accountHeaderMixin : Theme -> Style
 accountHeaderMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , displayFlex
         , flexDirection column

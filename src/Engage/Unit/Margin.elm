@@ -75,11 +75,11 @@ fromList units =
             margin unit1
 
 
-toCss : Margin -> Css.Mixin
+toCss : Margin -> Css.Style
 toCss margin =
     case margin of
         NotSet ->
-            Css.mixin []
+            Css.batch []
 
         Margin size ->
             Css.property "margin" (Size.toCss size)

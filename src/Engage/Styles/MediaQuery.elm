@@ -1,6 +1,7 @@
 module Engage.Styles.MediaQuery exposing (BreakPoint(..), atMedia)
 
 import Css exposing (..)
+import Css.Foreign exposing (Snippet, mediaQuery)
 
 
 type BreakPoint
@@ -16,6 +17,7 @@ atMedia : BreakPoint -> List Snippet -> Snippet
 atMedia breakPoint =
     breakPoint
         |> toString
+        |> List.singleton
         |> mediaQuery
 
 

@@ -10,7 +10,9 @@ module Engage.UI.Input.Css exposing
     )
 
 import Css exposing (..)
-import Css.Namespace
+import Css.Foreign exposing (Snippet, class, descendants, children, selector)
+import DEPRECATED.Css.Namespace
+import DEPRECATED.Css.File
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Class(..), Importance(..), MessageType(..), Size(..))
 import Engage.Styles.Css as BaseCss
@@ -42,9 +44,9 @@ type Class
     | Required
 
 
-css : Namespace -> Theme -> Stylesheet
+css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
-    (stylesheet << Css.Namespace.namespace (Namespace.toString namespace))
+    (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
@@ -104,7 +106,7 @@ formControlWithSize theme size =
         ]
 
 
-formControlMixin : Theme -> Size -> Mixin
+formControlMixin : Theme -> Size -> Style
 formControlMixin theme size =
     let
         labelFontSize =
@@ -113,7 +115,7 @@ formControlMixin theme size =
         margin =
             Theme.margin theme (.input >> .margin)
     in
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , position relative
         , displayFlex
@@ -129,7 +131,7 @@ formControlMixin theme size =
         ]
 
 
-labelMixin : Theme -> Size -> Mixin
+labelMixin : Theme -> Size -> Style
 labelMixin theme size =
     let
         labelFontSize =
@@ -141,7 +143,7 @@ labelMixin theme size =
         labelFontFamily =
             Theme.fontFamily theme (.input >> .labelFontFamily)
     in
-    mixin
+    batch
         [ case size of
             Large ->
                 labelFontSize.base
@@ -178,9 +180,9 @@ checkBoxWithSize theme size =
         ]
 
 
-checkBoxMixin : Mixin
+checkBoxMixin : Style
 checkBoxMixin =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , fontWeight normal
         , displayFlex
@@ -193,13 +195,13 @@ checkBoxMixin =
         ]
 
 
-inputMixin : Theme -> Mixin
+inputMixin : Theme -> Style
 inputMixin theme =
     let
         themePalette =
             Theme.palette theme
     in
-    mixin
+    batch
         [ border3 (px 1) solid (rgba 221 221 221 1)
         , Theme.backgroundColor themePalette.input.base
         , boxShadow5 inset (px 0) (px 1) (px 3) (rgba 0 0 0 0.15)
@@ -215,7 +217,7 @@ inputMixin theme =
         ]
 
 
-smallMixin : Theme -> Mixin
+smallMixin : Theme -> Style
 smallMixin theme =
     let
         padding =
@@ -224,13 +226,13 @@ smallMixin theme =
         fontSize =
             Theme.fontSize theme (.input >> .fontSize)
     in
-    mixin
+    batch
         [ padding.small
         , fontSize.small
         ]
 
 
-largeMixin : Theme -> Mixin
+largeMixin : Theme -> Style
 largeMixin theme =
     let
         padding =
@@ -239,7 +241,7 @@ largeMixin theme =
         fontSize =
             Theme.fontSize theme (.input >> .fontSize)
     in
-    mixin
+    batch
         [ padding.base
         , fontSize.base
         ]

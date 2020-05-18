@@ -3,16 +3,27 @@ module Engage.Color exposing
     , lighten
     )
 
+{-| Color helpers
+
+@docs darken
+
+@docs lighten
+
+-}
+
 import Color
 import Color.Manipulate
 import Css
 
-
+{-| Lighten a color by an amount
+-}
 lighten : Float -> Css.Color -> Css.Color
 lighten offset =
     manipulate (Color.Manipulate.lighten offset)
 
 
+{-| Darken a color by an amount
+-}
 darken : Float -> Css.Color -> Css.Color
 darken offset =
     manipulate (Color.Manipulate.darken offset)

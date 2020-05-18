@@ -7,8 +7,9 @@ module Engage.UI.Message.Css exposing
     )
 
 import Css exposing (..)
-import Css.Elements exposing (..)
-import Css.Namespace
+import Css.Foreign exposing (Snippet, class, ul, p, descendants)
+import DEPRECATED.Css.Namespace
+import DEPRECATED.Css.File
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (MessageType(..), Visibility(..))
 import Engage.Styles.Css as BaseCss
@@ -36,9 +37,9 @@ iconHeightPx =
     24
 
 
-css : Namespace -> Theme -> Stylesheet
+css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
-    (stylesheet << Css.Namespace.namespace (Namespace.toString namespace))
+    (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
@@ -93,9 +94,9 @@ snippets theme =
     ]
 
 
-iconMixin : Theme -> Mixin
+iconMixin : Theme -> Style
 iconMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         ]
 
@@ -118,17 +119,17 @@ controlMessageSnippet type_ theme =
         ]
 
 
-controlMessageIconMixin : Theme -> Mixin
+controlMessageIconMixin : Theme -> Style
 controlMessageIconMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , cursor pointer
         ]
 
 
-controlMessageTooltipMixin : Theme -> Mixin
+controlMessageTooltipMixin : Theme -> Style
 controlMessageTooltipMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , position absolute
         , bottom (pct 100)
@@ -137,9 +138,9 @@ controlMessageTooltipMixin theme =
         ]
 
 
-validationMixin : Theme -> Mixin
+validationMixin : Theme -> Style
 validationMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , padding (Css.em 1)
         , margin2 (Css.em 0.5) (px 0)
@@ -153,9 +154,9 @@ validationMixin theme =
         ]
 
 
-iconContainerMixin : Theme -> Mixin
+iconContainerMixin : Theme -> Style
 iconContainerMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , backgroundColor transparent
         , borderStyle none

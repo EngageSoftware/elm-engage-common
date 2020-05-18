@@ -4,8 +4,9 @@ module Engage.Form.Profile.Css exposing
     )
 
 import Css exposing (..)
-import Css.Elements
-import Css.Namespace
+import Css.Foreign exposing (Snippet, class, descendants)
+import DEPRECATED.Css.Namespace
+import DEPRECATED.Css.File
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Css as BaseCss
 import Engage.Styles.MediaQuery as MediaQuery
@@ -31,9 +32,9 @@ type Class
     | ProfileGender
 
 
-css : Namespace -> Theme -> Stylesheet
+css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
-    (stylesheet << Css.Namespace.namespace (Namespace.toString namespace))
+    (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
@@ -48,15 +49,15 @@ snippets theme =
         [ class Profile [ largeProfileMixin theme ] ]
     , class ProfileHeader [ profileHeaderMixin theme ]
     , class ProfileAvatar [ profileAvatarMixin theme ]
-    , class ProfileNoAvatar [ descendants [ Css.Elements.img [ property "opacity" "1" ] ] ]
+    , class ProfileNoAvatar [ descendants [ Css.Foreign.img [ property "opacity" "1" ] ] ]
     , class ProfileInfo [ width (pct 100) ]
     , class ProfileEditAccountLink [ displayFlex, alignItems center ]
     ]
 
 
-profileMixin : Theme -> Mixin
+profileMixin : Theme -> Style
 profileMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , position relative
         , displayFlex
@@ -64,14 +65,14 @@ profileMixin theme =
         ]
 
 
-largeProfileMixin : Theme -> Mixin
+largeProfileMixin : Theme -> Style
 largeProfileMixin theme =
-    mixin [ flexDirection row ]
+    batch [ flexDirection row ]
 
 
-profileHeaderMixin : Theme -> Mixin
+profileHeaderMixin : Theme -> Style
 profileHeaderMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , displayFlex
         , flexDirection column
@@ -79,12 +80,12 @@ profileHeaderMixin theme =
         ]
 
 
-profileAvatarMixin : Theme -> Mixin
+profileAvatarMixin : Theme -> Style
 profileAvatarMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , width (px 300)
-        , descendants [ Css.Elements.img [ width (pct 100) ] ]
+        , descendants [ Css.Foreign.img [ width (pct 100) ] ]
         , marginRight (em 1)
         , marginBottom (em 1)
         ]

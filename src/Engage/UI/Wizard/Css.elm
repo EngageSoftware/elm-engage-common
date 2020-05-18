@@ -7,8 +7,9 @@ module Engage.UI.Wizard.Css exposing
     )
 
 import Css exposing (..)
-import Css.Elements
-import Css.Namespace
+import Css.Foreign exposing (Snippet, class, descendants)
+import DEPRECATED.Css.Namespace
+import DEPRECATED.Css.File
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Css as BaseCss
 import Engage.Styles.MediaQuery exposing (BreakPoint(..), atMedia)
@@ -41,9 +42,9 @@ type SelectedStatus
     | NotSelected
 
 
-css : Namespace -> Theme -> Stylesheet
+css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
-    (stylesheet << Css.Namespace.namespace (Namespace.toString namespace))
+    (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
@@ -93,7 +94,7 @@ snippets theme =
     ]
 
 
-wizardHeaderMixin : Theme -> Mixin
+wizardHeaderMixin : Theme -> Style
 wizardHeaderMixin theme =
     let
         palette =
@@ -108,7 +109,7 @@ wizardHeaderMixin theme =
         themeMargin =
             Theme.margin theme (.wizardHeader >> .margin) |> .base
     in
-    mixin
+    batch
         [ Theme.backgroundColor palette.base
         , borderRadius4 (em 0.25) (em 0.25) zero zero
         , Theme.borderBottom3 (em 0.25) solid palette.tertiary
@@ -134,9 +135,9 @@ wizardHeaderMixin theme =
         ]
 
 
-navigationMixin : Theme -> Mixin
+navigationMixin : Theme -> Style
 navigationMixin theme =
-    mixin
+    batch
         [ position relative
         , descendants
             [ class (NavigationList Expanded)
@@ -197,13 +198,13 @@ navigationMixin theme =
         ]
 
 
-navigationArrowMixin : Theme -> Mixin
+navigationArrowMixin : Theme -> Style
 navigationArrowMixin theme =
     let
         palette =
             Theme.palette theme |> .wizardHeader
     in
-    mixin
+    batch
         [ backgroundColor transparent
         , border2 zero none
         , fontSize (em 1)
@@ -223,9 +224,9 @@ navigationArrowMixin theme =
         ]
 
 
-navigationListMixin : Mixin
+navigationListMixin : Style
 navigationListMixin =
-    mixin
+    batch
         [ position absolute
         , top (pct 100)
         , right (Css.rem -0.5)
@@ -240,9 +241,9 @@ navigationListMixin =
         ]
 
 
-navigationItemMixin : Theme -> SelectedStatus -> Mixin
+navigationItemMixin : Theme -> SelectedStatus -> Style
 navigationItemMixin theme selectedStatus =
-    mixin
+    batch
         [ listStyle none
         , padding (em 1)
         , paddingLeft (em 2.5)
@@ -271,7 +272,7 @@ navigationItemMixin theme selectedStatus =
             , property "content" "attr(data-index)"
             ]
         , descendants
-            [ Css.Elements.a
+            [ Css.Foreign.a
                 [ color (hex "#444")
                 , textDecoration none
                 , hover
@@ -280,7 +281,7 @@ navigationItemMixin theme selectedStatus =
             ]
         , case selectedStatus of
             Selected ->
-                mixin
+                batch
                     [ before
                         [ backgroundColor lighterColorLink
                         , opacity (int 1)
@@ -290,7 +291,7 @@ navigationItemMixin theme selectedStatus =
                     ]
 
             NotSelected ->
-                mixin
+                batch
                     [ color (rgba 0 0 0 0.25) ]
         ]
 

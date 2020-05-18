@@ -1,7 +1,9 @@
 module Engage.Pattern.CardCollector.Css exposing (Class(..), css)
 
 import Css exposing (..)
-import Css.Namespace
+import Css.Foreign exposing (Snippet, class, descendants)
+import DEPRECATED.Css.Namespace
+import DEPRECATED.Css.File
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Css as BaseCss
 import Engage.Theme as Theme exposing (Theme)
@@ -15,9 +17,9 @@ type Class
     | CardCollectorAction
 
 
-css : Namespace -> Theme -> Stylesheet
+css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
-    (stylesheet << Css.Namespace.namespace (Namespace.toString namespace))
+    (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
@@ -30,16 +32,16 @@ snippets theme =
     ]
 
 
-cardCollectorMixin : Theme -> Mixin
+cardCollectorMixin : Theme -> Style
 cardCollectorMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         ]
 
 
-cardsMixin : Theme -> Mixin
+cardsMixin : Theme -> Style
 cardsMixin theme =
-    mixin
+    batch
         [ displayFlex
         , flexWrap wrap
         , descendants

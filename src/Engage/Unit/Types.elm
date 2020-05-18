@@ -1,4 +1,4 @@
-module Engage.Unit.Types exposing (Compatible(..), ExplicitLength, Mixin(..))
+module Engage.Unit.Types exposing (Compatible(..), ExplicitLength, Style(..))
 
 
 type alias ExplicitLength units =
@@ -24,5 +24,5 @@ type Compatible
     = Compatible
 
 
-type Mixin a
-    = Mixin a
+type Style a
+    = Style a

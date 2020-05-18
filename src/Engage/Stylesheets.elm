@@ -1,6 +1,13 @@
 module Engage.Stylesheets exposing (stylesheets)
 
+{-| Stylesheets
+
+@docs stylesheets
+
+-}
+
 import Css
+import DEPRECATED.Css.File
 import DateTimePicker.Config
 import DateTimePicker.Css
 import Engage.Custom.Form.Css
@@ -28,7 +35,9 @@ import Engage.UI.Wizard.Css
 import IntlPhoneInput.Css
 
 
-stylesheets : Theme.Theme -> List Css.Stylesheet
+{-| Get the stylesheets from a theme
+-}
+stylesheets : Theme.Theme -> List DEPRECATED.Css.File.Stylesheet
 stylesheets theme =
     [ DateTimePicker.Css.cssWithNamespace DateTimePicker.Config.defaultNamespace
     , IntlPhoneInput.Css.css <| Namespace.toString Namespace.engagecore

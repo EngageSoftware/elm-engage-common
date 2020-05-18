@@ -5,7 +5,9 @@ module Engage.UI.Dropdown.Css exposing
     )
 
 import Css exposing (..)
-import Css.Namespace
+import Css.Foreign exposing (Snippet, class, children)
+import DEPRECATED.Css.Namespace
+import DEPRECATED.Css.File
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Class(..), Size(..))
 import Engage.Theme as Theme exposing (Theme)
@@ -17,9 +19,9 @@ type Class
     | Label
 
 
-css : Namespace -> Theme -> Stylesheet
+css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
-    (stylesheet << Css.Namespace.namespace (Namespace.toString namespace))
+    (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
@@ -48,21 +50,21 @@ snippets theme =
     ]
 
 
-labelMixin : Mixin
+labelMixin : Style
 labelMixin =
-    mixin
+    batch
         [ paddingRight (Css.rem 0.5)
         , display block
         ]
 
 
-dropdownMixin : Theme -> Css.Mixin
+dropdownMixin : Theme -> Css.Style
 dropdownMixin theme =
     let
         themePalette =
             Theme.palette theme
     in
-    mixin
+    batch
         [ border3 (px 1) solid (rgba 221 221 221 1)
         , Theme.backgroundColor themePalette.dropdown.base
         , boxShadow5 inset (px 0) (px 1) (px 3) (rgba 0 0 0 0.15)
@@ -78,7 +80,7 @@ dropdownMixin theme =
         ]
 
 
-largeMixin : Theme -> Css.Mixin
+largeMixin : Theme -> Css.Style
 largeMixin theme =
     let
         padding =
@@ -87,13 +89,13 @@ largeMixin theme =
         fontSize =
             Theme.fontSize theme (.dropdown >> .fontSize)
     in
-    mixin
+    batch
         [ padding.base
         , fontSize.base
         ]
 
 
-smallMixin : Theme -> Css.Mixin
+smallMixin : Theme -> Css.Style
 smallMixin theme =
     let
         padding =
@@ -102,7 +104,7 @@ smallMixin theme =
         fontSize =
             Theme.fontSize theme (.dropdown >> .fontSize)
     in
-    mixin
+    batch
         [ padding.small
         , fontSize.small
         ]

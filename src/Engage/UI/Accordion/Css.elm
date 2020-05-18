@@ -5,7 +5,9 @@ module Engage.UI.Accordion.Css exposing
     )
 
 import Css exposing (..)
-import Css.Namespace
+import Css.Foreign exposing (Snippet, class)
+import DEPRECATED.Css.Namespace
+import DEPRECATED.Css.File
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Css as BaseCss
 import Engage.Theme as Theme exposing (Theme)
@@ -23,9 +25,9 @@ type AccordionState
     | AccordionExpanded
 
 
-css : Namespace -> Theme -> Stylesheet
+css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
-    (stylesheet << Css.Namespace.namespace (Namespace.toString namespace))
+    (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
@@ -44,24 +46,24 @@ snippets theme =
     ]
 
 
-accordionHeaderMixin : Theme -> Mixin
+accordionHeaderMixin : Theme -> Style
 accordionHeaderMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , displayFlex
         , alignItems center
         ]
 
 
-accordionBodyMixin : Theme -> AccordionState -> Mixin
+accordionBodyMixin : Theme -> AccordionState -> Style
 accordionBodyMixin theme accordionState =
     let
         sharedMixin =
-            mixin [ BaseCss.normalizeMixin, overflow hidden, margin zero ]
+            batch [ BaseCss.normalizeMixin, overflow hidden, margin zero ]
     in
     case accordionState of
         AccordionCollapsed ->
-            mixin [ sharedMixin, Css.height (px 0) ]
+            batch [ sharedMixin, Css.height (px 0) ]
 
         AccordionExpanded ->
-            mixin [ sharedMixin, Css.height (pct 100) ]
+            batch [ sharedMixin, Css.height (pct 100) ]

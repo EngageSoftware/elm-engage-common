@@ -4,7 +4,9 @@ module Engage.UI.Info.Css exposing
     )
 
 import Css exposing (..)
-import Css.Namespace
+import Css.Foreign exposing (Snippet, class, descendants)
+import DEPRECATED.Css.Namespace
+import DEPRECATED.Css.File
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Css as BaseCss
 import Engage.Theme as Theme exposing (Theme)
@@ -24,9 +26,9 @@ type Class
     | InfoBool
 
 
-css : Namespace -> Theme -> Stylesheet
+css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
-    (stylesheet << Css.Namespace.namespace (Namespace.toString namespace))
+    (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
@@ -53,30 +55,30 @@ snippets theme =
     ]
 
 
-infoMixin : Theme -> Mixin
+infoMixin : Theme -> Style
 infoMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , marginBottom (em 1)
         ]
 
 
-infoTitleMixin : Theme -> Mixin
+infoTitleMixin : Theme -> Style
 infoTitleMixin theme =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , fontWeight bold
         ]
 
 
-infoContentMixin : Theme -> Mixin
+infoContentMixin : Theme -> Style
 infoContentMixin theme =
-    mixin [ BaseCss.normalizeMixin ]
+    batch [ BaseCss.normalizeMixin ]
 
 
-infoInlineMixin : Theme -> svgClass -> Mixin
+infoInlineMixin : Theme -> svgClass -> Style
 infoInlineMixin theme svgClass =
-    mixin
+    batch
         [ BaseCss.normalizeMixin
         , displayFlex
         , flexDirection row
