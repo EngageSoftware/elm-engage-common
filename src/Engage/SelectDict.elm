@@ -1,4 +1,4 @@
-module SelectDict exposing
+module Engage.SelectDict exposing
     ( SelectDict
     , after
     , before

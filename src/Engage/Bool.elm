@@ -1,4 +1,4 @@
-module Bool exposing (false, true)
+module Engage.Bool exposing (false, true)
 
 
 type FancyBool a
