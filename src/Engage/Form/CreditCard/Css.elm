@@ -1,5 +1,13 @@
 module Engage.Form.CreditCard.Css exposing (Class(..), Visibility(..), css, toVisibility)
 
+{-| Form.CreditCard.Css
+
+@docs Class, Visibility
+
+@docs css, toVisibility
+
+-}
+
 import Css exposing (..)
 import Css.Foreign exposing (legend, class, descendants, Snippet)
 import DEPRECATED.Css.Namespace
@@ -11,6 +19,8 @@ import Engage.Styles.MediaQuery exposing (BreakPoint(..), atMedia)
 import Engage.Theme as Theme exposing (Theme)
 
 
+{-| The Class type
+-}
 type Class
     = CreditCard
     | CreditCardSection
@@ -22,11 +32,15 @@ type Class
     | FormTitle
 
 
+{-| The Visibility type
+-}
 type Visibility
     = Visible
     | Hidden
 
 
+{-| Convert a Bool to Visibility
+-}
 toVisibility : Bool -> Visibility
 toVisibility bool =
     if bool then
@@ -36,6 +50,8 @@ toVisibility bool =
         Hidden
 
 
+{-| Get the css
+-}
 css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
     (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))

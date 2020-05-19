@@ -6,10 +6,20 @@ module Engage.Entity.Gender exposing
     , toString
     )
 
+{-| Entity.Gender
+
+@docs Gender
+
+@docs decoder, encoder, fromString, toString
+
+-}
+
 import Json.Decode as JD
 import Json.Encode as JE
 
 
+{-| The Gender type
+-}
 type Gender
     = Male
     | Female
@@ -17,6 +27,8 @@ type Gender
     | Unspecified
 
 
+{-| The Gender encoder
+-}
 encoder : Gender -> JE.Value
 encoder gender =
     case gender of
@@ -33,11 +45,15 @@ encoder gender =
             JE.null
 
 
+{-| The Gender decoder
+-}
 decoder : JD.Decoder Gender
 decoder =
     JD.nullable JD.string |> JD.map (Maybe.map fromString >> Maybe.withDefault Unspecified)
 
 
+{-| Convert a String to a Gender
+-}
 fromString : String -> Gender
 fromString value =
     case String.toUpper <| String.trim <| value of
@@ -54,6 +70,8 @@ fromString value =
             Other
 
 
+{-| Convert a Gender to a String
+-}
 toString : Gender -> String
 toString gender =
     case gender of

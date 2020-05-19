@@ -7,6 +7,14 @@ module Engage.UI.Dropdown exposing
     , reset
     )
 
+{-| UI.Dropdown
+
+@docs Item, State
+
+@docs dropdown, dropdownWithAttributes, initialState, reset
+
+-}
+
 import Dropdown
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
@@ -20,20 +28,28 @@ import Html.Attributes exposing (..)
 import Html.CssHelpers
 
 
+{-| The State type
+-}
 type State
     = State Message.State
 
 
+{-| Get the initial State
+-}
 initialState : State
 initialState =
     State Message.initialState
 
 
+{-| Reset the State
+-}
 reset : State -> State
 reset (State stateData) =
     State Message.initialState
 
 
+{-| The Item type
+-}
 type alias Item =
     { value : String
     , text : String
@@ -41,6 +57,8 @@ type alias Item =
     }
 
 
+{-| Get the dropdown view
+-}
 dropdown :
     { id : String
     , labelText : String
@@ -57,6 +75,8 @@ dropdown args state selectedItem =
     dropdownWithAttributes args [] state selectedItem
 
 
+{-| Get the dropdown with attributes view
+-}
 dropdownWithAttributes :
     { id : String
     , labelText : String

@@ -1,5 +1,13 @@
 module Engage.Form.Participant.Css exposing (Class(..), css)
 
+{-| Form.Participant.Css
+
+@docs Class
+
+@docs css
+
+-}
+
 import Css exposing (..)
 import Css.Foreign exposing (Snippet, class)
 import DEPRECATED.Css.Namespace
@@ -10,6 +18,8 @@ import Engage.Styles.MediaQuery as MediaQuery
 import Engage.Theme as Theme exposing (Theme)
 
 
+{-| The Class type
+-}
 type Class
     = Participant
     | ParticipantAccount
@@ -18,6 +28,8 @@ type Class
     | ParticipantForm
 
 
+{-| Get the css
+-}
 css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
     (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))

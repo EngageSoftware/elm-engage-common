@@ -11,6 +11,14 @@ module Engage.UI.PictureUpload exposing
     , remove
     )
 
+{-| UI.PictureUpload
+
+@docs Attribute, File, PortOutKey
+
+@docs browse, dropZone, onFiles, onLoad, picture, pictureUpload, remove
+
+-}
+
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.Attribute as Attribute
@@ -27,10 +35,14 @@ import Svg.Attributes
 import Time exposing (Time)
 
 
+{-| The PortOutKey type
+-}
 type PortOutKey
     = PictureUploadLoaded
 
 
+{-| The File type
+-}
 type alias File =
     { lastModified : Maybe Time
     , name : String
@@ -71,40 +83,56 @@ emptyAttribute =
     }
 
 
+{-| The Attribute type
+-}
 type alias Attribute msg =
     InternalAttribute msg -> InternalAttribute msg
 
 
+{-| Get the browse Attribute
+-}
 browse : String -> msg -> Attribute msg
 browse text msg =
     \attribute -> { attribute | browseButton = Just { text = text, msg = msg } }
 
 
+{-| Get the drop zone Attribute
+-}
 dropZone : String -> Attribute msg
 dropZone text =
     \attribute -> { attribute | dropZoneText = text }
 
 
+{-| Get the onLoad Attribute
+-}
 onLoad : (String -> msg) -> Attribute msg
 onLoad msg =
     \attribute -> { attribute | onLoad = Just msg }
 
 
+{-| Get the onFiles Attribute
+-}
 onFiles : (List File -> msg) -> Attribute msg
 onFiles msg =
     \attribute -> { attribute | onFiles = Just msg }
 
 
+{-| Get the picture Attribute
+-}
 picture : String -> Attribute msg
 picture pictureData =
     \attribute -> { attribute | pictureData = pictureData }
 
 
+{-| Get the remove Attribute
+-}
 remove : String -> msg -> Attribute msg
 remove text msg =
     \attribute -> { attribute | onRemove = Just ( text, msg ) }
 
 
+{-| Get the picture upload view
+-}
 pictureUpload : Namespace -> String -> List (Attribute msg) -> Html msg
 pictureUpload namespace domId attributes =
     let
@@ -125,6 +153,8 @@ pictureUpload namespace domId attributes =
         ]
 
 
+{-| Get the drop zone view
+-}
 dropZoneView : Namespace -> InternalAttribute msg -> String -> Html msg
 dropZoneView namespace attribute domId =
     let

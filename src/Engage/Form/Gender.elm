@@ -6,6 +6,14 @@ module Engage.Form.Gender exposing
     , onChange
     )
 
+{-| Form.Gender
+
+@docs Attribute
+
+@docs field, form, localization, onChange
+
+-}
+
 import Dict
 import Engage.Entity.Gender as Gender exposing (Gender(..))
 import Engage.Form.Field as Field
@@ -41,20 +49,28 @@ emptyAttribute =
         }
 
 
+{-| The Attribute type
+-}
 type alias Attribute field msg =
     InternalAttribute field msg -> InternalAttribute field msg
 
 
+{-| Get the field Attribute
+-}
 field : field -> Attribute field msg
 field value =
     \(InternalAttribute attribute) -> InternalAttribute { attribute | field = Just value }
 
 
+{-| Get the onChange Attribute
+-}
 onChange : (ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> Gender -> msg) -> Attribute field msg
 onChange value =
     \(InternalAttribute attribute) -> InternalAttribute { attribute | onChange = Just value }
 
 
+{-| Get the localization Attribute
+-}
 localization : Localization -> Attribute field msg
 localization value =
     \(InternalAttribute attribute) -> InternalAttribute { attribute | localization = value }
@@ -65,6 +81,8 @@ missingText =
     "Missing required attribute for Gender.form:"
 
 
+{-| Get the form view
+-}
 form : List (Attribute field msg) -> ValidationErrors field -> Input.State -> Gender -> Html msg
 form attributes validations state gender =
     let

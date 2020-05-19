@@ -16,6 +16,12 @@ module Engage.Form.Field exposing
     , validate
     )
 
+{-| Form.Field
+
+@docs checkbox, checkboxWithAttributes, dateField, datepickerField, dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes, fieldId, inputField, inputFieldWithAttributes, localizeHelp, localizeLabel, phoneField, radioListField, validate
+
+-}
+
 import Date exposing (Date)
 import Dict exposing (Dict)
 import Engage.Entity.PhoneNumber exposing (PhoneNumber)
@@ -48,6 +54,8 @@ type alias PhoneFieldArgs field msg =
     }
 
 
+{-| Get the phone field view
+-}
 phoneField : PhoneFieldArgs field msg -> ValidationErrors field -> Input.PhoneState -> PhoneNumber -> Html msg
 phoneField args validations state phoneNumber =
     let
@@ -104,11 +112,15 @@ phoneField args validations state phoneNumber =
         phoneNumber
 
 
+{-| Get the input field view
+-}
 inputField : InputFieldArgs field msg -> ValidationErrors field -> Input.State -> String -> Html msg
 inputField args validations state value =
     inputFieldWithAttributes args validations [] state value
 
 
+{-| Get the input field with attributes view
+-}
 inputFieldWithAttributes : InputFieldArgs field msg -> ValidationErrors field -> List (Html.Attribute msg) -> Input.State -> String -> Html msg
 inputFieldWithAttributes args validations attributes state value =
     let
@@ -163,6 +175,8 @@ type alias RadioListFieldArgs field msg =
     }
 
 
+{-| Get the radio field view
+-}
 radioListField : RadioListFieldArgs field msg -> ValidationErrors field -> Input.State -> String -> Html msg
 radioListField args validations state value =
     let
@@ -217,16 +231,22 @@ type alias DropdownFieldArgs field msg =
     }
 
 
+{-| Get the dropdown field view
+-}
 dropdownField : DropdownFieldArgs field msg -> ValidationErrors field -> Dropdown.State -> Maybe String -> Html msg
 dropdownField args validations state value =
     dropdownFieldWithAttributes args validations [] state value
 
 
+{-| Get the dropdown field value sort view
+-}
 dropdownFieldValueSort : DropdownFieldArgs field msg -> ValidationErrors field -> Dropdown.State -> Maybe String -> Bool -> Html msg
 dropdownFieldValueSort args validations state value reverseSort =
     dropdownFieldWithAttributesValueSort args validations [] state value reverseSort
 
 
+{-| Get the dropdown field with attributes value sort view
+-}
 dropdownFieldWithAttributesValueSort : DropdownFieldArgs field msg -> ValidationErrors field -> List (Html.Attribute msg) -> Dropdown.State -> Maybe String -> Bool -> Html msg
 dropdownFieldWithAttributesValueSort args validations attributes state value reverseSort =
     let
@@ -280,6 +300,8 @@ dropdownFieldWithAttributesValueSort args validations attributes state value rev
         value
 
 
+{-| Get the dropdown field with attributes view
+-}
 dropdownFieldWithAttributes : DropdownFieldArgs field msg -> ValidationErrors field -> List (Html.Attribute msg) -> Dropdown.State -> Maybe String -> Html msg
 dropdownFieldWithAttributes args validations attributes state value =
     let
@@ -333,6 +355,8 @@ type alias DatepickerFieldArgs field msg =
     }
 
 
+{-| Get the datepicker field view
+-}
 datepickerField : DatepickerFieldArgs field msg -> ValidationErrors field -> Datepicker.State -> Maybe Date -> Html msg
 datepickerField args validations state value =
     let
@@ -369,6 +393,8 @@ datepickerField args validations state value =
         value
 
 
+{-| Get the date field view
+-}
 dateField : DatepickerFieldArgs field msg -> ValidationErrors field -> Datepicker.State -> Maybe Date -> Html msg
 dateField args validations state value =
     let
@@ -414,11 +440,15 @@ type alias CheckboxFieldArgs field msg =
     }
 
 
+{-| Get the checkbox view
+-}
 checkbox : CheckboxFieldArgs field msg -> ValidationErrors field -> Input.State -> Bool -> Html msg
 checkbox args validations state value =
     checkboxWithAttributes args validations [] state value
 
 
+{-| Get the checkbox with attributes view
+-}
 checkboxWithAttributes : CheckboxFieldArgs field msg -> ValidationErrors field -> List (Html.Attribute msg) -> Input.State -> Bool -> Html msg
 checkboxWithAttributes args validations attributes state value =
     let
@@ -466,6 +496,8 @@ checkboxWithAttributes args validations attributes state value =
 -- HELPERS
 
 
+{-| Get the fieldId
+-}
 fieldId : Namespace -> field -> String
 fieldId namespace field =
     Namespace.toString namespace ++ toString field
@@ -481,6 +513,8 @@ validateBool field value validations =
         ++ Validation.validateBoolField (Validation.localize field) field (always value) ()
 
 
+{-| Validate a field
+-}
 validate : field -> String -> ValidationErrors field -> ValidationErrors field
 validate field value validations =
     let
@@ -501,11 +535,15 @@ validateMaybe field value validations =
         ++ Validation.validateMaybeField (Validation.localize field) field (always value) ()
 
 
+{-| Localize a label String
+-}
 localizeLabel : { a | field : field, localization : Localization } -> String
 localizeLabel ({ field } as args) =
     Localization.localizeString (toString field ++ ".label") args
 
 
+{-| Localize a help String
+-}
 localizeHelp : { a | field : field, localization : Localization } -> String
 localizeHelp ({ field } as args) =
     Localization.localizeStringWithDefault "" (toString field ++ ".help") args

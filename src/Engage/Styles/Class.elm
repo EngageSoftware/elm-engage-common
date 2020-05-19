@@ -6,16 +6,28 @@ module Engage.Styles.Class exposing
     , Visibility(..)
     )
 
+{-| Styles.Class
 
+@docs Class, Importance, MessageType, Size, Visibility
+
+-}
+
+
+{-| The Class type
+-}
 type Class
     = FormControl Size
 
 
+{-| The Size type
+-}
 type Size
     = Small
     | Large
 
 
+{-| The Importance type
+-}
 type Importance
     = Standard
     | Primary
@@ -23,6 +35,8 @@ type Importance
     | Negative
 
 
+{-| The MessageType type
+-}
 type MessageType
     = Confirmation
     | Error
@@ -30,6 +44,8 @@ type MessageType
     | Info
 
 
+{-| The Visibility type
+-}
 type Visibility
     = Visible
     | Hidden

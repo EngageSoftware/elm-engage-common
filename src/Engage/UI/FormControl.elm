@@ -4,6 +4,12 @@ module Engage.UI.FormControl exposing
     , labelWrapped
     )
 
+{-| UI.FormControl
+
+@docs formControl, groupFormControl, labelWrapped
+
+-}
+
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Class(FormControl), Size(..))
@@ -31,6 +37,8 @@ type alias Args a msg =
     }
 
 
+{-| Get the form control view
+-}
 formControl : Args a msg -> Message.State -> Html msg -> Html msg
 formControl args state element =
     let
@@ -54,6 +62,8 @@ formControl args state element =
         ]
 
 
+{-| Get the group form control view
+-}
 groupFormControl : Args a msg -> Message.State -> Html msg -> Html msg
 groupFormControl args state element =
     let
@@ -78,6 +88,8 @@ groupFormControl args state element =
         ]
 
 
+{-| Get the label wrapped view
+-}
 labelWrapped : Args a msg -> Message.State -> Html msg -> Html msg -> Html msg
 labelWrapped args state element other =
     let

@@ -5,6 +5,14 @@ module Engage.UI.Datepicker exposing
     , initialState
     )
 
+{-| UI.Datepicker
+
+@docs State
+
+@docs date, datepicker, initialState
+
+-}
+
 import Date exposing (Date)
 import DateTimePicker
 import DateTimePicker.Config
@@ -21,6 +29,8 @@ import Html.Attributes exposing (..)
 import Html.CssHelpers
 
 
+{-| The State type
+-}
 type State
     = State StateData
 
@@ -31,6 +41,8 @@ type alias StateData =
     }
 
 
+{-| Get the initial State
+-}
 initialState : Date -> State
 initialState now =
     State
@@ -39,6 +51,8 @@ initialState now =
         }
 
 
+{-| Get the datepicker view
+-}
 datepicker :
     { id : String
     , onChange : State -> Maybe Date -> msg
@@ -115,6 +129,8 @@ datepickerWithSize args state value =
         ]
 
 
+{-| Get the date view
+-}
 date :
     { id : String
     , onChange : State -> Maybe Date -> msg
