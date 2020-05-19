@@ -13,10 +13,20 @@ module Engage.RemoteData exposing
     , upgrade
     )
 
+{-| RemoteData
+
+@docs RemoteData, WebData
+
+@docs downgrade, fail, isLoading, isSuccess, loading, map, mapError, toError, toMaybe, upgrade
+
+-}
+
 import Http
 import RemoteData
 
 
+{-| The RemoteData type
+-}
 type RemoteData e a
     = NotAsked
     | Failure e
@@ -26,10 +36,14 @@ type RemoteData e a
     | Success a
 
 
+{-| The WebData type
+-}
 type alias WebData a =
     RemoteData Http.Error a
 
 
+{-| Get a loading RemoteData
+-}
 loading : RemoteData e a -> RemoteData e a
 loading remoteData =
     remoteData
@@ -38,6 +52,8 @@ loading remoteData =
         |> Maybe.withDefault Loading
 
 
+{-| Fail a RemoteData
+-}
 fail : e -> RemoteData e a -> RemoteData e a
 fail error remoteData =
     remoteData
@@ -46,6 +62,8 @@ fail error remoteData =
         |> Maybe.withDefault (Failure error)
 
 
+{-| Map the error of RemoteData
+-}
 mapError : (e -> ee) -> RemoteData e a -> RemoteData ee a
 mapError f remoteData =
     case remoteData of
@@ -68,6 +86,8 @@ mapError f remoteData =
             Success a
 
 
+{-| Get the error of RemoteData
+-}
 toError : RemoteData e a -> Maybe e
 toError remoteData =
     case remoteData of
@@ -90,6 +110,8 @@ toError remoteData =
             Nothing
 
 
+{-| Get the Maybe value of RemoteData
+-}
 toMaybe : RemoteData e a -> Maybe a
 toMaybe remoteData =
     case remoteData of
@@ -112,6 +134,8 @@ toMaybe remoteData =
             Just a
 
 
+{-| Check if the RemoteData is loading
+-}
 isLoading : RemoteData e a -> Bool
 isLoading remoteData =
     case remoteData of
@@ -134,6 +158,8 @@ isLoading remoteData =
             True
 
 
+{-| Map onto the RemoteData
+-}
 map : (a -> b) -> RemoteData e a -> RemoteData e b
 map f remoteData =
     case remoteData of
@@ -156,6 +182,8 @@ map f remoteData =
             Success (f a)
 
 
+{-| Upgrade the RemoteData
+-}
 upgrade : RemoteData.RemoteData e a -> RemoteData e a
 upgrade remoteData =
     case remoteData of
@@ -172,7 +200,9 @@ upgrade remoteData =
             Success a
 
 
-{-| Use this with caution, you lose some information with this
+{-| Downgrade the RemoteData
+
+    Use this with caution, you lose some information with this
 -}
 downgrade : RemoteData e a -> RemoteData.RemoteData e a
 downgrade remoteData =
@@ -196,6 +226,8 @@ downgrade remoteData =
             RemoteData.Success a
 
 
+{-| Check if the RemoteData is a success
+-}
 isSuccess : RemoteData e a -> Bool
 isSuccess =
     downgrade >> RemoteData.isSuccess

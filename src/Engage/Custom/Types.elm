@@ -27,6 +27,14 @@ module Engage.Custom.Types exposing
     , defaultParticipantForm
     )
 
+{-| Custom.Types
+
+@docs Answer, AnswerData, BoolEntryData, ChangeArgs, Config, Disable, Entry, EntryData, Field, FieldChoice, FieldGroup, FieldType, FileEntryData, FileStatus, FileUploadError, FileUploadProgress, FileUploadStatus, Form, Level, MultipleEntryData, Section, StaticFormType, UpdateOptions
+
+@docs defaultCompanyForm, defaultConfig, defaultParticipantForm
+
+-}
+
 import Date
 import Date.Extra.Config.Config_en_us as Config
 import Date.Extra.Format
@@ -42,6 +50,8 @@ import Engage.Validation as Validation exposing (ValidationErrors)
 import Set exposing (Set)
 
 
+{-| The Form type
+-}
 type alias Form =
     { formId : Int
     , formFilloutId : Maybe Int
@@ -53,6 +63,8 @@ type alias Form =
     }
 
 
+{-| Get the default Participant Form
+-}
 defaultParticipantForm : Form
 defaultParticipantForm =
     { formId = 0
@@ -65,6 +77,8 @@ defaultParticipantForm =
     }
 
 
+{-| Get the default Company Form
+-}
 defaultCompanyForm : Form
 defaultCompanyForm =
     { formId = 0
@@ -77,6 +91,8 @@ defaultCompanyForm =
     }
 
 
+{-| The Level type
+-}
 type Level
     = Participant
     | Registration
@@ -84,6 +100,8 @@ type Level
     | Additional
 
 
+{-| The Section type
+-}
 type alias Section =
     { sectionId : Int
     , name : String
@@ -95,6 +113,8 @@ type alias Section =
     }
 
 
+{-| The Answer type
+-}
 type Answer
     = Answer AnswerData
     | MultipleAnswer (Set String)
@@ -103,10 +123,14 @@ type Answer
     | MembershipTypeAnswer (Maybe MembershipTypeList.MembershipType)
 
 
+{-| The AnswerData type
+-}
 type alias AnswerData =
     { value : String }
 
 
+{-| The Field type
+-}
 type alias Field =
     { fieldId : Int
     , relativeOrder : Int
@@ -123,6 +147,8 @@ type alias Field =
     }
 
 
+{-| The FieldGroup type
+-}
 type alias FieldGroup =
     { fieldGroupId : Int
     , fields : Dict Int Field
@@ -130,12 +156,16 @@ type alias FieldGroup =
     }
 
 
+{-| The UpdateOptions type
+-}
 type UpdateOptions
     = AlwaysUpdate
     | Update
     | DontUpdate
 
 
+{-| The FieldChoice type
+-}
 type alias FieldChoice =
     { fieldChoiceId : Maybe Int
     , name : String
@@ -144,27 +174,37 @@ type alias FieldChoice =
     }
 
 
+{-| The Entry type
+-}
 type Entry
     = Entry EntryData
     | BoolEntry BoolEntryData
     | FileEntry FileEntryData
 
 
+{-| The EntryData type
+-}
 type alias EntryData =
     { value : String
     }
 
 
+{-| The MultipleEntryData type
+-}
 type alias MultipleEntryData =
     { values : Set String
     }
 
 
+{-| The BoolEntryData type
+-}
 type alias BoolEntryData =
     { value : Bool
     }
 
 
+{-| The FileEntryData type
+-}
 type alias FileEntryData =
     { name : String
     , fileType : String
@@ -172,6 +212,8 @@ type alias FileEntryData =
     }
 
 
+{-| The FileStatus type
+-}
 type FileStatus
     = NoFile
     | Uploading { progressPercentage : Float }
@@ -179,6 +221,8 @@ type FileStatus
     | Error { message : String }
 
 
+{-| The FieldType type
+-}
 type FieldType
     = TextBox { entry : EntryData, state : Input.State }
     | LargeTextBox { entry : EntryData, state : Input.State }
@@ -200,17 +244,23 @@ type FieldType
     | StaticForm StaticFormType
 
 
+{-| The StaticFormType type
+-}
 type StaticFormType
     = ParticipantForm
     | MembershipTypeList { state : Accordion.State, membershipTypeList : List MembershipType, entry : Maybe MembershipType }
 
 
+{-| The Disable type
+-}
 type Disable
     = None
     | Disabled
     | Hidden
 
 
+{-| Get the default Config
+-}
 defaultConfig :
     { onChange : ChangeArgs -> Answer -> msg
     , onEnter : msg
@@ -229,6 +279,8 @@ defaultConfig { onChange, onEnter, onGotoPage, localization } =
     }
 
 
+{-| The Config type
+-}
 type alias Config msg =
     { onChange : ChangeArgs -> Answer -> msg
     , onEnter : msg
@@ -240,6 +292,8 @@ type alias Config msg =
     }
 
 
+{-| The ChargeArgs type
+-}
 type alias ChangeArgs =
     { formId : Int
     , sectionId : Int
@@ -251,6 +305,8 @@ type alias ChangeArgs =
     }
 
 
+{-| The FileUploadProgress type
+-}
 type alias FileUploadProgress =
     { formId : Int
     , sectionId : Int
@@ -260,6 +316,8 @@ type alias FileUploadProgress =
     }
 
 
+{-| The FileUploadStatus type
+-}
 type alias FileUploadStatus =
     { formId : Int
     , sectionId : Int
@@ -269,6 +327,8 @@ type alias FileUploadStatus =
     }
 
 
+{-| The FileUploadError type
+-}
 type alias FileUploadError =
     { formId : Int
     , sectionId : Int

@@ -10,6 +10,14 @@ module Engage.Entity.Contact exposing
     , encoderWith
     )
 
+{-| Entity.Contact
+
+@docs Contact, ContactType, ContactTypes
+
+@docs contactTypeDecoder, contactTypesDecoder, decoder, empty, encoder, encoderWith
+
+-}
+
 import Dict exposing (Dict)
 import Engage.Entity.PhoneNumber as PhoneNumber exposing (PhoneNumber)
 import Engage.ListItem as ListItem exposing (ListItem)
@@ -18,10 +26,14 @@ import Json.Decode.Pipeline as JDP
 import Json.Encode as JE
 
 
+{-| The ContactTypes type
+-}
 type alias ContactTypes =
     Dict Int ContactType
 
 
+{-| The ContactType type
+-}
 type alias ContactType =
     { contactTypeId : Int
     , shortDescription : String
@@ -29,6 +41,8 @@ type alias ContactType =
     }
 
 
+{-| The Contact type
+-}
 type alias Contact =
     { contactType : Maybe ContactType
     , contactId : Maybe Int
@@ -55,6 +69,8 @@ type alias Contact =
     }
 
 
+{-| Get an empty Contact
+-}
 empty : Contact
 empty =
     { contactType = Nothing
@@ -82,6 +98,8 @@ empty =
     }
 
 
+{-| The Contact decoder
+-}
 decoder : Decoder Contact
 decoder =
     JDP.decode Contact
@@ -109,6 +127,8 @@ decoder =
         |> JDP.required "relativeOrder" JD.int
 
 
+{-| The ContactType decoder
+-}
 contactTypeDecoder : Decoder ContactType
 contactTypeDecoder =
     JDP.decode ContactType
@@ -117,6 +137,8 @@ contactTypeDecoder =
         |> JDP.required "longDescription" (JD.oneOf [ JD.string, JD.null "" ])
 
 
+{-| The ContactTypes decoder
+-}
 contactTypesDecoder : Decoder ContactTypes
 contactTypesDecoder =
     JD.list contactTypeDecoder
@@ -124,11 +146,15 @@ contactTypesDecoder =
         |> JD.map Dict.fromList
 
 
+{-| The Contact encoder
+-}
 encoder : Contact -> JE.Value
 encoder =
     encoderWith []
 
 
+{-| The Contact encoder with values
+-}
 encoderWith : List ( String, JE.Value ) -> Contact -> JE.Value
 encoderWith fields contactData =
     JE.object

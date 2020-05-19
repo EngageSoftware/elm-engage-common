@@ -11,6 +11,14 @@ module Engage.Form.Company exposing
     , validateAll
     )
 
+{-| Form.Company
+
+@docs Msg, State
+
+@docs cast, completedView, emptyForm, form, initialState, isValid, update, validateAll
+
+-}
+
 import Date exposing (Date)
 import Engage.Custom.Form.Css as Css
 import Engage.Entity.Address as Address exposing (RegionsCountry)
@@ -46,6 +54,8 @@ type alias CompanyState =
     }
 
 
+{-| The State type
+-}
 type State
     = State StateData
 
@@ -56,6 +66,8 @@ type alias StateData =
     }
 
 
+{-| Get the initial state
+-}
 initialState : Date -> State
 initialState now =
     State
@@ -92,6 +104,8 @@ type CompanyValidationField
     | EndDate
 
 
+{-| The Msg type
+-}
 type Msg
     = CurrentCompany CompanyMsg
     | PreviousCompany CompanyMsg
@@ -118,6 +132,8 @@ type alias FormArgs a =
     }
 
 
+{-| Get the form view
+-}
 form : FormArgs a -> State -> CompaniesData data -> Html.Html Msg
 form args (State state) data =
     div [ class [ Css.Form ] ]
@@ -257,6 +273,8 @@ previousCompany args state data =
         ]
 
 
+{-| Get a completed view
+-}
 completedView : { a | localization : Localization } -> CompaniesData data -> Html.Html msg
 completedView args data =
     div [ class [ Css.Sections ] ]
@@ -293,6 +311,8 @@ completedView args data =
         ]
 
 
+{-| Update a CompaniesData
+-}
 update : Msg -> State -> CompaniesData data -> ( State, CompaniesData data, Cmd Msg )
 update msg (State state) data =
     case msg of
@@ -372,6 +392,8 @@ updateAddress addressMsg companyState companyData =
     )
 
 
+{-| Validate all fields
+-}
 validateAll : State -> RegionsCountry -> CompaniesData data -> State
 validateAll (State state) regions data =
     let
@@ -409,6 +431,8 @@ validateAll (State state) regions data =
         }
 
 
+{-| Check if the State is valid
+-}
 isValid : State -> Bool
 isValid (State state) =
     Validation.isValid state.currentCompany.validations
@@ -417,6 +441,8 @@ isValid (State state) =
         && Address.isValid state.previousCompany.address
 
 
+{-| Cast a CompaniesData
+-}
 cast : CompaniesData other -> CompaniesData {}
 cast companies =
     { currentCompany = companies.currentCompany
@@ -424,6 +450,8 @@ cast companies =
     }
 
 
+{-| Get an empty form
+-}
 emptyForm :
     Int
     -> Date

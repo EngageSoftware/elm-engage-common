@@ -7,6 +7,14 @@ module Engage.Entity.PhoneNumber exposing
     , format
     )
 
+{-| Entity.PhoneNumber
+
+@docs PhoneNumber
+
+@docs decoder, defaultIsoCode, empty, encoder, format
+
+-}
+
 import Dict
 import Engage.String exposing (space)
 import IntlPhoneInput.Config
@@ -17,10 +25,14 @@ import Json.Encode
 import String
 
 
+{-| The PhoneNumber type
+-}
 type alias PhoneNumber =
     IntlPhoneInput.Type.PhoneNumber
 
 
+{-| Get an empty phone number
+-}
 empty : PhoneNumber
 empty =
     { isoCode = "US", phoneNumber = "" }
@@ -33,6 +45,8 @@ isEmpty phoneNumber =
         |> String.isEmpty
 
 
+{-| Get the default iso code
+-}
 defaultIsoCode : PhoneNumber -> PhoneNumber
 defaultIsoCode phoneNumber =
     if String.isEmpty phoneNumber.isoCode then
@@ -42,6 +56,8 @@ defaultIsoCode phoneNumber =
         phoneNumber
 
 
+{-| The PhoneNumber decoder
+-}
 decoder : Decoder PhoneNumber
 decoder =
     decode (\isoCode phoneNumber -> { isoCode = isoCode, phoneNumber = phoneNumber } |> defaultIsoCode)
@@ -49,6 +65,8 @@ decoder =
         |> required "phoneNumber" (oneOf [ null "", string ])
 
 
+{-| The PhoneNumber encoder
+-}
 encoder : PhoneNumber -> Json.Encode.Value
 encoder phoneNumber =
     if isEmpty phoneNumber then
@@ -64,6 +82,8 @@ encoder phoneNumber =
             ]
 
 
+{-| Format a phone number
+-}
 format : IntlPhoneInput.Config.Config msg -> PhoneNumber -> String
 format config phoneNumber =
     let

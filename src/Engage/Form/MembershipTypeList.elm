@@ -3,6 +3,14 @@ module Engage.Form.MembershipTypeList exposing
     , form
     )
 
+{-| Form.MembershipTypeList
+
+@docs MembershipType
+
+@docs form
+
+-}
+
 import Engage.Namespace as Namespace
 import Engage.UI.Accordion as Accordion
 import Engage.UI.Error as Error
@@ -10,6 +18,8 @@ import Html exposing (Html)
 import String
 
 
+{-| The MembershipType type
+-}
 type alias MembershipType =
     { name : String
     , value : Int
@@ -32,6 +42,8 @@ type alias Args a msg =
     }
 
 
+{-| Get a form view
+-}
 form : Args a msg -> Accordion.State -> Maybe MembershipType -> Html msg
 form ({ id, membershipTypeList, labelText, onChange, status, helpText, accordionExpandButtonText, requiredText } as args) state membershipType =
     let

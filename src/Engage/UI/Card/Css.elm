@@ -3,6 +3,14 @@ module Engage.UI.Card.Css exposing
     , css
     )
 
+{-| UI.Card.Css
+
+@docs Class
+
+@docs css
+
+-}
+
 import Css exposing (..)
 import Css.Foreign exposing (Snippet, class, descendants)
 import DEPRECATED.Css.Namespace
@@ -14,6 +22,8 @@ import Engage.Theme as Theme exposing (Theme)
 import Engage.UI.Button.Css as ButtonCss
 
 
+{-| The Class type
+-}
 type Class
     = Card
     | CardHeader
@@ -24,6 +34,8 @@ type Class
     | CardSubtitle
 
 
+{-| Get the css
+-}
 css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
     (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))

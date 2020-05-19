@@ -12,6 +12,12 @@ module Engage.UI.Svg exposing
     , warning
     )
 
+{-| UI.Svg
+
+@docs chevron, confirmation, error, fax, info, mail, mobilePhone, phone, remove, upload, warning
+
+-}
+
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (MessageType(..))
 import Engage.Svg.CssHelpers as CssHelpers
@@ -22,6 +28,8 @@ import Svg exposing (..)
 import Svg.Attributes exposing (..)
 
 
+{-| Get the error svg
+-}
 error : { a | namespace : Namespace } -> List (Html.Attribute msg) -> Html msg
 error { namespace } attributes =
     let
@@ -38,6 +46,8 @@ error { namespace } attributes =
         ]
 
 
+{-| Get the confirmation svg
+-}
 confirmation : { a | namespace : Namespace } -> List (Html.Attribute msg) -> Html msg
 confirmation { namespace } attributes =
     let
@@ -54,6 +64,8 @@ confirmation { namespace } attributes =
         ]
 
 
+{-| Get the warning svg
+-}
 warning : { a | namespace : Namespace } -> List (Html.Attribute msg) -> Html msg
 warning { namespace } attributes =
     let
@@ -70,6 +82,8 @@ warning { namespace } attributes =
         ]
 
 
+{-| Get the info svg
+-}
 info : { a | namespace : Namespace } -> List (Html.Attribute msg) -> Html msg
 info { namespace } attributes =
     let
@@ -86,6 +100,8 @@ info { namespace } attributes =
         ]
 
 
+{-| Get the chevron svg
+-}
 chevron : { a | namespace : Namespace } -> List (Html.Attribute msg) -> Html msg
 chevron { namespace } attributes =
     let
@@ -100,6 +116,8 @@ chevron { namespace } attributes =
         ]
 
 
+{-| Get the mail svg
+-}
 mail : Namespace -> String -> List (Html.Attribute msg) -> Html msg
 mail namespace titleText attributes =
     let
@@ -117,6 +135,8 @@ mail namespace titleText attributes =
         ]
 
 
+{-| Get the phone svg
+-}
 phone : Namespace -> String -> List (Html.Attribute msg) -> Html msg
 phone namespace titleText attributes =
     let
@@ -134,6 +154,8 @@ phone namespace titleText attributes =
         ]
 
 
+{-| Get the mobile phone svg
+-}
 mobilePhone : Namespace -> String -> List (Html.Attribute msg) -> Html msg
 mobilePhone namespace titleText attributes =
     let
@@ -151,6 +173,8 @@ mobilePhone namespace titleText attributes =
         ]
 
 
+{-| Get the fax svg
+-}
 fax : Namespace -> String -> List (Html.Attribute msg) -> Html msg
 fax namespace titleText attributes =
     let
@@ -167,6 +191,8 @@ fax namespace titleText attributes =
         ]
 
 
+{-| Get the upload svg
+-}
 upload : Namespace -> String -> List (Html.Attribute msg) -> Html msg
 upload namespace titleText attributes =
     let
@@ -185,6 +211,8 @@ upload namespace titleText attributes =
         ]
 
 
+{-| Get the remove svg
+-}
 remove : Namespace -> String -> List (Html.Attribute msg) -> Html msg
 remove namespace titleText attributes =
     let

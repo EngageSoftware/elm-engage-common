@@ -10,7 +10,13 @@ module Engage.UI.Info exposing
     , phone
     )
 
-import Bool
+{-| UI.Info
+
+@docs bool, email, fax, group, info, label, mobilePhone, multiple, phone
+
+-}
+
+import Engage.Bool
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.Info.Css exposing (Class(..))
 import Engage.UI.Svg as Svg
@@ -26,6 +32,8 @@ type Label
     = Label String
 
 
+{-| Get a Label from a String
+-}
 label : String -> Label
 label =
     Label
@@ -35,6 +43,8 @@ label =
 -- VIEW
 
 
+{-| Get the group view
+-}
 group : Namespace -> List (Html msg) -> Html msg
 group namespace content =
     let
@@ -46,6 +56,8 @@ group namespace content =
     div [ class [ InfoGroup ] ] content
 
 
+{-| Get the info view
+-}
 info : Namespace -> Label -> String -> Html msg
 info namespace label text =
     let
@@ -58,6 +70,8 @@ info namespace label text =
         ]
 
 
+{-| Get the mutlitple view
+-}
 multiple : Namespace -> Label -> List (Html msg) -> Html msg
 multiple namespace label content =
     let
@@ -70,6 +84,8 @@ multiple namespace label content =
         ]
 
 
+{-| Get the mobilePhone view
+-}
 mobilePhone : Namespace -> Label -> String -> Html msg
 mobilePhone namespace (Label label) mobilePhone =
     let
@@ -86,6 +102,8 @@ mobilePhone namespace (Label label) mobilePhone =
             ]
 
 
+{-| Get the phone view
+-}
 phone : Namespace -> Label -> String -> Html msg
 phone namespace (Label label) phoneNumber =
     let
@@ -102,6 +120,8 @@ phone namespace (Label label) phoneNumber =
             ]
 
 
+{-| Get the email view
+-}
 email : Namespace -> Label -> String -> Html msg
 email namespace (Label label) emailAddress =
     let
@@ -118,6 +138,8 @@ email namespace (Label label) emailAddress =
             ]
 
 
+{-| Get the fax view
+-}
 fax : Namespace -> Label -> String -> Html msg
 fax namespace (Label label) faxNumber =
     let
@@ -134,6 +156,8 @@ fax namespace (Label label) faxNumber =
             ]
 
 
+{-| Get the bool view
+-}
 bool : Namespace -> Label -> Bool -> Html msg
 bool namespace (Label label) value =
     let
@@ -142,8 +166,8 @@ bool namespace (Label label) value =
     in
     div [ namespaced.class [ Info, InfoBool ] ]
         [ value
-            |> Bool.true (Svg.confirmation { namespace = namespace } [])
-            |> Bool.false (Svg.error { namespace = namespace } [])
+            |> Engage.Bool.true (Svg.confirmation { namespace = namespace } [])
+            |> Engage.Bool.false (Svg.error { namespace = namespace } [])
         , textView namespace label
         ]
 

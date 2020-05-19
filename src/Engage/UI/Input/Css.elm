@@ -9,6 +9,14 @@ module Engage.UI.Input.Css exposing
     , snippets
     )
 
+{-| UI.Input.Css
+
+@docs Class
+
+@docs css, formControlMixin, inputMixin, labelMixin, largeMixin, smallMixin, snippets
+
+-}
+
 import Css exposing (..)
 import Css.Foreign exposing (Snippet, class, descendants, children, selector)
 import DEPRECATED.Css.Namespace
@@ -24,6 +32,8 @@ import Engage.UI.Message.Css exposing (iconHeightPx, iconWidthPx)
 import IntlPhoneInput.Css as IntlPhoneInput
 
 
+{-| The Class type
+-}
 type Class
     = Input Size
     | CheckBoxList Size
@@ -44,12 +54,16 @@ type Class
     | Required
 
 
+{-| Get the css
+-}
 css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
     (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
+{-| Get the snippets
+-}
 snippets : Theme -> List Snippet
 snippets theme =
     formControlStyle theme
@@ -106,6 +120,8 @@ formControlWithSize theme size =
         ]
 
 
+{-| Get the form control style
+-}
 formControlMixin : Theme -> Size -> Style
 formControlMixin theme size =
     let
@@ -131,6 +147,8 @@ formControlMixin theme size =
         ]
 
 
+{-| Get the label style
+-}
 labelMixin : Theme -> Size -> Style
 labelMixin theme size =
     let
@@ -163,7 +181,6 @@ labelMixin theme size =
         , fontWeight bold
         ]
 
-
 checkBoxStyle : Theme -> List Snippet
 checkBoxStyle theme =
     class CheckBoxContainer
@@ -180,6 +197,8 @@ checkBoxWithSize theme size =
         ]
 
 
+{-| Get the check box style
+-}
 checkBoxMixin : Style
 checkBoxMixin =
     batch
@@ -195,6 +214,8 @@ checkBoxMixin =
         ]
 
 
+{-| Get the input style
+-}
 inputMixin : Theme -> Style
 inputMixin theme =
     let
@@ -217,6 +238,8 @@ inputMixin theme =
         ]
 
 
+{-| Get the small style
+-}
 smallMixin : Theme -> Style
 smallMixin theme =
     let
@@ -232,6 +255,8 @@ smallMixin theme =
         ]
 
 
+{-| Get the large style
+-}
 largeMixin : Theme -> Style
 largeMixin theme =
     let

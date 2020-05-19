@@ -24,6 +24,14 @@ module Engage.UI.Table exposing
     , withCustomSorter
     )
 
+{-| UI.Table
+
+@docs ActionColumnDetails, Column, ColumnAction, Config, State
+
+@docs actionsColumn, customColumn, dateColumn, decreasingBy, decreasingOrIncreasingBy, floatColumn, formattedNumberColumn, formattedNumberWithLanguageColumn, increasingBy, increasingOrDecreasingBy, initialSort, intColumn, linkColumn, maybeColumn, stringColumn, table, unsortable, withCustomSorter
+
+-}
+
 import Date.Extra.Config.Configs as DateConfigs
 import Date.Extra.Format exposing (format)
 import Engage.DateHelper as DateHelper
@@ -42,6 +50,8 @@ import Table
 import Time exposing (Time)
 
 
+{-| Get the table view
+-}
 table : Config data msg -> State -> List data -> Html msg
 table { namespace, toId, toMsg, columns } state data =
     let
@@ -73,6 +83,8 @@ table { namespace, toId, toMsg, columns } state data =
 -- Types
 
 
+{-| The Config type
+-}
 type alias Config data msg =
     { namespace : Namespace
     , toId : data -> String
@@ -81,6 +93,8 @@ type alias Config data msg =
     }
 
 
+{-| The ActionColumnDetails type
+-}
 type alias ActionColumnDetails data msg =
     { text : String
     , toMsg : data -> msg
@@ -89,6 +103,8 @@ type alias ActionColumnDetails data msg =
     }
 
 
+{-| The ColumnAction type
+-}
 type ColumnAction data msg
     = PrimaryButton String (data -> msg) (List (Html.Attribute msg))
     | StandardButton String (data -> msg) (List (Html.Attribute msg))
@@ -99,10 +115,14 @@ type ColumnAction data msg
 -- Aliases
 
 
+{-| The Column type
+-}
 type Column data msg
     = Column (ColumnData data msg)
 
 
+{-| The State type
+-}
 type alias State =
     Table.State
 
@@ -118,31 +138,43 @@ type alias Sorter data =
     Table.Sorter data
 
 
+{-| Get the initial sort State
+-}
 initialSort : String -> State
 initialSort =
     Table.initialSort
 
 
+{-| Get the unsortable Sorter
+-}
 unsortable : Sorter data
 unsortable =
     Table.unsortable
 
 
+{-| Get the increasing by Sorter
+-}
 increasingBy : (data -> comparable) -> Sorter data
 increasingBy toComparable =
     Table.increasingBy toComparable
 
 
+{-| Get the decreasing by Sorter
+-}
 decreasingBy : (data -> comparable) -> Sorter data
 decreasingBy toComparable =
     Table.decreasingBy toComparable
 
 
+{-| Get the decreasing or increasing by Sorter
+-}
 decreasingOrIncreasingBy : (data -> comparable) -> Sorter data
 decreasingOrIncreasingBy toComparable =
     Table.decreasingOrIncreasingBy toComparable
 
 
+{-| Get the increasing or decreasing by Sorter
+-}
 increasingOrDecreasingBy : (data -> comparable) -> Sorter data
 increasingOrDecreasingBy toComparable =
     Table.increasingOrDecreasingBy toComparable
@@ -152,6 +184,8 @@ increasingOrDecreasingBy toComparable =
 -- Columns
 
 
+{-| Get a String column
+-}
 stringColumn : String -> (data -> String) -> Column data msg
 stringColumn name toStr =
     Column
@@ -161,6 +195,8 @@ stringColumn name toStr =
         }
 
 
+{-| Get a Int column
+-}
 intColumn : String -> (data -> Int) -> Column data msg
 intColumn name toInt =
     Column
@@ -170,6 +206,8 @@ intColumn name toInt =
         }
 
 
+{-| Get a Float column
+-}
 floatColumn : String -> (data -> Float) -> Column data msg
 floatColumn name toFloat =
     Column
@@ -179,6 +217,8 @@ floatColumn name toFloat =
         }
 
 
+{-| Get a date column
+-}
 dateColumn : String -> (data -> Time) -> String -> String -> Column data msg
 dateColumn name toTime locale dateFormat =
     Column
@@ -188,6 +228,8 @@ dateColumn name toTime locale dateFormat =
         }
 
 
+{-| Get a link column
+-}
 linkColumn : String -> (data -> String) -> (data -> String) -> (data -> List (Html.Attribute msg)) -> Column data msg
 linkColumn name toHref toText toAttributes =
     let
@@ -202,6 +244,8 @@ linkColumn name toHref toText toAttributes =
         }
 
 
+{-| Get a formatted number column
+-}
 formattedNumberColumn : String -> (data -> Float) -> String -> Column data msg
 formattedNumberColumn name toCurrency format =
     Column
@@ -211,6 +255,8 @@ formattedNumberColumn name toCurrency format =
         }
 
 
+{-| Get a formatted number with language column
+-}
 formattedNumberWithLanguageColumn : String -> (data -> Float) -> NumeralLanguage.Language -> String -> Column data msg
 formattedNumberWithLanguageColumn name toCurrency language format =
     Column
@@ -220,6 +266,8 @@ formattedNumberWithLanguageColumn name toCurrency language format =
         }
 
 
+{-| Get an actions column
+-}
 actionsColumn : List (ColumnAction data msg) -> Column data msg
 actionsColumn actions =
     Column
@@ -229,6 +277,8 @@ actionsColumn actions =
         }
 
 
+{-| Get a custom column
+-}
 customColumn : String -> (data -> List (Html msg)) -> Column data msg
 customColumn name toHtml =
     Column
@@ -238,6 +288,8 @@ customColumn name toHtml =
         }
 
 
+{-| Get a Maybe column
+-}
 maybeColumn : String -> (data -> Maybe a) -> (a -> String) -> String -> Sorter data -> Column data msg
 maybeColumn name toMaybeData toStr defaultValue sorter =
     let
@@ -329,6 +381,8 @@ linkDetails attributes text namespace =
     Table.HtmlDetails [] [ link ]
 
 
+{-| Get a Column with a custom Sorter
+-}
 withCustomSorter : Sorter data -> Column data msg -> Column data msg
 withCustomSorter sorter column =
     case column of

@@ -6,6 +6,12 @@ module Engage.Form.Company.Json exposing
     , encoderWith
     )
 
+{-| Form.Company.Json
+
+@docs decoder, emptyCompanies, emptyCompany, encoder, encoderWith
+
+-}
+
 import Date exposing (Date)
 import Date.Extra.Format
 import Engage.Entity.Address as Address
@@ -16,11 +22,15 @@ import Json.Encode as Encode
 import String
 
 
+{-| Get the encoder
+-}
 encoder : { a | participantId : Int, companies : CompaniesData {} } -> Encode.Value
 encoder =
     encoderWith []
 
 
+{-| Get the encoder with data
+-}
 encoderWith : List ( String, Encode.Value ) -> { a | participantId : Int, companies : CompaniesData {} } -> Encode.Value
 encoderWith additional { participantId, companies } =
     Encode.object
@@ -36,6 +46,8 @@ encoderWith additional { participantId, companies } =
         )
 
 
+{-| Get the company encoder
+-}
 companyEncoder : Bool -> CompanyData -> Encode.Value
 companyEncoder isCurrent company =
     if String.isEmpty company.name then
@@ -75,6 +87,8 @@ companyEncoder isCurrent company =
             ]
 
 
+{-| The CompaniesData decoder
+-}
 decoder : Decoder (CompaniesData {})
 decoder =
     let
@@ -116,6 +130,8 @@ isoDateDecoder =
             )
 
 
+{-| Get an empty CompaniesData
+-}
 emptyCompanies : CompaniesData {}
 emptyCompanies =
     { currentCompany = emptyCompany
@@ -123,6 +139,8 @@ emptyCompanies =
     }
 
 
+{-| Get an empty CompanyData
+-}
 emptyCompany : CompanyData
 emptyCompany =
     { companyId = Nothing

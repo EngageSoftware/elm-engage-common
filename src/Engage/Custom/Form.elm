@@ -11,6 +11,12 @@ module Engage.Custom.Form exposing
     , view
     )
 
+{-| Custom.Form
+
+@docs allFields, completedView, findField, form, isValid, update, updateFileEntryData, validate, validateAll, view
+
+-}
+
 import Dict exposing (Dict)
 import Engage.Custom.Form.Css as Css
 import Engage.Custom.Section as Section exposing (sectionTupleDecoder)
@@ -28,6 +34,8 @@ import Html.CssHelpers
         |> Html.CssHelpers.withNamespace
 
 
+{-| Get the view
+-}
 view : Config msg -> Form -> Html msg
 view config form =
     let
@@ -41,6 +49,8 @@ view config form =
         |> Html.div [ class [ Css.Sections ] ]
 
 
+{-| Get the form view
+-}
 form : Config msg -> Form -> Html msg
 form config form =
     let
@@ -63,6 +73,8 @@ form config form =
     Html.div [ class [ Css.Form ] ] (title :: sections)
 
 
+{-| Get the completed view
+-}
 completedView : Config msg -> Form -> Html msg
 completedView config form =
     let
@@ -85,11 +97,15 @@ type alias Query a =
     { a | formId : Int, sectionId : Int, fieldGroupId : Int, fieldId : Int }
 
 
+{-| Update a Form field
+-}
 update : Query a -> (Field -> Field) -> Form -> Form
 update query updater form =
     { form | sections = Dict.update query.sectionId (Maybe.map <| Section.update query updater form) form.sections }
 
 
+{-| Update a Form FileEntryData
+-}
 updateFileEntryData : Query a -> (FileEntryData -> FileEntryData) -> Form -> Form
 updateFileEntryData query updater form =
     let
@@ -104,6 +120,8 @@ updateFileEntryData query updater form =
     update query fieldUpdater form
 
 
+{-| Validate a Form
+-}
 validate : { a | fieldId : Int } -> Form -> Form
 validate fieldId form =
     { form
@@ -115,11 +133,15 @@ validate fieldId form =
     }
 
 
+{-| Clear validations
+-}
 cleanValidations : { a | fieldId : Int } -> ValidationErrors { fieldId : Int } -> ValidationErrors { fieldId : Int }
 cleanValidations fieldId validations =
     validations |> List.filter (\( currentFieldId, _ ) -> currentFieldId.fieldId /= fieldId.fieldId)
 
 
+{-| Validate all fields
+-}
 validateAll : Form -> Form
 validateAll form =
     { form
@@ -130,6 +152,8 @@ validateAll form =
     }
 
 
+{-| Get all fields of the Form
+-}
 allFields : Form -> List ( Form, Section, FieldGroup, Field )
 allFields form =
     form.sections
@@ -137,6 +161,8 @@ allFields form =
         |> List.concatMap (Section.allFields form)
 
 
+{-| Field a Form field
+-}
 findField : { a | formId : Int, sectionId : Int, fieldGroupId : Int, fieldId : Int } -> Form -> Maybe ( Form, Section, FieldGroup, Field )
 findField query form =
     form.sections
@@ -144,6 +170,8 @@ findField query form =
         |> Maybe.andThen (Section.findField query form)
 
 
+{-| Check if the Form is valid
+-}
 isValid : Form -> Bool
 isValid form =
     Validation.isValid form.validations

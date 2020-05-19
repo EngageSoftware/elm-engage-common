@@ -6,12 +6,22 @@ module Engage.Entity.Account exposing
     , encoderWith
     )
 
+{-| Entity.Account
+
+@docs Account
+
+@docs decoder, empty, encoder, encoderWith
+
+-}
+
 import Engage.ListItem as ListItem exposing (ListItem)
 import Json.Decode as JD exposing (Decoder)
 import Json.Decode.Pipeline as JDP
 import Json.Encode as JE
 
 
+{-| The Account type
+-}
 type alias Account =
     { accountId : Maybe Int
     , name : String
@@ -26,6 +36,8 @@ type alias Account =
     }
 
 
+{-| Get an empty account
+-}
 empty : Account
 empty =
     { accountId = Nothing
@@ -41,6 +53,8 @@ empty =
     }
 
 
+{-| The Account decoder
+-}
 decoder : Decoder Account
 decoder =
     JDP.decode Account
@@ -56,11 +70,15 @@ decoder =
         |> JDP.required "phone" (JD.oneOf [ JD.null "", JD.string ])
 
 
+{-| The Account encoder
+-}
 encoder : Account -> JE.Value
 encoder =
     encoderWith []
 
 
+{-| The Account encoder with fields
+-}
 encoderWith : List ( String, JE.Value ) -> Account -> JE.Value
 encoderWith fields account =
     JE.object

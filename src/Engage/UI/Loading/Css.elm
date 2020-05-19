@@ -5,6 +5,14 @@ module Engage.UI.Loading.Css exposing
     , snippets
     )
 
+{-| UI.Loading.Css
+
+@docs Class, LoadingIcon
+
+@docs css, snippets
+
+-}
+
 import Css exposing (..)
 import Css.Foreign exposing (Snippet, class, descendants, withClass)
 import DEPRECATED.Css.Namespace
@@ -16,6 +24,8 @@ import Engage.Theme as Theme exposing (Theme)
 import Engage.ThemeHelper as Theme
 
 
+{-| The Class type
+-}
 type Class
     = Loading
     | LoadingIndicator MessageType
@@ -26,16 +36,22 @@ type Class
     | Overlay
 
 
+{-| The LoadingIcon type
+-}
 type LoadingIcon
     = Ring
 
 
+{-| Get the css
+-}
 css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
     (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
+{-| Get the snippets
+-}
 snippets : Theme -> List Snippet
 snippets theme =
     [ loading

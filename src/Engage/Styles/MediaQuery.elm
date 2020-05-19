@@ -1,9 +1,19 @@
 module Engage.Styles.MediaQuery exposing (BreakPoint(..), atMedia)
 
+{-| Styles.MediaQuery
+
+@docs BreakPoint
+
+@docs atMedia
+
+-}
+
 import Css exposing (..)
 import Css.Foreign exposing (Snippet, mediaQuery)
 
 
+{-| The BreakPoint type
+-}
 type BreakPoint
     = XSmall
     | Small
@@ -13,6 +23,8 @@ type BreakPoint
     | XXLarge
 
 
+{-| Get the media query at the breakpoint
+-}
 atMedia : BreakPoint -> List Snippet -> Snippet
 atMedia breakPoint =
     breakPoint

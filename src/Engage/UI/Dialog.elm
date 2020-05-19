@@ -11,6 +11,14 @@ module Engage.UI.Dialog exposing
     , show
     )
 
+{-| UI.Dialog
+
+@docs Attribute, State
+
+@docs cancelText, confirm, hide, initialState, okText, onCancel, onOk, show
+
+-}
+
 import Dom
 import Engage.Form.FormAction as FormAction
 import Engage.Namespace as Namespace exposing (Namespace)
@@ -30,6 +38,8 @@ domId =
     "EngageUIDialog"
 
 
+{-| The Attribute type
+-}
 type alias Attribute msg =
     InternalAttribute msg -> InternalAttribute msg
 
@@ -51,15 +61,21 @@ emptyAttribute =
     }
 
 
+{-| Get the initial State
+-}
 initialState : State
 initialState =
     State { visible = False }
 
 
+{-| The State type
+-}
 type State
     = State { visible : Bool }
 
 
+{-| Get the confirm view
+-}
 confirm : Namespace -> State -> List (Attribute msg) -> List (Html msg) -> Html msg
 confirm namespace (State state) attributes body =
     let
@@ -162,21 +178,29 @@ escapeKeyDecoder msg (State state) =
 -- ATTRIBUTES
 
 
+{-| Get the onCancel message
+-}
 onCancel : (State -> msg) -> Attribute msg
 onCancel handler =
     \attribute -> { attribute | onCancel = Just handler }
 
 
+{-| Get the onOk message
+-}
 onOk : (State -> msg) -> Attribute msg
 onOk handler =
     \attribute -> { attribute | onOk = Just handler }
 
 
+{-| Get the okText message
+-}
 okText : String -> Attribute msg
 okText value =
     \attribute -> { attribute | okText = value }
 
 
+{-| Get the cancelText message
+-}
 cancelText : String -> Attribute msg
 cancelText value =
     \attribute -> { attribute | cancelText = value }
@@ -186,6 +210,8 @@ cancelText value =
 -- STATE TRANSFORMATION
 
 
+{-| Show the dialog
+-}
 show : State -> ( State, Task Dom.Error () )
 show (State state) =
     ( State { state | visible = True }
@@ -193,6 +219,8 @@ show (State state) =
     )
 
 
+{-| Hide the dialog
+-}
 hide : State -> State
 hide (State state) =
     State { state | visible = False }

@@ -23,6 +23,14 @@ module Engage.Form.Contact exposing
     , view
     )
 
+{-| Form.Contact
+
+@docs Attribute, Msg, State, ValidationField
+
+@docs completedView, completedViewWithAdditional, contactTypes, countries, countriesToItems, form, initialState, isEmpty, isValid, regions, regionsToItems, required, toAllRegions, update, validateAll, validateAllWith, validateFieldWith, view
+
+-}
+
 import Dict exposing (Dict)
 import Engage.Custom.Form.Css as Css
 import Engage.Entity.Address as Address exposing (Countries, Regions, RegionsCountry)
@@ -44,6 +52,8 @@ import Html.CssHelpers
 import String
 
 
+{-| The Msg type
+-}
 type Msg field
     = PrefixUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
     | FirstNameUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
@@ -67,6 +77,8 @@ type Msg field
     | NotesUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
 
 
+{-| The State type
+-}
 type State parentField
     = State
         { prefix : Input.State
@@ -94,6 +106,8 @@ type State parentField
         }
 
 
+{-| Get the initial state
+-}
 initialState : State parentField
 initialState =
     State
@@ -122,6 +136,8 @@ initialState =
         }
 
 
+{-| The ValidationField type
+-}
 type ValidationField
     = Prefix
     | FirstName
@@ -165,30 +181,42 @@ emptyAttribute =
     }
 
 
+{-| The Attribute type
+-}
 type alias Attribute =
     InternalAttribute -> InternalAttribute
 
 
+{-| Get the countries Attribute
+-}
 countries : Countries -> Attribute
 countries value =
     \attribute -> { attribute | countries = value }
 
 
+{-| Get the regions Attribute
+-}
 regions : RegionsCountry -> Attribute
 regions value =
     \attribute -> { attribute | regions = value }
 
 
+{-| Get the required Attribute
+-}
 required : Bool -> Attribute
 required value =
     \attribute -> { attribute | required = value }
 
 
+{-| Get the contact types Attribute
+-}
 contactTypes : ContactTypes -> Attribute
 contactTypes value =
     \attribute -> { attribute | contactTypes = Just value }
 
 
+{-| Get the view
+-}
 view : Namespace -> Localization -> Countries -> RegionsCountry -> Contact -> Html msg
 view namespace localization countries regions data =
     let
@@ -237,11 +265,15 @@ view namespace localization countries regions data =
             ]
 
 
+{-| Get the completed view
+-}
 completedView : Namespace -> Localization -> Contact -> Html msg
 completedView namespace localization data =
     completedViewWithAdditional namespace localization [] data
 
 
+{-| Get the completed view with additional data
+-}
 completedViewWithAdditional : Namespace -> Localization -> List String -> Contact -> Html msg
 completedViewWithAdditional namespace localization additionalText data =
     let
@@ -268,6 +300,8 @@ completedViewWithAdditional namespace localization additionalText data =
         ]
 
 
+{-| Check if the Contact is empty
+-}
 isEmpty : Contact -> Bool
 isEmpty data =
     String.isEmpty data.firstName
@@ -280,6 +314,8 @@ isEmpty data =
         && (data.country == Nothing)
 
 
+{-| Get the form view
+-}
 form : Namespace -> Localization -> (ValidationField -> parentField) -> List Attribute -> State parentField -> Contact -> Html (Msg parentField)
 form originalNamespace localization field attributes (State state) contactData =
     let
@@ -597,6 +633,8 @@ billingContactCheckBox originalNamespace localization field (State state) contac
                 contactData.isBillingContact                
  
 
+{-| Update the Contact
+-}
 update : Msg parentField -> State parentField -> Contact -> ( State parentField, Contact, Cmd (Msg parentField) )
 update msg (State oldState) data =
     let
@@ -819,6 +857,8 @@ contactTypesToItems countries =
         |> Dict.fromList
 
 
+{-| Convert Countries to an dropdown
+-}
 countriesToItems : Countries -> Dict String Dropdown.Item
 countriesToItems countries =
     countries
@@ -828,6 +868,8 @@ countriesToItems countries =
         |> Dict.fromList
 
 
+{-| Convert Regions to an dropdown
+-}
 regionsToItems : Regions -> Dict String Dropdown.Item
 regionsToItems regions =
     regions
@@ -837,11 +879,15 @@ regionsToItems regions =
         |> Dict.fromList
 
 
+{-| Validate all of the fields
+-}
 validateAll : (ValidationField -> parentField) -> State parentField -> Contact -> State parentField
 validateAll =
     validateAllWith []
 
 
+{-| Validate all of the fields with a function
+-}
 validateAllWith : List (Contact -> ValidationErrors parentField) -> (ValidationField -> parentField) -> State parentField -> Contact -> State parentField
 validateAllWith additionalValidations parentField (State state) data =
     State
@@ -850,6 +896,8 @@ validateAllWith additionalValidations parentField (State state) data =
         }
 
 
+{-| Validate a field with a function
+-}
 validateFieldWith : List (Contact -> ValidationErrors parentField) -> (ValidationField -> parentField) -> Contact -> ValidationErrors parentField
 validateFieldWith additionalValidations parentField data =
     Validation.validateField
@@ -869,11 +917,15 @@ validateFieldWith additionalValidations parentField data =
         data
 
 
+{-| Check if the State is valid
+-}
 isValid : State parentField -> Bool
 isValid (State state) =
     Validation.isValid state.validations
 
 
+{-| Convert RegionsCountry to Regions
+-}
 toAllRegions : RegionsCountry -> Regions
 toAllRegions regionsCountry =
     regionsCountry

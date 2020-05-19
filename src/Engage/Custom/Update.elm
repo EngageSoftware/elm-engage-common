@@ -6,6 +6,12 @@ module Engage.Custom.Update exposing
     , updateMembershipEventId
     )
 
+{-| Custom.Update
+
+@docs updateAnswer, updateFileUploadError, updateFileUploadProgress, updateFileUploadStatus, updateMembershipEventId
+
+-}
+
 import Dict
 import Engage.Custom.Field as Field
 import Engage.Custom.Field.Helpers as Helpers
@@ -21,6 +27,8 @@ type alias Query a =
     { a | formId : Int, sectionId : Int, fieldGroupId : Int, fieldId : Int }
 
 
+{-| Update an Answer
+-}
 updateAnswer : Query { a | onlyStateChange : Bool } -> FieldType -> Answer -> Form -> Form
 updateAnswer query fieldType answer form =
     let
@@ -70,6 +78,8 @@ updateAnswer query fieldType answer form =
         |> validate
 
 
+{-| Reset Regions
+-}
 resetRegions : Query a -> Form -> Form
 resetRegions query form =
     let
@@ -90,6 +100,8 @@ resetRegions query form =
         |> List.foldl (\regionQuery updatedForm -> Form.update regionQuery Field.reset updatedForm) form
 
 
+{-| Update FileUploadError
+-}
 updateFileUploadError : FileUploadError -> Form -> Form
 updateFileUploadError fileUploadError form =
     let
@@ -99,6 +111,8 @@ updateFileUploadError fileUploadError form =
     Form.updateFileEntryData fileUploadError updater form
 
 
+{-| Update FileUploadStatus
+-}
 updateFileUploadStatus : FileUploadStatus -> Form -> Form
 updateFileUploadStatus fileUploadStatus form =
     let
@@ -108,6 +122,8 @@ updateFileUploadStatus fileUploadStatus form =
     Form.updateFileEntryData fileUploadStatus updater form
 
 
+{-| Update FileUploadProgress
+-}
 updateFileUploadProgress : FileUploadProgress -> Form -> Form
 updateFileUploadProgress fileUploadProgress form =
     let
@@ -382,6 +398,8 @@ updateBoolEntryData answer entry =
     { entry | value = answer }
 
 
+{-| Update membership event id
+-}
 updateMembershipEventId : Int -> Form -> Form
 updateMembershipEventId membershipEventid form =
     let

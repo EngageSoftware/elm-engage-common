@@ -5,14 +5,26 @@ module Engage.CreditCard.Ports exposing
     , toInKey
     )
 
+{-| CreditCard.Ports
+
+@docs InKey, OutKey
+
+@docs inKeyDecoder, toInKey
+
+-}
+
 import Json.Decode exposing (..)
 
 
+{-| The InKey Decoder
+-}
 inKeyDecoder : Decoder InKey
 inKeyDecoder =
     string |> andThen toInKey
 
 
+{-| Convert a String to an InKey Decoder
+-}
 toInKey : String -> Decoder InKey
 toInKey str =
     case str of
@@ -32,11 +44,15 @@ toInKey str =
             fail <| "Unknown port in key: " ++ key
 
 
+{-| The OutKey type
+-}
 type OutKey
     = DomReady
     | GetStripeToken
 
 
+{-| The InKey Type
+-}
 type InKey
     = StripeCardError
     | StripeCardReady

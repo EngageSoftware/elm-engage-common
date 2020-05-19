@@ -7,6 +7,14 @@ module Engage.Entity.Participant exposing
     , toParticipant
     )
 
+{-| Entity.Participant
+
+@docs Participant
+
+@docs decoder, empty, encoder, encoderWith, toParticipant
+
+-}
+
 import Date exposing (Date)
 import Engage.Entity.Account as Account exposing (Account)
 import Engage.Entity.Address as Address exposing (Address)
@@ -19,6 +27,8 @@ import Json.Encode as JE
 import Time
 
 
+{-| The Participant type
+-}
 type alias Participant =
     { participantId : Maybe Int
     , firstName : String
@@ -37,6 +47,8 @@ type alias Participant =
     }
 
 
+{-| Get an empty Participant
+-}
 empty : Participant
 empty =
     { participantId = Nothing
@@ -75,6 +87,8 @@ type alias ParticipantLike a =
     }
 
 
+{-| Get a Participant from a partial
+-}
 toParticipant : ParticipantLike a -> Participant
 toParticipant data =
     { participantId = data.participantId
@@ -94,6 +108,8 @@ toParticipant data =
     }
 
 
+{-| A Participant decoder
+-}
 decoder : Decoder Participant
 decoder =
     JDP.decode Participant
@@ -113,11 +129,15 @@ decoder =
         |> JDP.required "account" (JD.maybe Account.decoder)
 
 
+{-| A Participant encoder
+-}
 encoder : ParticipantLike a -> JE.Value
 encoder =
     encoderWith []
 
 
+{-| A Participant with fields encoder
+-}
 encoderWith : List ( String, JE.Value ) -> ParticipantLike a -> JE.Value
 encoderWith fields participantData =
     JE.object

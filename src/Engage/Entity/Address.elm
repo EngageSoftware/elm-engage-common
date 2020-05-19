@@ -21,6 +21,14 @@ module Engage.Entity.Address exposing
     , regionsCountryDecoder
     )
 
+{-| Entity.Address
+
+@docs Address, AddressLike, AddressType, AddressTypes, Countries, CountryId, RegionId, Regions, RegionsCountry
+
+@docs addressTypeDecoder, addressTypesDecoder, countriesDecoder, decoder, empty, emptyAddressType, emptyPrimaryAddress, encoder, encoderWith, getRegionsForCountry, regionsCountryDecoder
+
+-}
+
 import Dict exposing (Dict)
 import Engage.Entity.PhoneNumber as PhoneNumber exposing (PhoneNumber)
 import Engage.ListItem as ListItem exposing (ListItem)
@@ -29,42 +37,62 @@ import Json.Decode.Pipeline as JDP
 import Json.Encode as JE
 
 
+{-| The CountryId type
+-}
 type alias CountryId =
     Int
 
 
+{-| The RegionId type
+-}
 type alias RegionId =
     Int
 
 
+{-| The AddressTypeId type
+-}
 type alias AddressTypeId =
     Int
 
 
+{-| The Countries type
+-}
 type alias Countries =
     Dict CountryId CountryData
 
 
+{-| The CountryData type
+-}
 type alias CountryData =
     { countryId : Int, countryName : String, countryIsoCode : String }
 
 
+{-| The RegionsCountry type
+-}
 type alias RegionsCountry =
     Dict CountryId Regions
 
 
+{-| The Regions type
+-}
 type alias Regions =
     Dict RegionId RegionData
 
 
+{-| The AddressTypes type
+-}
 type alias AddressTypes =
     Dict AddressTypeId AddressType
 
 
+{-| The RegionData type
+-}
 type alias RegionData =
     { regionId : Int, regionName : String }
 
 
+{-| The AddressType type
+-}
 type alias AddressType =
     { addressTypeId : Int
     , shortDescription : String
@@ -72,6 +100,8 @@ type alias AddressType =
     }
 
 
+{-| Get an empty AddressType
+-}
 emptyAddressType : AddressType
 emptyAddressType =
     { addressTypeId = 0
@@ -80,6 +110,8 @@ emptyAddressType =
     }
 
 
+{-| An AddressType decoder
+-}
 addressTypeDecoder : Decoder AddressType
 addressTypeDecoder =
     JDP.decode AddressType
@@ -88,6 +120,8 @@ addressTypeDecoder =
         |> JDP.required "longDescription" (JD.oneOf [ JD.string, JD.null "" ])
 
 
+{-| An AddressTypes decoder
+-}
 addressTypesDecoder : Decoder AddressTypes
 addressTypesDecoder =
     JD.list addressTypeDecoder
@@ -95,6 +129,8 @@ addressTypesDecoder =
         |> JD.map Dict.fromList
 
 
+{-| The AddressLike type
+-}
 type alias AddressLike a =
     { a
         | address1 : String
@@ -106,6 +142,8 @@ type alias AddressLike a =
     }
 
 
+{-| The Address type
+-}
 type alias Address =
     { addressType : Maybe AddressType
     , addressId : Maybe Int
@@ -126,6 +164,8 @@ type alias Address =
     }
 
 
+{-| Get an empty Address
+-}
 empty : Address
 empty =
     { addressType = Nothing
@@ -147,11 +187,15 @@ empty =
     }
 
 
+{-| Get an empty primary Address
+-}
 emptyPrimaryAddress : Address
 emptyPrimaryAddress =
     { empty | isPrimaryAddress = True }
 
 
+{-| The Address decoder
+-}
 decoder : Decoder Address
 decoder =
     JDP.decode Address
@@ -173,6 +217,8 @@ decoder =
         |> JDP.required "includeInExternalDirectory" JD.bool
 
 
+{-| The Countries decoder
+-}
 countriesDecoder : Decoder Countries
 countriesDecoder =
     JD.list countryDataDecoder
@@ -180,6 +226,8 @@ countriesDecoder =
         |> JD.map Dict.fromList
 
 
+{-| The CountryData decoder
+-}
 countryDataDecoder : JD.Decoder CountryData
 countryDataDecoder =
     JDP.decode CountryData
@@ -188,6 +236,8 @@ countryDataDecoder =
         |> JDP.required "countryIsoCode" JD.string
 
 
+{-| The RegionsCountry decoder
+-}
 regionsCountryDecoder : JD.Decoder RegionsCountry
 regionsCountryDecoder =
     let
@@ -201,6 +251,8 @@ regionsCountryDecoder =
         |> JD.map Dict.fromList
 
 
+{-| The Regions decoder
+-}
 regionsDecoder : JD.Decoder Regions
 regionsDecoder =
     JD.list regionDataDecoder
@@ -208,6 +260,8 @@ regionsDecoder =
         |> JD.map Dict.fromList
 
 
+{-| The RegionData decoder
+-}
 regionDataDecoder : JD.Decoder RegionData
 regionDataDecoder =
     JDP.decode RegionData
@@ -215,11 +269,15 @@ regionDataDecoder =
         |> JDP.required "regionName" JD.string
 
 
+{-| The Address encoder
+-}
 encoder : Address -> JE.Value
 encoder =
     encoderWith []
 
 
+{-| The Address encoder with fields
+-}
 encoderWith : List ( String, JE.Value ) -> Address -> JE.Value
 encoderWith fields addressData =
     JE.object
@@ -243,6 +301,8 @@ encoderWith fields addressData =
         )
 
 
+{-| Get Regions for a country
+-}
 getRegionsForCountry : CountryId -> RegionsCountry -> Regions
 getRegionsForCountry countryId regions =
     regions

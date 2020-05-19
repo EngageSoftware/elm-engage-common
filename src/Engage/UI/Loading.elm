@@ -4,6 +4,12 @@ module Engage.UI.Loading exposing
     , progress
     )
 
+{-| UI.Loading
+
+@docs loading, loadingOverlay, progress
+
+-}
+
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (MessageType(..))
 import Engage.Svg.CssHelpers as CssHelpers
@@ -14,11 +20,15 @@ import Svg exposing (..)
 import Svg.Attributes exposing (..)
 
 
+{-| Get the loading overlay view
+-}
 loadingOverlay : { a | namespace : Namespace } -> LoadingIcon -> String -> List (Html.Attribute msg) -> Html msg
 loadingOverlay =
     customLoading [ Overlay ]
 
 
+{-| Get the loading view
+-}
 loading : { a | namespace : Namespace } -> LoadingIcon -> String -> List (Html.Attribute msg) -> Html msg
 loading =
     customLoading []
@@ -57,6 +67,8 @@ customLoading classes { namespace } icon message attributes =
         ]
 
 
+{-| Get the progress view
+-}
 progress : { a | namespace : Namespace } -> { max : Float, value : Float } -> Html msg
 progress { namespace } { max, value } =
     let

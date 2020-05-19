@@ -9,6 +9,14 @@ module Engage.UI.Error exposing
     , merge
     )
 
+{-| UI.Error
+
+@docs Status
+
+@docs error, errorLocalized, inlineError, isError, isNone, localize, merge
+
+-}
+
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.List as List
@@ -22,6 +30,8 @@ import Html.CssHelpers
 -- TYPES
 
 
+{-| The Status type
+-}
 type Status
     = Unknown
     | None { infos : List String }
@@ -29,6 +39,8 @@ type Status
     | Ok
 
 
+{-| Localize the Status
+-}
 localize : (String -> String) -> Status -> Status
 localize localizer status =
     case status of
@@ -45,6 +57,8 @@ localize localizer status =
             Ok
 
 
+{-| Merge two statuses
+-}
 merge : Status -> Status -> Status
 merge a b =
     case ( a, b ) of
@@ -80,11 +94,15 @@ merge a b =
 -- VIEWS
 
 
+{-| Get the error view
+-}
 error : { namespace : Namespace } -> Status -> Html msg
 error { namespace } status =
     errorLocalized { namespace = namespace, localize = identity } status
 
 
+{-| Get the error localized view
+-}
 errorLocalized : { namespace : Namespace, localize : String -> String } -> Status -> Html msg
 errorLocalized { namespace, localize } status =
     case status of
@@ -117,6 +135,8 @@ errorLocalized { namespace, localize } status =
                 []
 
 
+{-| Get the inline error view
+-}
 inlineError :
     { namespace : Namespace
     , status : Status
@@ -175,6 +195,8 @@ inlineError { namespace, status, onChange } state =
 -- Helpers
 
 
+{-| Check if the Status is None
+-}
 isNone : Status -> Maybe Bool
 isNone result =
     case result of
@@ -191,6 +213,8 @@ isNone result =
             Just False
 
 
+{-| Check if the Status is Error
+-}
 isError : Status -> Maybe Bool
 isError result =
     case result of

@@ -8,6 +8,14 @@ module Engage.RemoteValidation exposing
     , webDataToError
     )
 
+{-| RemoteValidation
+
+@docs RemoteValidationErrors
+
+@docs httpErrorToValidationResult, isValid, isValidWebData, serverErrorDecoder, toValidationResult, webDataToError
+
+-}
+
 import Dict exposing (Dict)
 import Engage.Http
 import Engage.RemoteData exposing (WebData)
@@ -17,6 +25,8 @@ import Json.Decode as Decode exposing (Decoder)
 import String
 
 
+{-| A RemoteValidationErrors type
+-}
 type alias RemoteValidationErrors =
     List String
 
@@ -26,6 +36,8 @@ type ServerError
     | ValidationError (List String)
 
 
+{-| A ServerError decoder
+-}
 serverErrorDecoder : Decoder ServerError
 serverErrorDecoder =
     Decode.oneOf
@@ -36,6 +48,8 @@ serverErrorDecoder =
         ]
 
 
+{-| Convert a ServerError to a List
+-}
 serverErrorToErrors : ServerError -> List String
 serverErrorToErrors serverError =
     case serverError of
@@ -50,6 +64,8 @@ serverErrorToErrors serverError =
             err
 
 
+{-| Convert a WebData to a Status
+-}
 webDataToError : WebData data -> Status
 webDataToError webData =
     case webData of
@@ -72,6 +88,8 @@ webDataToError webData =
             Error.None { infos = [] }
 
 
+{-| Convert a RemoteValidationErrors to a Status
+-}
 toValidationResult : RemoteValidationErrors -> Status
 toValidationResult validationErrors =
     if List.isEmpty validationErrors then
@@ -81,6 +99,8 @@ toValidationResult validationErrors =
         Error.Error { reasons = validationErrors }
 
 
+{-| Convert a Http.Error to a Status
+-}
 httpErrorToValidationResult : Http.Error -> Status
 httpErrorToValidationResult error =
     case error of
@@ -107,11 +127,15 @@ httpErrorToValidationResult error =
             Error.Error { reasons = [ "NetworkError" ] }
 
 
+{-| Check if WebData is valid
+-}
 isValidWebData : WebData data -> Bool
 isValidWebData webData =
     Engage.RemoteData.isSuccess webData
 
 
+{-| Check if RemoteValidationErrors is valid 
+-}
 isValid : RemoteValidationErrors -> Bool
 isValid =
     List.isEmpty >> not

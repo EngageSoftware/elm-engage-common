@@ -19,6 +19,14 @@ module Engage.Form.Profile exposing
     , view
     )
 
+{-| Form.Profile
+
+@docs Attribute
+
+@docs address, avatar, birthDate, birthDateMonth, birthDateYear, edit, editAccountLink, email, fax, firstName, gender, lastName, mobilePhone, none, phone, title, view
+
+-}
+
 import Date exposing (Date)
 import Date.Extra.Config.Config_en_us
 import Date.Extra.Format
@@ -79,90 +87,126 @@ emptyAttribute =
     }
 
 
+{-| The Attribute type
+-}
 type alias Attribute msg =
     InternalAttribute msg -> InternalAttribute msg
 
 
+{-| Get the none Attribute
+-}
 none : Attribute msg
 none =
     \attribute -> attribute
 
 
+{-| Get the first name Attribute
+-}
 firstName : String -> Attribute msg
 firstName text =
     \attribute -> { attribute | firstName = Just text }
 
 
+{-| Get the title Attribute
+-}
 title : String -> Attribute msg
 title text =
     \attribute -> { attribute | title = Just text }
 
 
+{-| Get the address Attribute
+-}
 address : String -> Address -> Attribute msg
 address label addressData =
     \attribute -> { attribute | address = Just ( label, addressData ) }
 
 
+{-| Get the last name Attribute
+-}
 lastName : String -> Attribute msg
 lastName text =
     \attribute -> { attribute | lastName = Just text }
 
 
+{-| Get the avatar Attribute
+-}
 avatar : String -> Attribute msg
 avatar text =
     \attribute -> { attribute | avatar = Just text }
 
 
+{-| Get the email Attribute
+-}
 email : String -> String -> Attribute msg
 email label text =
     \attribute -> { attribute | email = Just ( label, text ) }
 
 
+{-| Get the phone Attribute
+-}
 phone : String -> String -> Attribute msg
 phone label text =
     \attribute -> { attribute | phone = Just ( label, text ) }
 
 
+{-| Get the mobile phone Attribute
+-}
 mobilePhone : String -> String -> Attribute msg
 mobilePhone label text =
     \attribute -> { attribute | mobilePhone = Just ( label, text ) }
 
 
+{-| Get the fax Attribute
+-}
 fax : String -> String -> Attribute msg
 fax label text =
     \attribute -> { attribute | fax = Just ( label, text ) }
 
 
+{-| Get the gender Attribute
+-}
 gender : String -> Gender -> Attribute msg
 gender label value =
     \attribute -> { attribute | gender = Just ( label, value ) }
 
 
+{-| Get the birth date Attribute
+-}
 birthDate : String -> Maybe Date -> Attribute msg
 birthDate label date =
     \attribute -> { attribute | birthDate = Just ( label, date ) }
 
 
+{-| Get the birth date year Attribute
+-}
 birthDateYear : String -> Maybe ListItem -> Attribute msg
 birthDateYear label item =
     \attribute -> { attribute | birthDateYear = Just ( label, item ) }
 
 
+{-| Get the birth date month Attribute
+-}
 birthDateMonth : String -> Maybe ListItem -> Attribute msg
 birthDateMonth label item =
     \attribute -> { attribute | birthDateMonth = Just ( label, item ) }
 
 
+{-| Get the edit Attribute
+-}
 edit : String -> msg -> Attribute msg
 edit text msg =
     \attribute -> { attribute | edit = Just ( text, msg ) }
 
 
+{-| Get the edit account link Attribute
+-}
 editAccountLink : String -> String -> Attribute msg
 editAccountLink text value =
     \attribute -> { attribute | editAccountLink = Just ( text, value ) }
 
 
+{-| Get the view
+-}
 view : { args | namespace : Namespace, localization : Localization, countries : Countries, regions : RegionsCountry } -> List (Attribute msg) -> List (Html msg) -> Html msg
 view ({ namespace, localization } as args) attributes additionalContents =
     let

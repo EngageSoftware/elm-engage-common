@@ -8,6 +8,14 @@ module Engage.Form.Account exposing
     , view
     )
 
+{-| Form.Account
+
+@docs Attribute
+
+@docs address, edit, name, none, phone, view
+
+-}
+
 import Engage.Entity.Address exposing (Address, Countries, RegionsCountry)
 import Engage.Form.Account.Css exposing (Class(..))
 import Engage.Form.Address
@@ -41,35 +49,49 @@ emptyAttribute =
     }
 
 
+{-| The Attribute type
+-}
 type alias Attribute msg =
     InternalAttribute msg -> InternalAttribute msg
 
 
+{-| Get the none Attribute
+-}
 none : Attribute msg
 none =
     \attribute -> attribute
 
 
+{-| Get the name Attribute
+-}
 name : String -> Attribute msg
 name text =
     \attribute -> { attribute | name = Just text }
 
 
+{-| Get the address Attribute
+-}
 address : String -> Address -> Attribute msg
 address label addressData =
     \attribute -> { attribute | address = Just ( label, addressData ) }
 
 
+{-| Get the phone Attribute
+-}
 phone : String -> String -> Attribute msg
 phone label text =
     \attribute -> { attribute | phone = Just ( label, text ) }
 
 
+{-| Get the edit Attribute
+-}
 edit : String -> msg -> Attribute msg
 edit text msg =
     \attribute -> { attribute | edit = Just ( text, msg ) }
 
 
+{-| Get the view
+-}
 view : { args | namespace : Namespace, localization : Localization, countries : Countries, regions : RegionsCountry } -> List (Attribute msg) -> List (Html msg) -> Html msg
 view ({ namespace, localization } as args) attributes additionalContents =
     let

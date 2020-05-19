@@ -38,7 +38,7 @@ import Engage.Form.Participant as Participant
 import Engage.RemoteData exposing (WebData)
 import Engage.RemoteValidation as RemoteValidation
 import Engage.UI.Wizard as Wizard
-import SelectDict exposing (SelectDict)
+import Engage.SelectDict exposing (SelectDict)
 
 
 

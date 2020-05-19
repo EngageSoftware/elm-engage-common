@@ -19,6 +19,14 @@ module Engage.UI.Input exposing
     , textWithAttributes
     )
 
+{-| UI.Input
+
+@docs FileInfo, PhoneState, State
+
+@docs bigNumber, checkBoxList, checkbox, checkboxWithAttributes, file, initialPhoneState, initialState, number, phone, radioList, reset, smallNumber, text, textArea, textWithAttributes
+
+-}
+
 import Engage.Entity.PhoneNumber exposing (PhoneNumber)
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
@@ -44,21 +52,29 @@ import Json.Decode.Pipeline exposing (decode, required, requiredAt)
 import Set exposing (Set)
 
 
+{-| A State type
+-}
 type State
     = State Message.State
 
 
+{-| A PhoneState type
+-}
 type alias PhoneState =
     { message : Message.State
     , phoneInput : IntlPhoneInput.State
     }
 
 
+{-| Get the initial State
+-}
 initialState : State
 initialState =
     State Message.initialState
 
 
+{-| Get the initial PhoneState
+-}
 initialPhoneState : PhoneState
 initialPhoneState =
     { message = Message.initialState
@@ -66,11 +82,15 @@ initialPhoneState =
     }
 
 
+{-| Reset the State
+-}
 reset : State
 reset =
     initialState
 
 
+{-| Get the phone view
+-}
 phone :
     { namespace : Namespace
     , id : String
@@ -99,6 +119,8 @@ phone { namespace, id, labelText, helpText, onChange, status, requiredText } sta
         phoneNumber
 
 
+{-| Get the phone with size and attributes view
+-}
 phoneWithSizeAndAttributes :
     { namespace : Namespace
     , id : String
@@ -158,6 +180,8 @@ phoneWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, statu
         )
 
 
+{-| Get a text view
+-}
 text :
     { namespace : Namespace
     , id : String
@@ -174,6 +198,8 @@ text args state value =
     textWithAttributes args [] state value
 
 
+{-| Get a text with attributes view
+-}
 textWithAttributes :
     { namespace : Namespace
     , id : String
@@ -203,6 +229,8 @@ textWithAttributes { namespace, id, labelText, helpText, onChange, status, requi
         value
 
 
+{-| Get a text with size view
+-}
 textWithSize :
     { namespace : Namespace
     , id : String
@@ -220,6 +248,8 @@ textWithSize args state value =
     textWithSizeAndAttributes args [] state value
 
 
+{-| Get a text with size and attributes view
+-}
 textWithSizeAndAttributes :
     { namespace : Namespace
     , id : String
@@ -268,6 +298,8 @@ textWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, status
         )
 
 
+{-| Get a number view
+-}
 number :
     { namespace : Namespace
     , id : String
@@ -299,6 +331,8 @@ number { namespace, id, labelText, helpText, onChange, status, maxValue, minValu
         value
 
 
+{-| Get a small number view
+-}
 smallNumber :
     { namespace : Namespace
     , id : String
@@ -330,6 +364,8 @@ smallNumber { namespace, id, labelText, helpText, onChange, status, maxValue, mi
         value
 
 
+{-| Get a number with size view
+-}
 numberWithSize :
     { namespace : Namespace
     , id : String
@@ -379,6 +415,8 @@ numberWithSize { namespace, id, labelText, helpText, onChange, status, size, max
         )
 
 
+{-| Get a big number view
+-}
 bigNumber :
     { namespace : Namespace
     , id : String
@@ -429,6 +467,8 @@ bigNumber ({ namespace, id, labelText, helpText, onChange, status } as args) sta
         )
 
 
+{-| Get a text area view
+-}
 textArea :
     { namespace : Namespace
     , id : String
@@ -456,6 +496,8 @@ textArea { namespace, id, labelText, helpText, onChange, status, requiredText } 
         value
 
 
+{-| Get a text area with size view
+-}
 textAreaWithSize :
     { namespace : Namespace
     , id : String
@@ -505,6 +547,8 @@ textAreaWithSize args value =
         )
 
 
+{-| Get a checkbox view
+-}
 checkbox :
     { namespace : Namespace
     , labelText : String
@@ -520,6 +564,8 @@ checkbox args checked =
     checkboxWithAttributes args [] checked
 
 
+{-| Get a checkbox with attributes view
+-}
 checkboxWithAttributes :
     { namespace : Namespace
     , labelText : String
@@ -561,6 +607,8 @@ checkboxWithAttributes { namespace, labelText, onCheck, status, state, requiredT
         ]
 
 
+{-| Get a radio list view
+-}
 radioList :
     { namespace : Namespace
     , id : String
@@ -615,6 +663,8 @@ radioList ({ namespace, labelText, onChange, status, items } as args) state sele
         )
 
 
+{-| Get a checkbox list view
+-}
 checkBoxList :
     { namespace : Namespace
     , id : String
@@ -670,10 +720,14 @@ checkBoxList ({ namespace, labelText, onChange, status, items } as args) state s
         )
 
 
+{-| The FileInfo type
+-}
 type alias FileInfo =
     { name : String, fileType : String, progressPercentage : Maybe Float }
 
 
+{-| Get a file view
+-}
 file :
     { namespace : Namespace
     , id : String
@@ -729,6 +783,8 @@ file args (State state) fileInfo =
         ]
 
 
+{-| Get a progress indicator view
+-}
 progressIndicator : { a | namespace : Namespace } -> FileInfo -> Html msg
 progressIndicator args fileInfo =
     fileInfo.progressPercentage

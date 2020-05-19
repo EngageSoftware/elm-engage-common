@@ -7,6 +7,12 @@ module Engage.UI.Card exposing
     , title
     )
 
+{-| UI.Card
+
+@docs attributes, card, edit, none, subtitle, title
+
+-}
+
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.Button as Button
 import Engage.UI.Card.Css exposing (Class(..))
@@ -41,6 +47,8 @@ processAttribute initialAttribute attributes =
     List.foldl (\f attribute -> f attribute) initialAttribute attributes
 
 
+{-| Get the card view
+-}
 card : Namespace -> List (Attribute msg) -> List (Html msg) -> Html msg
 card namespace attributes content =
     let
@@ -101,26 +109,36 @@ editView namespace attribute =
 -- Attribute
 
 
+{-| Get the title attribute
+-}
 title : String -> Attribute msg
 title titleText =
     \attribute -> { attribute | title = Just titleText }
 
 
+{-| Get the subtitle attribute
+-}
 subtitle : String -> Attribute msg
 subtitle subtitleText =
     \attribute -> { attribute | subtitle = Just subtitleText }
 
 
+{-| Get the edit attribute
+-}
 edit : String -> msg -> Attribute msg
 edit text msg =
     \attribute -> { attribute | edit = Just ( text, msg ) }
 
 
+{-| Get the attributes attribute
+-}
 attributes : List (Html.Attribute msg) -> Attribute msg
 attributes htmlAttributes =
     \attribute -> { attribute | attributes = Just htmlAttributes }
 
 
+{-| Get the none attribute
+-}
 none : Attribute msg
 none =
     identity

@@ -10,6 +10,12 @@ module Engage.UI.Button exposing
     , standardSmall
     )
 
+{-| UI.Button
+
+@docs custom, divert, divertSmall, negative, negativeSmall, primary, primarySmall, standard, standardSmall
+
+-}
+
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Importance(..), Size(..))
 import Engage.UI.Button.Css exposing (Class(..))
@@ -18,6 +24,8 @@ import Html.Attributes exposing (..)
 import Html.CssHelpers
 
 
+{-| Get a standard Button
+-}
 standard : { namespace : Namespace, attributes : List (Attribute msg), text : String } -> Html msg
 standard { attributes, text, namespace } =
     custom
@@ -28,6 +36,8 @@ standard { attributes, text, namespace } =
         }
 
 
+{-| Get a primary Button
+-}
 primary : { namespace : Namespace, attributes : List (Attribute msg), text : String } -> Html msg
 primary { attributes, text, namespace } =
     custom
@@ -38,6 +48,8 @@ primary { attributes, text, namespace } =
         }
 
 
+{-| Get a divert Button
+-}
 divert : { namespace : Namespace, attributes : List (Attribute msg), text : String } -> Html msg
 divert { attributes, text, namespace } =
     custom
@@ -48,6 +60,8 @@ divert { attributes, text, namespace } =
         }
 
 
+{-| Get a negative Button
+-}
 negative : { namespace : Namespace, attributes : List (Attribute msg), text : String } -> Html msg
 negative { attributes, text, namespace } =
     custom
@@ -58,6 +72,8 @@ negative { attributes, text, namespace } =
         }
 
 
+{-| Get a standard small Button
+-}
 standardSmall : { namespace : Namespace, attributes : List (Attribute msg), text : String } -> Html msg
 standardSmall { attributes, text, namespace } =
     custom
@@ -68,6 +84,8 @@ standardSmall { attributes, text, namespace } =
         }
 
 
+{-| Get a primary small Button
+-}
 primarySmall : { namespace : Namespace, attributes : List (Attribute msg), text : String } -> Html msg
 primarySmall { attributes, text, namespace } =
     custom
@@ -78,6 +96,8 @@ primarySmall { attributes, text, namespace } =
         }
 
 
+{-| Get a divert small Button
+-}
 divertSmall : { namespace : Namespace, attributes : List (Attribute msg), text : String } -> Html msg
 divertSmall { attributes, text, namespace } =
     custom
@@ -88,6 +108,8 @@ divertSmall { attributes, text, namespace } =
         }
 
 
+{-| Get a negative small Button
+-}
 negativeSmall : { namespace : Namespace, attributes : List (Attribute msg), text : String } -> Html msg
 negativeSmall { attributes, text, namespace } =
     custom
@@ -98,6 +120,8 @@ negativeSmall { attributes, text, namespace } =
         }
 
 
+{-| Get a custom Button
+-}
 custom : { namespace : Namespace, class : class, attributes : List (Attribute msg), contents : List (Html msg) } -> Html msg
 custom { namespace, class, attributes, contents } =
     let

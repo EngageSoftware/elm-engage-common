@@ -28,7 +28,15 @@ module Engage.Form.Address exposing
     , view
     )
 
-import Bool
+{-| Form.Address
+
+@docs Attribute, Msg, State, ValidationField
+
+@docs addressTypes, completedView, completedViewWithAdditional, countries, countriesToItems, form, hideFax, hidePrimaryAddressCheckbox, hideWebsite, initialState, isEmpty, isValid, regions, regionsToItems, required, showIncludeInExternalDirectory, showIncludeInInternalDirectory, toAllRegions, update, validateAll, validateAllWith, validateFieldWith, view
+
+-}
+
+import Engage.Bool
 import Dict exposing (Dict)
 import Engage.Custom.Form.Css as Css
 import Engage.Entity.Address as Address exposing (Address, AddressLike, AddressType, AddressTypes, Countries, Regions, RegionsCountry)
@@ -50,6 +58,8 @@ import Html.CssHelpers
 import String exposing (..)
 
 
+{-| The Msg type
+-}
 type Msg field
     = NameUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
     | AddressUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
@@ -67,6 +77,8 @@ type Msg field
     | IncludeInExternalDirectoryUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State Bool
 
 
+{-| The State type
+-}
 type State parentField
     = State
         { name : Input.State
@@ -88,6 +100,8 @@ type State parentField
         }
 
 
+{-| Get the initial State
+-}
 initialState : State parentField
 initialState =
     State
@@ -110,6 +124,8 @@ initialState =
         }
 
 
+{-| The ValidationField type
+-}
 type ValidationField
     = Name
     | Address
@@ -158,60 +174,84 @@ emptyAttribute =
     }
 
 
+{-| The Attribute type
+-}
 type alias Attribute =
     InternalAttribute -> InternalAttribute
 
 
+{-| Get the countries Attribute
+-}
 countries : Countries -> Attribute
 countries value =
     \attribute -> { attribute | countries = value }
 
 
+{-| Get the regions Attribute
+-}
 regions : RegionsCountry -> Attribute
 regions value =
     \attribute -> { attribute | regions = value }
 
 
+{-| Get the required Attribute
+-}
 required : Bool -> Attribute
 required value =
     \attribute -> { attribute | required = value }
 
 
+{-| Get the address types Attribute
+-}
 addressTypes : AddressTypes -> Attribute
 addressTypes value =
     \attribute -> { attribute | addressTypes = Just value }
 
 
+{-| Get the hide fax Attribute
+-}
 hideFax : Attribute
 hideFax =
     \attribute -> { attribute | hideFax = True }
 
 
+{-| Get the hide website Attribute
+-}
 hideWebsite : Attribute
 hideWebsite =
     \attribute -> { attribute | hideWebsite = True }
 
 
+{-| Get the hide address phone Attribute
+-}
 hideAddressPhone : Attribute
 hideAddressPhone =
     \attribute -> { attribute | hideAddressPhone = True }
 
 
+{-| Get the hide primary address checkbox Attribute
+-}
 hidePrimaryAddressCheckbox : Attribute
 hidePrimaryAddressCheckbox =
     \attribute -> { attribute | hidePrimaryAddressCheckbox = True }
 
 
+{-| Get the show include in internal directory Attribute
+-}
 showIncludeInInternalDirectory : Attribute
 showIncludeInInternalDirectory =
     \attribute -> { attribute | showIncludeInInternalDirectory = True }
 
 
+{-| Get the show include in external directory Attribute
+-}
 showIncludeInExternalDirectory : Attribute
 showIncludeInExternalDirectory =
     \attribute -> { attribute | showIncludeInExternalDirectory = True }
 
 
+{-| Get the view
+-}
 view : { a | namespace : Namespace, localization : Localization, countries : Countries, regions : RegionsCountry } -> AddressLike address -> Html msg
 view args data =
     let
@@ -256,11 +296,15 @@ view args data =
             ]
 
 
+{-| Get the completed view
+-}
 completedView : { a | namespace : Namespace, localization : Localization } -> Address -> Html msg
 completedView args data =
     completedViewWithAdditional args [] data
 
 
+{-| Get the completed view with additional
+-}
 completedViewWithAdditional : { a | namespace : Namespace, localization : Localization } -> List String -> Address -> Html msg
 completedViewWithAdditional args additionalText data =
     let
@@ -289,6 +333,8 @@ completedViewWithAdditional args additionalText data =
         ]
 
 
+{-| Check if the address is empty
+-}
 isEmpty : AddressLike a -> Bool
 isEmpty data =
     String.isEmpty data.address1
@@ -299,6 +345,8 @@ isEmpty data =
         && (data.country == Nothing)
 
 
+{-| Get the form view
+-}
 form : Namespace -> Localization -> (ValidationField -> parentField) -> List Attribute -> State parentField -> HideOrShow -> Address -> Html (Msg parentField)
 form originalNamespace localization field attributes (State state) hideOrShow addressData =
     let
@@ -469,8 +517,8 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
             ]
         , div [ class [ Css.FieldGroup ] ]
             [ attribute.hideAddressPhone
-                |> Bool.true HtmlExtra.none
-                |> Bool.false
+                |> Engage.Bool.true HtmlExtra.none
+                |> Engage.Bool.false
                     (Field.phoneField
                         { namespace = namespace
                         , onChange = PhoneUpdated
@@ -484,8 +532,8 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                         addressData.phone
                     )
             , attribute.hideFax
-                |> Bool.true HtmlExtra.none
-                |> Bool.false
+                |> Engage.Bool.true HtmlExtra.none
+                |> Engage.Bool.false
                     (Field.phoneField
                         { namespace = namespace
                         , onChange = FaxUpdated
@@ -499,8 +547,8 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                         addressData.fax
                     )
             , attribute.hideWebsite
-                |> Bool.true HtmlExtra.none
-                |> Bool.false
+                |> Engage.Bool.true HtmlExtra.none
+                |> Engage.Bool.false
                     (Field.inputField
                         { namespace = namespace
                         , onChange = WebsiteUpdated
@@ -514,13 +562,13 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                     )
             ]
         , attribute.hidePrimaryAddressCheckbox
-            |> Bool.true HtmlExtra.none
-            |> Bool.false
+            |> Engage.Bool.true HtmlExtra.none
+            |> Engage.Bool.false
                 (div [ class [ Css.FieldGroup ] ]
                     [ primaryAddressCheckbox namespace localization field (State state) addressData ]
                 )
         , attribute.showIncludeInInternalDirectory
-            |> Bool.true
+            |> Engage.Bool.true
                 (div [ class [ Css.FieldGroup ] ]
                     [ Field.checkbox
                         { namespace = namespace
@@ -534,9 +582,9 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                         addressData.includeInInternalDirectory
                     ]
                 )
-            |> Bool.false HtmlExtra.none
+            |> Engage.Bool.false HtmlExtra.none
         , attribute.showIncludeInExternalDirectory
-            |> Bool.true
+            |> Engage.Bool.true
                 (div [ class [ Css.FieldGroup ] ]
                     [ Field.checkbox
                         { namespace = namespace
@@ -550,7 +598,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                         addressData.includeInExternalDirectory
                     ]
                 )
-            |> Bool.false HtmlExtra.none
+            |> Engage.Bool.false HtmlExtra.none
         ]
 
 
@@ -587,6 +635,8 @@ primaryAddressCheckbox originalNamespace localization field (State state) addres
                 addressData.isPrimaryAddress
 
 
+{-| Update the address
+-}
 update : Msg parentField -> State parentField -> Address -> ( State parentField, Address, Cmd (Msg parentField) )
 update msg (State oldState) data =
     let
@@ -806,6 +856,8 @@ addressTypesToItems countries =
         |> Dict.fromList
 
 
+{-| Convert Countries to items dropdown
+-}
 countriesToItems : Countries -> Dict String Dropdown.Item
 countriesToItems countries =
     countries
@@ -815,6 +867,8 @@ countriesToItems countries =
         |> Dict.fromList
 
 
+{-| Convert Regions to items dropdown
+-}
 regionsToItems : Regions -> Dict String Dropdown.Item
 regionsToItems regions =
     regions
@@ -824,11 +878,15 @@ regionsToItems regions =
         |> Dict.fromList
 
 
+{-| Validate all fields
+-}
 validateAll : (ValidationField -> parentField) -> State parentField -> RegionsCountry -> Address -> State parentField
 validateAll =
     validateAllWith []
 
 
+{-| Validate all fields with a function
+-}
 validateAllWith : List (Address -> ValidationErrors parentField) -> (ValidationField -> parentField) -> State parentField -> RegionsCountry -> Address -> State parentField
 validateAllWith additionalValidations parentField (State state) regions data =
     State
@@ -837,6 +895,8 @@ validateAllWith additionalValidations parentField (State state) regions data =
         }
 
 
+{-| Validate a field with a function
+-}
 validateFieldWith : List (Address -> ValidationErrors parentField) -> (ValidationField -> parentField) -> RegionsCountry -> Address -> ValidationErrors parentField
 validateFieldWith additionalValidations parentField regions data =
     let
@@ -865,11 +925,15 @@ validateFieldWith additionalValidations parentField regions data =
         data
 
 
+{-| Check if the state is valid
+-}
 isValid : State parentField -> Bool
 isValid (State state) =
     Validation.isValid state.validations
 
 
+{-| Convert RegionsCountry to Regions
+-}
 toAllRegions : RegionsCountry -> Regions
 toAllRegions regionsCountry =
     regionsCountry

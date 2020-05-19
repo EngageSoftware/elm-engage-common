@@ -1,8 +1,18 @@
 module Engage.UI.MessageType exposing (MessageType(..), toClass)
 
+{-| MessageType
+
+@docs MessageType
+
+@docs toClass
+
+-}
+
 import Engage.Styles.Class
 
 
+{-| The MessageType type
+-}
 type MessageType
     = Confirmation
     | Error
@@ -10,6 +20,8 @@ type MessageType
     | Info
 
 
+{-| Convert a MesssageType into a class
+-}
 toClass : MessageType -> Engage.Styles.Class.MessageType
 toClass messageType =
     case messageType of

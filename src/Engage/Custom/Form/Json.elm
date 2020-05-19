@@ -3,6 +3,12 @@ module Engage.Custom.Form.Json exposing
     , encoder
     )
 
+{-| Custom.Form.Json
+
+@docs decoder, encoder
+
+-}
+
 import Date exposing (Date)
 import Dict
 import Engage.Custom.Field.Json as CustomField
@@ -13,6 +19,8 @@ import Json.Decode.Pipeline exposing (decode, hardcoded, optional, required)
 import Json.Encode as Encode
 
 
+{-| Get the Form encoder
+-}
 encoder : Form -> Encode.Value
 encoder form =
     let
@@ -29,6 +37,8 @@ encoder form =
         ]
 
 
+{-| Get the Form decoder
+-}
 decoder : Date -> Level -> Int -> Decode.Decoder Form
 decoder now formLevel relativeOrder =
     decode Form

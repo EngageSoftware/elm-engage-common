@@ -6,6 +6,14 @@ module Engage.UI.Wizard.Css exposing
     , snippets
     )
 
+{-| UI.Wizard.Css
+
+@docs Class, NavigationStatus, SelectedStatus
+
+@docs css, snippets
+
+-}
+
 import Css exposing (..)
 import Css.Foreign exposing (Snippet, class, descendants)
 import DEPRECATED.Css.Namespace
@@ -18,6 +26,8 @@ import Engage.ThemeHelper as Theme
 import Engage.UI.Message.Css as MessageCss exposing (Class(..))
 
 
+{-| The Class type
+-}
 type Class
     = Wizard
     | PageIndicator
@@ -32,22 +42,30 @@ type Class
     | ShoppingCart
 
 
+{-| The NavigationStatus type
+-}
 type NavigationStatus
     = Expanded
     | Collapsed
 
 
+{-| The SelectedStatus type
+-}
 type SelectedStatus
     = Selected
     | NotSelected
 
 
+{-| Get the css
+-}
 css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
     (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))
         (snippets theme)
 
 
+{-| Get the snippets
+-}
 snippets : Theme -> List Snippet
 snippets theme =
     let

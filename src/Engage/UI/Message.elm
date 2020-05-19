@@ -6,6 +6,14 @@ module Engage.UI.Message exposing
     , message
     )
 
+{-| UI.Message
+
+@docs State
+
+@docs controlMessage, initialState, inlineMessage, message
+
+-}
+
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class
 import Engage.UI.Message.Css exposing (Class(..))
@@ -25,6 +33,8 @@ type alias Config msg =
     }
 
 
+{-| The State type
+-}
 type State
     = State StateData
 
@@ -35,6 +45,8 @@ type alias StateData =
     }
 
 
+{-| Get the initial State
+-}
 initialState : State
 initialState =
     State
@@ -47,6 +59,8 @@ initialState =
 -- VIEWS
 
 
+{-| Get a message
+-}
 message : { namespace : Namespace, messageType : MessageType } -> List (Html msg) -> Html msg
 message { namespace, messageType } contents =
     let
@@ -58,6 +72,8 @@ message { namespace, messageType } contents =
     Html.div [ class [ Engage.UI.Message.Css.Message (getMessageTypeClass messageType) ] ] contents
 
 
+{-| Get an inline message
+-}
 inlineMessage : { namespace : Namespace, messageType : MessageType } -> List (Html msg) -> Html msg
 inlineMessage { namespace, messageType } contents =
     let
@@ -69,6 +85,8 @@ inlineMessage { namespace, messageType } contents =
     Html.span [ class [ Engage.UI.Message.Css.InlineMessage (getMessageTypeClass messageType) ] ] contents
 
 
+{-| Get a control message
+-}
 controlMessage : Config msg -> State -> Html msg -> Html msg
 controlMessage { namespace, messageType, onChange } ((State stateData) as state) contents =
     let

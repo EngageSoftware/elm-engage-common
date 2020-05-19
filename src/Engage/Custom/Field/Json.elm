@@ -6,6 +6,12 @@ module Engage.Custom.Field.Json exposing
     , fileUploadEncoder
     )
 
+{-| Custom.Field.Json
+
+@docs encoder, fieldDecoder, fieldGroupDecoder, fileEntryDataEncoder, fileUploadEncoder
+
+-}
+
 import Date exposing (Date)
 import Dict
 import Engage.Custom.Types exposing (BoolEntryData, Disable(..), EntryData, Field, FieldChoice, FieldGroup, FieldType(..), FileEntryData, FileStatus(..), MultipleEntryData, StaticFormType(..), UpdateOptions(AlwaysUpdate))
@@ -20,6 +26,8 @@ import Json.Encode as Encode
 import Set exposing (Set)
 
 
+{-| The FieldGroup decoder
+-}
 fieldGroupDecoder : Date -> Decode.Decoder ( Int, FieldGroup )
 fieldGroupDecoder now =
     let
@@ -39,6 +47,8 @@ fieldGroupDecoder now =
         |> resolve
 
 
+{-| The Field tuple decoder
+-}
 fieldTupleDecoder : Date -> Decode.Decoder ( Int, Field )
 fieldTupleDecoder now =
     decode (,)
@@ -46,6 +56,8 @@ fieldTupleDecoder now =
         |> custom (fieldDecoder now)
 
 
+{-| The Field decoder
+-}
 fieldDecoder : Date -> Decode.Decoder Field
 fieldDecoder now =
     decode Field
@@ -370,6 +382,8 @@ fileEntryDataDecoder =
         ]
 
 
+{-| The file upload encoder
+-}
 fileUploadEncoder :
     { a
         | registrationId : Maybe Int
@@ -389,6 +403,8 @@ fileUploadEncoder args =
         ]
 
 
+{-| The Field encoder
+-}
 encoder : Field -> Encode.Value
 encoder field =
     Encode.object
@@ -494,6 +510,8 @@ boolEntryDataEncoder entryData =
     )
 
 
+{-| The FieldEntryData encoder
+-}
 fileEntryDataEncoder : FileEntryData -> ( String, Encode.Value )
 fileEntryDataEncoder fileEntryData =
     ( "fileEntry"

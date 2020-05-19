@@ -6,6 +6,14 @@ module Engage.Pattern.CardCollector exposing
     , view
     )
 
+{-| Pattern.CardCollector
+
+@docs Attribute
+
+@docs addButton, none, title, view
+
+-}
+
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Pattern.CardCollector.Css exposing (Class(CardCollector, CardCollectorAction, CardCollectorCards, CardCollectorTitle))
 import Engage.UI.Button as Button
@@ -28,6 +36,8 @@ emptyAttribute =
     }
 
 
+{-| The Attribute type
+-}
 type alias Attribute msg =
     InternalAttribute msg -> InternalAttribute msg
 
@@ -37,21 +47,29 @@ processAttribute initialAttribute configs =
     List.foldl (\f config -> f config) initialAttribute configs
 
 
+{-| Get the none attribute
+-}
 none : Attribute msg
 none =
     identity
 
 
+{-| Get the title attribute
+-}
 title : String -> Attribute msg
 title text =
     \attribute -> { attribute | titleText = Just text }
 
 
+{-| Get the addButton attribute
+-}
 addButton : String -> msg -> Attribute msg
 addButton text msg =
     \attribute -> { attribute | addButtonText = Just ( text, msg ) }
 
 
+{-| Get the view
+-}
 view : Namespace -> List (Attribute msg) -> List (Html msg) -> Html msg
 view namespace attributes cards =
     let

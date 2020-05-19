@@ -3,10 +3,18 @@ module Engage.Form.Company.Types exposing
     , CompanyData
     )
 
+{-| Form.Company.Types
+
+@docs CompaniesData, CompanyData
+
+-}
+
 import Date exposing (Date)
 import Engage.Entity.Address exposing (Address)
 
 
+{-| A CompaniesData type
+-}
 type alias CompaniesData data =
     { data
         | currentCompany : CompanyData
@@ -14,6 +22,8 @@ type alias CompaniesData data =
     }
 
 
+{-| A CompanyData type
+-}
 type alias CompanyData =
     { companyId : Maybe Int
     , participantCompanyId : Maybe Int

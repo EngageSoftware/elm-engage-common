@@ -15,6 +15,14 @@ module Engage.UI.Wizard exposing
     , wizard
     )
 
+{-| UI.Wizard
+
+@docs Config, Page, ShoppingCart, SinglePageType, State, Step
+
+@docs defaultConfig, getStepError, getStepModel, getStepTitle, initialState, multiPages, singlePage, wizard
+
+-}
+
 import Dict exposing (Dict)
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
@@ -29,7 +37,7 @@ import Html.Events exposing (..)
 import Json.Decode
 import Maybe.Extra
 import Mustache
-import SelectDict exposing (SelectDict)
+import Engage.SelectDict as SelectDict exposing (SelectDict)
 
 
 
@@ -43,21 +51,29 @@ type Step model comparable
     | Multi { title : String, pages : SelectDict comparable (Page model) }
 
 
+{-| A SinglePageType type
+-}
 type SinglePageType
     = SinglePageInfo
     | SinglePageForm
 
 
+{-| Get a single page Step
+-}
 singlePage : { singlePageType : SinglePageType, title : String, status : Status, model : model } -> Step model comparable
 singlePage =
     Single
 
 
+{-| Get a multi pages Step
+-}
 multiPages : { title : String, pages : SelectDict comparable (Page model) } -> Step model comparable
 multiPages =
     Multi
 
 
+{-| A Page type
+-}
 type alias Page model =
     { title : String
     , status : Status
@@ -65,6 +81,8 @@ type alias Page model =
     }
 
 
+{-| A ShoppingCart type
+-}
 type alias ShoppingCart msg =
     { content : Html msg }
 
@@ -96,6 +114,8 @@ type alias Config msg model comparable =
     }
 
 
+{-| Get the default config
+-}
 defaultConfig :
     { onState : State -> msg
     , onNextStep : State -> msg
@@ -127,6 +147,8 @@ defaultConfig { onState, onNextStep, onGotoStep, onNextPage, onFinish, onReview 
     }
 
 
+{-| A State type
+-}
 type State
     = State StateData
 
@@ -146,6 +168,8 @@ type NavigationStatus
 -- VIEWS
 
 
+{-| Get the wizard view
+-}
 wizard :
     { namespace : Namespace
     , config : Config msg model comparable
@@ -575,6 +599,8 @@ errorMessage { namespace, config, localize } steps =
 -- HELPERS
 
 
+{-| Get the initial State
+-}
 initialState : State
 initialState =
     State
@@ -590,6 +616,8 @@ unwrap state =
             data
 
 
+{-| Get the Step title
+-}
 getStepTitle : Step model comparable -> String
 getStepTitle step =
     case step of
@@ -600,6 +628,8 @@ getStepTitle step =
             title
 
 
+{-| Get the page title
+-}
 getPageTitle : Step model comparable -> String
 getPageTitle step =
     case step of
@@ -616,6 +646,8 @@ getPageTitle step =
                     |> .title
 
 
+{-| Get the Step error Status
+-}
 getStepError : Step model comparable -> Status
 getStepError step =
     case step of
@@ -628,6 +660,8 @@ getStepError step =
                 |> .status
 
 
+{-| Get the Step model
+-}
 getStepModel : Step model comparable -> model
 getStepModel step =
     case step of

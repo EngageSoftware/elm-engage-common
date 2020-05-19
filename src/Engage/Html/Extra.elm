@@ -4,17 +4,27 @@ module Engage.Html.Extra exposing
     , stylesheet
     )
 
+{-| Html.Extra
+
+@docs domLoadNotifier, none, stylesheet
+
+-}
+
 import Html exposing (Html)
 import Html.Attributes
 import Html.Events
 import Json.Decode
 
 
+{-| Get an empty Html
+-}
 none : Html.Html msg
 none =
     Html.text ""
 
 
+{-| Get a stylesheet html tag
+-}
 stylesheet : String -> Html.Html msg
 stylesheet href =
     let
@@ -33,6 +43,8 @@ stylesheet href =
     Html.node "link" attrs children
 
 
+{-| Get a dom load notifier
+-}
 domLoadNotifier : msg -> Html msg
 domLoadNotifier msg =
     Html.img

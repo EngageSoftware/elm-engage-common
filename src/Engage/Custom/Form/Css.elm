@@ -1,5 +1,13 @@
 module Engage.Custom.Form.Css exposing (Class(..), css)
 
+{-| Custom.Form.Css
+
+@docs Class
+
+@docs css
+
+-}
+
 import Css exposing (..)
 import Css.Foreign exposing (h2, legend, li, ul, class, descendants, Snippet)
 import DEPRECATED.Css.Namespace
@@ -11,6 +19,8 @@ import Engage.Theme exposing (Theme)
 import Engage.UI.Message.Css as MessageCss exposing (Class(..))
 
 
+{-| The Class type
+-}
 type Class
     = Form
     | FormCompleted
@@ -22,6 +32,8 @@ type Class
     | FormSection
 
 
+{-| Get the css
+-}
 css : Namespace -> Theme -> DEPRECATED.Css.File.Stylesheet
 css namespace theme =
     (DEPRECATED.Css.File.stylesheet << DEPRECATED.Css.Namespace.namespace (Namespace.toString namespace))

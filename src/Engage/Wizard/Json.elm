@@ -23,7 +23,7 @@ import Engage.Wizard exposing (..)
 import Json.Decode as Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 import Json.Encode as Encode
-import SelectDict exposing (SelectDict)
+import Engage.SelectDict exposing (SelectDict)
 
 
 {-| Preparing for when we need to handle in the case the user have multiple pending registration.
