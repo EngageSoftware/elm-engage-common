@@ -7,7 +7,7 @@ module Engage.UI.Accordion exposing
 import Dict exposing (Dict)
 import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
-import Engage.Styles.Class exposing (Class(FormControl), Importance(..), Size(..))
+import Engage.Styles.Class exposing (Class(..), Importance(..), Size(..))
 import Engage.UI.Button as Button
 import Engage.UI.Error as Error exposing (Status)
 import Engage.UI.FormControl as FormControl

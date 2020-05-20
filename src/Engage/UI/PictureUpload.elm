@@ -23,7 +23,7 @@ import Html.Events exposing (onClick)
 import Html.Keyed
 import Json.Decode
 import Svg.Attributes
-import Time exposing (Time)
+import Time exposing (Posix)
 
 
 {-| The PortOutKey type
@@ -35,7 +35,7 @@ type PortOutKey
 {-| The File type
 -}
 type alias File =
-    { lastModified : Maybe Time
+    { lastModified : Maybe Posix
     , name : String
     , size : Int
     , mimeType : String
@@ -46,7 +46,7 @@ type alias File =
 fileDecoder : Json.Decode.Decoder File
 fileDecoder =
     Json.Decode.map5 File
-        (Json.Decode.maybe (Json.Decode.field "lastModified" Json.Decode.float))
+        (Json.Decode.maybe (Json.Decode.field "lastModified" Json.Decode.int |> Json.Decode.map Time.millisToPosix))
         (Json.Decode.field "name" Json.Decode.string)
         (Json.Decode.field "size" Json.Decode.int)
         (Json.Decode.field "mimeType" Json.Decode.string)
@@ -154,8 +154,8 @@ dropZoneView namespace attribute domId =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
 
-        onFiles : (List File -> msg) -> Html.Attribute msg
-        onFiles msg =
+        onFilesUpload : (List File -> msg) -> Html.Attribute msg
+        onFilesUpload msg =
             Html.Events.on "files"
                 (Json.Decode.map msg
                     (Json.Decode.field "detail"
@@ -166,17 +166,14 @@ dropZoneView namespace attribute domId =
     div
         ([ class [ "PictureUploadDropZone" ]
          , id domId
-         , style
-            (if String.isEmpty attribute.pictureData then
-                []
+         , if String.isEmpty attribute.pictureData then
+            style "" ""
 
-             else
-                [ ( "background-image", "url(" ++ attribute.pictureData ++ ")" )
-                ]
-            )
+           else
+            style "background-image" ("url(" ++ attribute.pictureData ++ ")")
          ]
             ++ (attribute.onFiles
-                    |> Maybe.map (onFiles >> List.singleton)
+                    |> Maybe.map (onFilesUpload >> List.singleton)
                     |> Maybe.withDefault []
                )
         )

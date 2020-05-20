@@ -1,24 +1,6 @@
 module Engage.Entity.Address exposing
-    ( Address
-    , AddressLike
-    , AddressType
-    , AddressTypes
-    , Countries
-    , CountryId
-    , RegionId
-    , Regions
-    , RegionsCountry
-    , addressTypeDecoder
-    , addressTypesDecoder
-    , countriesDecoder
-    , decoder
-    , empty
-    , emptyAddressType
-    , emptyPrimaryAddress
-    , encoder
-    , encoderWith
-    , getRegionsForCountry
-    , regionsCountryDecoder
+    ( Address, AddressLike, AddressType, AddressTypes, Countries, CountryId, RegionId, Regions, RegionsCountry
+    , addressTypeDecoder, addressTypesDecoder, countriesDecoder, decoder, empty, emptyAddressType, emptyPrimaryAddress, encoder, encoderWith, getRegionsForCountry, regionsCountryDecoder
     )
 
 {-| Entity.Address
@@ -114,7 +96,7 @@ emptyAddressType =
 -}
 addressTypeDecoder : Decoder AddressType
 addressTypeDecoder =
-    JDP.decode AddressType
+    JD.succeed AddressType
         |> JDP.required "addressTypeId" JD.int
         |> JDP.required "shortDescription" (JD.oneOf [ JD.string, JD.null "" ])
         |> JDP.required "longDescription" (JD.oneOf [ JD.string, JD.null "" ])
@@ -198,7 +180,7 @@ emptyPrimaryAddress =
 -}
 decoder : Decoder Address
 decoder =
-    JDP.decode Address
+    JD.succeed Address
         |> JDP.required "addresType" (JD.map Just addressTypeDecoder)
         |> JDP.required "addressId" (JD.nullable JD.int)
         |> JDP.required "name" (JD.oneOf [ JD.null "", JD.string ])
@@ -230,7 +212,7 @@ countriesDecoder =
 -}
 countryDataDecoder : JD.Decoder CountryData
 countryDataDecoder =
-    JDP.decode CountryData
+    JD.succeed CountryData
         |> JDP.required "countryId" JD.int
         |> JDP.required "countryName" JD.string
         |> JDP.required "countryIsoCode" JD.string
@@ -242,7 +224,7 @@ regionsCountryDecoder : JD.Decoder RegionsCountry
 regionsCountryDecoder =
     let
         countryRegionsDecoder =
-            JDP.decode (\countryId regions -> { countryId = countryId, regions = regions })
+            JD.succeed (\countryId regions -> { countryId = countryId, regions = regions })
                 |> JDP.required "countryId" JD.int
                 |> JDP.required "regions" regionsDecoder
     in
@@ -264,7 +246,7 @@ regionsDecoder =
 -}
 regionDataDecoder : JD.Decoder RegionData
 regionDataDecoder =
-    JDP.decode RegionData
+    JD.succeed RegionData
         |> JDP.required "regionId" JD.int
         |> JDP.required "regionName" JD.string
 

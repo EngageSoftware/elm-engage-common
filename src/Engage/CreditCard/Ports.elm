@@ -1,8 +1,6 @@
 module Engage.CreditCard.Ports exposing
-    ( InKey(..)
-    , OutKey(..)
-    , inKeyDecoder
-    , toInKey
+    ( InKey(..), OutKey(..)
+    , inKeyDecoder, toInKey
     )
 
 {-| CreditCard.Ports

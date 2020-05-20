@@ -43,8 +43,8 @@ toList unit =
         NotSet ->
             []
 
-        Padding unit ->
-            [ unit ]
+        Padding unit1 ->
+            [ unit1 ]
 
         Padding2 unit1 unit2 ->
             [ unit1, unit2 ]
@@ -76,8 +76,8 @@ fromList units =
 
 
 toCss : Padding -> Css.Style
-toCss padding =
-    case padding of
+toCss paddingValue =
+    case paddingValue of
         NotSet ->
             Css.batch []
 

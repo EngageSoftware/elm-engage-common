@@ -9,7 +9,7 @@ module Engage.UI.FormControl exposing (formControl, groupFormControl, labelWrapp
 import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
-import Engage.Styles.Class exposing (Class(FormControl), Size(..), getSizeString)
+import Engage.Styles.Class exposing (Class(..), Size(..), getSizeString)
 import Engage.UI.Error as Error exposing (Status(..))
 import Engage.UI.Message as Message
 import Engage.UI.MessageType as MessageType

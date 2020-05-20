@@ -11,7 +11,7 @@ errorView : Namespace -> WebData a -> Html msg
 errorView namespace webData =
     case webData |> RemoteData.toError of
         Just e ->
-            e |> httpErrorToValidationResult |> Engage.UI.Error.error { namespace = Namespace.toString namespace }
+            e |> httpErrorToValidationResult |> Engage.UI.Error.error { namespace = namespace }
 
         Nothing ->
             Html.text ""

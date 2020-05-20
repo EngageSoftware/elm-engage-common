@@ -1,10 +1,7 @@
 module Engage.Custom.Field.Helpers exposing (fieldGroupHasAnswer, fieldHasAnswer, getBoolValue, getFileInfo, getProgressPercentage, getRelativeOrder, getStaticFormTypeText, getText, getValue, getValues, intToDisable, isCountryField, isCountryFieldType, isFileField, isFileFieldType, isRegionField, isRegionFieldType, isSameType, shouldUpdate, toCheckBoxEntryData, toDropdownItem, toDropdownItems, toEntryData, toError, toFileEntryData, toRadioItem, toRadioItems, updateAccordionState, updateDateState, updateDropdownState, updateFieldTypeState, updateInputState, updateOptionsToBool)
 
-import Date.Extra.Config.Config_en_us
-import Date.Extra.Format
 import Dict
 import Engage.Custom.Types exposing (..)
-import Engage.DateHelper as DateHelper
 import Engage.Form.Address as Address
 import Engage.UI.Accordion as Accordion
 import Engage.UI.Datepicker as Datepicker
@@ -145,7 +142,7 @@ getText config field =
             getValue field
                 |> Maybe.andThen List.head
                 |> Maybe.andThen (String.toFloat >> Result.toMaybe)
-                |> Maybe.map DateHelper.toDateIgnoreTimezone
+                -- |> Maybe.map DateHelper.toDateIgnoreTimezone
                 |> Maybe.map (Date.Extra.Format.format Date.Extra.Config.Config_en_us.config "%B %e, %Y")
                 |> Maybe.map List.singleton
 
@@ -490,7 +487,7 @@ getFileInfo field =
             Nothing
 
 
-toError : Validation.ValidationErrors { fieldId : Int } -> Field -> Status
+toError : ValidationResult { fieldId : Int } -> Field -> Status
 toError validationErrors field =
     case Validation.findErrorMessage { fieldId = field.fieldId } validationErrors of
         Nothing ->

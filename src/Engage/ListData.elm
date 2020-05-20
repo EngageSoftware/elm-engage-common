@@ -1,27 +1,13 @@
 module Engage.ListData exposing
-    ( Edit(..)
-    , ListData(..)
-    , cancelEdit
-    , decoder
-    , dict
-    , editView
-    , empty
-    , fromList
-    , getEdit
-    , isEditing
-    , isEmpty
-    , mapEdit
-    , newData
-    , setEdit
-    , setState
-    , view
+    ( ListData(..), Edit(..)
+    , cancelEdit, decoder, getDict, editView, empty, fromList, getEdit, isEditing, isEmpty, mapEdit, newData, setEdit, setState, view
     )
 
 {-| ListData
 
 @docs ListData, Edit
 
-@docs cancelEdit, decoder, dict, editView, empty, fromList, getEdit, isEditing, isEmpty, mapEdit, newData, setEdit, setState, view
+@docs cancelEdit, decoder, getDict, editView, empty, fromList, getEdit, isEditing, isEmpty, mapEdit, newData, setEdit, setState, view
 
 -}
 
@@ -45,8 +31,8 @@ type Edit state a
 
 {-| Get the dict from the list data
 -}
-dict : ListData state a comparable -> Dict comparable a
-dict (ListData dict _) =
+getDict : ListData state a comparable -> Dict comparable a
+getDict (ListData dict _) =
     dict
 
 
@@ -90,14 +76,12 @@ fromList toKey list =
 view : (a -> comparable) -> (a -> comparable) -> (a -> Html msg) -> ListData state a comparable -> List (Html msg)
 view sorter toKey viewer (ListData dict edit) =
     let
-        isEditing =
-            case edit of
-                NoEdit ->
-                    False
-
-                Edit _ _ ->
-                    True
-
+        -- isEditing =
+        --     case edit of
+        --         NoEdit ->
+        --             False
+        --         Edit _ _ ->
+        --             True
         editedKey =
             case edit of
                 NoEdit ->

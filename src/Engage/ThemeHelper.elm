@@ -1,19 +1,8 @@
 module Engage.ThemeHelper exposing
     ( backgroundColor
-    , border3
-    , borderBottom3
-    , borderLeft3
-    , borderRight3
-    , borderTop3
-    , color
-    , fill
-    , fontFamily
-    , fontSize
-    , margin
-    , messagePalette
-    , padding
-    , palette
-    , spacing
+    , border3, borderBottom3, borderLeft3, borderRight3, borderTop3
+    , color, fill, fontFamily, fontSize
+    , margin, messagePalette, padding, palette, spacing
     )
 
 {-| ThemeHelper
@@ -21,7 +10,7 @@ module Engage.ThemeHelper exposing
 @docs backgroundColor
 
 @docs border3, borderBottom3, borderLeft3, borderRight3, borderTop3
-    
+
 @docs color, fill, fontFamily, fontSize
 
 @docs margin, messagePalette, padding, palette, spacing
@@ -158,8 +147,8 @@ fontSize theme section =
 fontFamily : Theme -> (Theme.Style -> FontFamily) -> Css.Style
 fontFamily theme section =
     let
-        toCss fontFamily =
-            case fontFamily of
+        toCss fontFamilyValue =
+            case fontFamilyValue of
                 FontFamily.NotSet ->
                     Css.batch []
 
@@ -183,7 +172,7 @@ margin theme section =
         baseMargin =
             (section themeSpacing).base
 
-        margin =
+        marginValue =
             Css.property "margin"
     in
     { base = baseMargin |> Margin.toCss
@@ -194,8 +183,8 @@ margin theme section =
 {-| Get the theme color from the theme
 -}
 themeColor : (Css.Color -> Css.Style) -> Color.Color -> Css.Style
-themeColor f color =
-    case color of
+themeColor f colorValue =
+    case colorValue of
         Color.ColorNotSet ->
             Css.batch []
 
@@ -227,14 +216,13 @@ fill =
 {-| Get the theme border from the theme
 -}
 themeBorder : (a -> b -> Css.ColorValue { alpha : Float, blue : Int, green : Int, red : Int } -> Css.Style) -> a -> b -> Color.Color -> Css.Style
-themeBorder f width style color =
-    case color of
+themeBorder f width styleValue colorValue =
+    case colorValue of
         Color.ColorNotSet ->
             Css.batch []
 
         Color.Color cssColor ->
-            f width style cssColor
-
+            f width styleValue cssColor
 
 
 {-| Get a Css border 3
@@ -244,7 +232,6 @@ border3 =
     themeBorder Css.border3
 
 
-
 {-| Get a Css border bottom 3
 -}
 borderBottom3 : Css.Length compatibleA unitsA -> Css.BorderStyle compatibleB -> Color.Color -> Css.Style
@@ -252,13 +239,11 @@ borderBottom3 =
     themeBorder Css.borderBottom3
 
 
-
 {-| Get a Css border right 3
 -}
 borderRight3 : Css.Length compatibleA unitsA -> Css.BorderStyle compatibleB -> Color.Color -> Css.Style
 borderRight3 =
     themeBorder Css.borderRight3
-
 
 
 {-| Get a Css border top 3

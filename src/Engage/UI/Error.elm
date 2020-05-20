@@ -1,13 +1,13 @@
 module Engage.UI.Error exposing
     ( Status(..)
-    , error, errorLocalized, inlineError, isError, isNone, localize, merge
+    , error, errorLocalized, inlineError, isError, isNone, localizeStatus, merge
     )
 
 {-| UI.Error
 
 @docs Status
 
-@docs error, errorLocalized, inlineError, isError, isNone, localize, merge
+@docs error, errorLocalized, inlineError, isError, isNone, localizeStatus, merge
 
 -}
 
@@ -35,8 +35,8 @@ type Status
 
 {-| Localize the Status
 -}
-localize : (String -> String) -> Status -> Status
-localize localizer status =
+localizeStatus : (String -> String) -> Status -> Status
+localizeStatus localizer status =
     case status of
         Unknown ->
             Unknown

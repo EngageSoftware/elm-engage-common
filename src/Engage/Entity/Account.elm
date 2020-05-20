@@ -1,9 +1,6 @@
 module Engage.Entity.Account exposing
     ( Account
-    , decoder
-    , empty
-    , encoder
-    , encoderWith
+    , decoder, empty, encoder, encoderWith
     )
 
 {-| Entity.Account
@@ -57,7 +54,7 @@ empty =
 -}
 decoder : Decoder Account
 decoder =
-    JDP.decode Account
+    JD.succeed Account
         |> JDP.required "accountId" (JD.map Just JD.int)
         |> JDP.required "name" (JD.oneOf [ JD.null "", JD.string ])
         |> JDP.required "description" (JD.oneOf [ JD.null "", JD.string ])

@@ -35,7 +35,7 @@ import Mustache
 -}
 type Step model comparable
     = Single { singlePageType : SinglePageType, title : String, status : Status, model : model }
-    | Multi { title : String, pages : SelectDict comparable (Page model) }
+    | Multi { title : String, pages : SelectDict (Page model) }
 
 
 {-| A SinglePageType type
@@ -47,14 +47,14 @@ type SinglePageType
 
 {-| Get a single page Step
 -}
-singlePage : { singlePageType : SinglePageType, title : String, status : Status, model : model } -> Step model comparable
+singlePage : { singlePageType : SinglePageType, title : String, status : Status, model : model } -> Step model Int
 singlePage =
     Single
 
 
 {-| Get a multi pages Step
 -}
-multiPages : { title : String, pages : SelectDict comparable (Page model) } -> Step model comparable
+multiPages : { title : String, pages : SelectDict (Page model) } -> Step model Int
 multiPages =
     Multi
 
@@ -80,7 +80,7 @@ type alias ShoppingCart msg =
   - onState: callback function for when internal state of the wizard changes.
 
 -}
-type alias Config msg model comparable =
+type alias Config msg model =
     { pageIndicatorTemplate : String
     , nextButtonTemplate : String
     , prevButtonTemplate : String
@@ -88,7 +88,7 @@ type alias Config msg model comparable =
     , reviewButtonTemplate : String
     , title : String
     , onNextStep : State -> msg
-    , onGotoStep : { stepId : comparable } -> State -> msg
+    , onGotoStep : { stepId : Int } -> State -> msg
     , onNextPage : State -> msg
     , onState : State -> msg
     , onFinish : State -> msg
@@ -106,13 +106,12 @@ type alias Config msg model comparable =
 defaultConfig :
     { onState : State -> msg
     , onNextStep : State -> msg
-    , onGotoStep : { stepId : comparable } -> State -> msg
+    , onGotoStep : { stepId : Int } -> State -> msg
     , onNextPage : State -> msg
-    , onState : State -> msg
     , onFinish : State -> msg
     , onReview : State -> msg
     }
-    -> Config msg model comparable
+    -> Config msg model
 defaultConfig { onState, onNextStep, onGotoStep, onNextPage, onFinish, onReview } =
     { pageIndicatorTemplate = "Page {{ currentPage }} of {{ totalPage }}"
     , nextButtonTemplate = "Next - {{ nextTitle }}"
@@ -159,13 +158,13 @@ type NavigationStatus
 -}
 wizard :
     { namespace : Namespace
-    , config : Config msg model comparable
+    , config : Config msg model
     , state : State
     , shoppingCart : ShoppingCart msg
     , isLoading : Bool
     , localize : String -> String
     }
-    -> SelectDict comparable (Step model comparable)
+    -> SelectDict (Step model Int)
     -> Html msg
 wizard ({ namespace, config, state, shoppingCart, localize } as args) steps =
     let
@@ -187,11 +186,11 @@ wizard ({ namespace, config, state, shoppingCart, localize } as args) steps =
         )
 
 
-viewStep : { a | namespace : Namespace, config : Config msg model comparable } -> State -> SelectDict comparable (Step model comparable) -> Html msg
+viewStep : { a | namespace : Namespace, config : Config msg model } -> State -> SelectDict (Step model Int) -> Html msg
 viewStep { namespace, config } state steps =
     let
         step =
-            SelectDict.selected steps
+            SelectDict.getSelected steps
 
         class =
             namespace
@@ -212,7 +211,7 @@ viewStep { namespace, config } state steps =
                 pages
 
 
-viewMultiPages : { namespace : Namespace, config : Config msg model comparable, state : State, stepId : comparable } -> SelectDict comparable (Page model) -> Html msg
+viewMultiPages : { namespace : Namespace, config : Config msg model, state : State, stepId : Int } -> SelectDict (Page model) -> Html msg
 viewMultiPages { namespace, config, state, stepId } pages =
     let
         ( before, selected, after ) =
@@ -250,12 +249,12 @@ viewMultiPages { namespace, config, state, stepId } pages =
         )
 
 
-renderBeforePage : Config msg model comparable -> State -> comparable -> Page model -> List (Html msg)
+renderBeforePage : Config msg model -> State -> Int -> Page model -> List (Html msg)
 renderBeforePage config state pageId page =
     page.model |> config.beforePageRenderer
 
 
-wizardHeader : { a | namespace : Namespace, config : Config msg model comparable } -> State -> SelectDict comparable (Step model comparable) -> Html msg
+wizardHeader : { a | namespace : Namespace, config : Config msg model } -> State -> SelectDict (Step model Int) -> Html msg
 wizardHeader ({ namespace, config } as args) state steps =
     let
         class =
@@ -274,7 +273,7 @@ wizardHeader ({ namespace, config } as args) state steps =
         ]
 
 
-stepIndicator : { a | namespace : Namespace, config : Config msg model comparable } -> SelectDict comparable (Step model comparable) -> Html msg
+stepIndicator : { a | namespace : Namespace, config : Config msg model } -> SelectDict (Step model Int) -> Html msg
 stepIndicator ({ namespace, config } as args) steps =
     let
         class =
@@ -287,7 +286,7 @@ stepIndicator ({ namespace, config } as args) steps =
         ]
 
 
-navigationArrow : { a | namespace : Namespace, config : Config msg model comparable } -> State -> Html msg
+navigationArrow : { a | namespace : Namespace, config : Config msg model } -> State -> Html msg
 navigationArrow ({ namespace, config } as args) state =
     let
         stateData =
@@ -317,7 +316,7 @@ navigationArrow ({ namespace, config } as args) state =
                 [ Svg.chevron { namespace = namespace } [] ]
 
 
-navigation : { a | namespace : Namespace, config : Config msg model comparable } -> State -> SelectDict comparable (Step model comparable) -> Html msg
+navigation : { a | namespace : Namespace, config : Config msg model } -> State -> SelectDict (Step model Int) -> Html msg
 navigation ({ namespace, config } as args) state steps =
     let
         class =
@@ -376,7 +375,7 @@ navigation ({ namespace, config } as args) state steps =
                 ]
 
 
-navigationStep : { namespace : Namespace, config : Config msg model comparable, isBefore : Bool, isSelected : Bool, state : State } -> ( comparable, Step model comparable ) -> Html msg
+navigationStep : { namespace : Namespace, config : Config msg model, isBefore : Bool, isSelected : Bool, state : State } -> ( Int, Step model Int ) -> Html msg
 navigationStep { namespace, config, isBefore, isSelected, state } ( stepId, step ) =
     let
         class =
@@ -395,7 +394,7 @@ navigationStep { namespace, config, isBefore, isSelected, state } ( stepId, step
               else
                 "NavigationItem-NotSelected"
             ]
-        , Html.Attributes.attribute "data-index" (toString (stepId + 1))
+        , Html.Attributes.attribute "data-index" (String.fromInt (stepId + 1))
         ]
         [ if isBefore then
             a
@@ -409,7 +408,7 @@ navigationStep { namespace, config, isBefore, isSelected, state } ( stepId, step
         ]
 
 
-navigationControl : { a | namespace : Namespace, config : Config msg model comparable, isLoading : Bool } -> State -> SelectDict comparable (Step model comparable) -> Html msg
+navigationControl : { a | namespace : Namespace, config : Config msg model, isLoading : Bool } -> State -> SelectDict (Step model Int) -> Html msg
 navigationControl ({ namespace, config, isLoading } as args) ((State stateData) as state) steps =
     let
         class =
@@ -423,11 +422,11 @@ navigationControl ({ namespace, config, isLoading } as args) ((State stateData) 
         ]
 
 
-previousButton : { a | namespace : Namespace, config : Config msg model comparable, isLoading : Bool } -> State -> SelectDict comparable (Step model comparable) -> Html msg
+previousButton : { a | namespace : Namespace, config : Config msg model, isLoading : Bool } -> State -> SelectDict (Step model Int) -> Html msg
 previousButton ({ namespace, config, isLoading } as args) ((State stateData) as state) steps =
     let
         prev =
-            steps |> SelectDict.before |> Dict.toList |> List.reverse |> List.head
+            steps |> SelectDict.getBefore |> Dict.toList |> List.reverse |> List.head
     in
     case prev of
         Nothing ->
@@ -449,7 +448,7 @@ previousButton ({ namespace, config, isLoading } as args) ((State stateData) as 
                     }
 
 
-nextButton : { a | namespace : Namespace, config : Config msg model comparable, isLoading : Bool } -> State -> SelectDict comparable (Step model comparable) -> Html msg
+nextButton : { a | namespace : Namespace, config : Config msg model, isLoading : Bool } -> State -> SelectDict (Step model Int) -> Html msg
 nextButton ({ namespace, config, isLoading } as args) ((State stateData) as state) steps =
     let
         current =
@@ -534,8 +533,8 @@ nextButton ({ namespace, config, isLoading } as args) ((State stateData) as stat
                         formNextButton
             in
             case current of
-                Single singlePage ->
-                    case singlePage.singlePageType of
+                Single singlePageValue ->
+                    case singlePageValue.singlePageType of
                         SinglePageInfo ->
                             infoNextButton
 
@@ -546,14 +545,14 @@ nextButton ({ namespace, config, isLoading } as args) ((State stateData) as stat
                     nextButtonForFormPage
 
 
-renderTemplate : Config msg model comparable -> SelectDict comparable (Step model comparable) -> String -> String
+renderTemplate : Config msg model -> SelectDict (Step model Int) -> String -> String
 renderTemplate config steps template =
     let
         next =
-            SelectDict.after steps |> Dict.values |> List.head
+            SelectDict.getAfter steps |> Dict.values |> List.head
 
         before =
-            SelectDict.before steps
+            SelectDict.getBefore steps
 
         totalSteps =
             SelectDict.toDict steps |> Dict.size
@@ -565,13 +564,13 @@ renderTemplate config steps template =
         [ Mustache.Variable "title" config.title
         , Mustache.Variable "nextTitle" (steps |> getNextTitle |> Maybe.withDefault "")
         , Mustache.Variable "prevTitle" (steps |> getPrevTitle |> Maybe.withDefault "")
-        , Mustache.Variable "currentPage" (toString currentStepIndex)
-        , Mustache.Variable "totalPage" (toString totalSteps)
+        , Mustache.Variable "currentPage" (String.fromInt currentStepIndex)
+        , Mustache.Variable "totalPage" (String.fromInt totalSteps)
         ]
         template
 
 
-errorMessage : { a | namespace : Namespace, config : Config msg model comparable, localize : String -> String } -> SelectDict comparable (Step model comparable) -> Html msg
+errorMessage : { a | namespace : Namespace, config : Config msg model, localize : String -> String } -> SelectDict (Step model Int) -> Html msg
 errorMessage { namespace, config, localize } steps =
     let
         step =
@@ -605,7 +604,7 @@ unwrap state =
 
 {-| Get the Step title
 -}
-getStepTitle : Step model comparable -> String
+getStepTitle : Step model Int -> String
 getStepTitle step =
     case step of
         Single { title } ->
@@ -617,14 +616,14 @@ getStepTitle step =
 
 {-| Get the page title
 -}
-getPageTitle : Step model comparable -> String
+getPageTitle : Step model Int -> String
 getPageTitle step =
     case step of
         Single { title } ->
             title
 
         Multi { title, pages } ->
-            if Dict.isEmpty (SelectDict.before pages) then
+            if Dict.isEmpty (SelectDict.getBefore pages) then
                 title
 
             else
@@ -635,7 +634,7 @@ getPageTitle step =
 
 {-| Get the Step error Status
 -}
-getStepError : Step model comparable -> Status
+getStepError : Step model Int -> Status
 getStepError step =
     case step of
         Single { status } ->
@@ -649,7 +648,7 @@ getStepError step =
 
 {-| Get the Step model
 -}
-getStepModel : Step model comparable -> model
+getStepModel : Step model Int -> model
 getStepModel step =
     case step of
         Single { model } ->
@@ -662,12 +661,12 @@ getStepModel step =
 
 
 type NextPageResult comparable model
-    = NextPage ( comparable, Page model )
-    | NextStep ( comparable, Step model comparable )
+    = NextPage ( Int, Page model )
+    | NextStep ( Int, Step model Int )
     | LastPage
 
 
-getNextPage : SelectDict comparable (Step model comparable) -> NextPageResult comparable model
+getNextPage : SelectDict (Step model Int) -> NextPageResult Int model
 getNextPage steps =
     let
         nextStep =
@@ -682,14 +681,14 @@ getNextPage steps =
 
         Multi { pages } ->
             pages
-                |> SelectDict.after
+                |> SelectDict.getAfter
                 |> Dict.toList
                 |> List.head
                 |> Maybe.map NextPage
                 |> Maybe.withDefault nextStep
 
 
-getNextTitle : SelectDict comparable (Step model comparable) -> Maybe String
+getNextTitle : SelectDict (Step model Int) -> Maybe String
 getNextTitle steps =
     case SelectDict.selectedValue steps of
         Single _ ->
@@ -697,37 +696,37 @@ getNextTitle steps =
 
         Multi { pages } ->
             pages
-                |> SelectDict.after
+                |> SelectDict.getAfter
                 |> Dict.values
                 |> List.head
                 |> Maybe.map .title
                 |> Maybe.Extra.orElseLazy (\_ -> getNextStepTitle steps)
 
 
-getNextStepTitle : SelectDict comparable (Step model comparable) -> Maybe String
+getNextStepTitle : SelectDict (Step model Int) -> Maybe String
 getNextStepTitle steps =
     steps
         |> getNextStep
         |> Maybe.map (Tuple.second >> getStepTitle)
 
 
-getNextStep : SelectDict comparable (Step model comparable) -> Maybe ( comparable, Step model comparable )
+getNextStep : SelectDict (Step model Int) -> Maybe ( Int, Step model Int )
 getNextStep steps =
     steps
-        |> SelectDict.after
+        |> SelectDict.getAfter
         |> Dict.toList
         |> List.head
 
 
-isFirstPage : SelectDict comparable (Page mode) -> Bool
+isFirstPage : SelectDict (Page mode) -> Bool
 isFirstPage pages =
-    pages |> SelectDict.before |> Dict.isEmpty
+    pages |> SelectDict.getBefore |> Dict.isEmpty
 
 
-getPrevTitle : SelectDict comparable (Step model comparable) -> Maybe String
+getPrevTitle : SelectDict (Step model Int) -> Maybe String
 getPrevTitle steps =
     steps
-        |> SelectDict.before
+        |> SelectDict.getBefore
         |> Dict.values
         |> List.reverse
         |> List.head
@@ -738,18 +737,19 @@ onMouseDownPreventDefault : msg -> Html.Attribute msg
 onMouseDownPreventDefault msg =
     let
         eventOptions =
-            { preventDefault = True
+            { message = msg
+            , preventDefault = True
             , stopPropagation = True
             }
     in
-    Html.Events.onWithOptions "mousedown" eventOptions (Json.Decode.succeed msg)
+    Html.Events.custom "mousedown" (Json.Decode.succeed eventOptions)
 
 
-shouldReview : Step model comparable -> Config msg model comparable -> Bool
+shouldReview : Step model Int -> Config msg model -> Bool
 shouldReview step { showReview } =
     case step of
         Single page ->
             False
 
         Multi { pages } ->
-            showReview && (pages |> SelectDict.after |> Dict.isEmpty)
+            showReview && (pages |> SelectDict.getAfter |> Dict.isEmpty)

@@ -1,5 +1,7 @@
-module Engage.Bool exposing (false, true)
-
+module Engage.Bool exposing
+    ( true
+    , false
+    )
 
 {-| Bool helpers
 
@@ -8,6 +10,7 @@ module Engage.Bool exposing (false, true)
 @docs false
 
 -}
+
 
 type FancyBool a
     = Nothing

@@ -90,15 +90,13 @@ progress { namespace } { max, value } =
         [ Html.span
             [ Html.Attributes.attribute "aria-hidden" "true"
             , class [ "ProgressBar", "Info" ]
-            , Html.Attributes.style
-                [ ( "width", (clampedValue / max * 100.0 |> round |> toString) ++ "%" )
-                ]
+            , Html.Attributes.style "width" ((clampedValue / max * 100.0 |> round |> String.fromInt) ++ "%")
             ]
             []
         , Html.progress
             [ class [ "HtmlProgress" ]
-            , Html.Attributes.max (toString max)
-            , Html.Attributes.value (toString clampedValue)
+            , Html.Attributes.max (String.fromFloat max)
+            , Html.Attributes.value (String.fromFloat clampedValue)
             ]
             []
         ]

@@ -1,7 +1,6 @@
 module Engage.ListItem exposing
     ( ListItem
-    , decoder
-    , fromDropdownItem
+    , decoder, fromDropdownItem
     )
 
 {-| ListItem
@@ -12,8 +11,8 @@ module Engage.ListItem exposing
 
 -}
 
-import Json.Decode exposing (Decoder, int, string)
-import Json.Decode.Pipeline exposing (decode, required)
+import Json.Decode exposing (Decoder, int, string, succeed)
+import Json.Decode.Pipeline exposing (required)
 import String
 
 
@@ -28,10 +27,10 @@ type alias ListItem =
 fromDropdownItem : ( String, String ) -> Maybe ListItem
 fromDropdownItem ( id, value ) =
     case String.toInt id of
-        Ok parsedId ->
+        Just parsedId ->
             Just ( parsedId, value )
 
-        Err _ ->
+        Nothing ->
             Nothing
 
 
@@ -40,20 +39,20 @@ fromDropdownItem ( id, value ) =
 decoder : Decoder ( Int, String )
 decoder =
     Json.Decode.oneOf
-        [ decode (,)
+        [ succeed (\a b -> ( a, b ))
             |> required "key" int
             |> required "value" string
-        , decode (,)
+        , succeed (\a b -> ( a, b ))
             |> required "key" (string |> Json.Decode.andThen (String.toInt >> fromResult))
             |> required "value" string
         ]
 
 
-fromResult : Result String a -> Decoder a
+fromResult : Maybe a -> Decoder a
 fromResult result =
     case result of
-        Ok a ->
+        Just a ->
             Json.Decode.succeed a
 
-        Err err ->
-            Json.Decode.fail err
+        Nothing ->
+            Json.Decode.fail ""

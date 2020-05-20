@@ -1,10 +1,4 @@
-module Engage.Custom.Field.Json exposing
-    ( encoder
-    , fieldDecoder
-    , fieldGroupDecoder
-    , fileEntryDataEncoder
-    , fileUploadEncoder
-    )
+module Engage.Custom.Field.Json exposing (encoder, fieldDecoder, fieldGroupDecoder, fileEntryDataEncoder, fileUploadEncoder)
 
 {-| Custom.Field.Json
 
@@ -12,9 +6,8 @@ module Engage.Custom.Field.Json exposing
 
 -}
 
-import Date exposing (Date)
 import Dict
-import Engage.Custom.Types exposing (BoolEntryData, Disable(..), EntryData, Field, FieldChoice, FieldGroup, FieldType(..), FileEntryData, FileStatus(..), MultipleEntryData, StaticFormType(..), UpdateOptions(AlwaysUpdate))
+import Engage.Custom.Types exposing (BoolEntryData, Disable(..), EntryData, Field, FieldChoice, FieldGroup, FieldType(..), FileEntryData, FileStatus(..), MultipleEntryData, StaticFormType(..), UpdateOptions(..))
 import Engage.Form.MembershipTypeList exposing (MembershipType)
 import Engage.UI.Accordion as Accordion
 import Engage.UI.Datepicker as Datepicker
@@ -51,7 +44,7 @@ fieldGroupDecoder now =
 -}
 fieldTupleDecoder : Date -> Decode.Decoder ( Int, Field )
 fieldTupleDecoder now =
-    decode (,)
+    decode (\a b -> ( a, b ))
         |> required "fieldId" int
         |> custom (fieldDecoder now)
 

@@ -1,8 +1,6 @@
 module Engage.Namespace exposing
     ( Namespace
-    , engagecore
-    , namespace
-    , toString
+    , engagecore, namespace, toString
     )
 
 {-| Namespace
@@ -12,6 +10,7 @@ module Engage.Namespace exposing
 @docs engagecore, namespace, toString
 
 -}
+
 
 {-| The engagecore Namespace
 -}

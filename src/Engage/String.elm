@@ -24,6 +24,7 @@ import Char
 import Regex exposing (Regex)
 import String
 
+
 {-| Append two strings with a delimeter
 -}
 append : String -> String -> String -> String
@@ -54,12 +55,12 @@ comma =
 
 cssClassRegex : Regex
 cssClassRegex =
-    Regex.regex "[^a-z0-9]"
+    Maybe.withDefault Regex.never <| Regex.fromString "[^a-z0-9]"
 
 
 idRegex : Regex
 idRegex =
-    Regex.regex "[^a-zA-Z0-9]"
+    Maybe.withDefault Regex.never <| Regex.fromString "[^a-zA-Z0-9]"
 
 
 {-| Convert to a safe CSS class name
@@ -88,7 +89,7 @@ toSafeCssClassName text =
                 ""
     in
     text
-        |> Regex.replace Regex.All cssClassRegex replace
+        |> Regex.replace cssClassRegex replace
 
 
 {-| Convert to a safe ID
@@ -100,4 +101,4 @@ toSafeId text =
             ""
     in
     text
-        |> Regex.replace Regex.All idRegex replace
+        |> Regex.replace idRegex replace

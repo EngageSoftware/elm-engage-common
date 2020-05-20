@@ -16,7 +16,7 @@ import Engage.Entity.PhoneNumber exposing (PhoneNumber)
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.String
-import Engage.Styles.Class exposing (Class(FormControl), Importance(..), Size(..), getSizeString)
+import Engage.Styles.Class exposing (Class(..), Importance(..), Size(..), getSizeString)
 import Engage.UI.Error as Error exposing (Status)
 import Engage.UI.FormControl as FormControl
 import Engage.UI.Loading as Loading
@@ -24,13 +24,14 @@ import Engage.UI.Message as Message
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Html.Styled.Attributes exposing (fromUnstyled)
 import Input.BigNumber
 import Input.Number
 import Input.Text
 import IntlPhoneInput
 import IntlPhoneInput.Config
-import Json.Decode
-import Json.Decode.Pipeline exposing (decode, required, requiredAt)
+import Json.Decode exposing (succeed)
+import Json.Decode.Pipeline exposing (required, requiredAt)
 import Set exposing (Set)
 
 
@@ -128,10 +129,10 @@ phoneWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, statu
             Engage.String.toSafeId id
 
         defaultConfig =
-            IntlPhoneInput.Config.configWithId
+            IntlPhoneInput.Config.config
                 safeId
-                (\phoneState phoneNumber cmd ->
-                    onChange { onlyStateChange = False } { state | phoneInput = phoneState } phoneNumber cmd
+                (\phoneState phoneNumberValue cmd ->
+                    onChange { onlyStateChange = False } { state | phoneInput = phoneState } phoneNumberValue cmd
                 )
 
         config =
@@ -155,7 +156,7 @@ phoneWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, statu
         }
         state.message
         (IntlPhoneInput.customInput
-            (class [ "Input-" ++ getSizeString size ] :: attributes)
+            (List.map fromUnstyled (class [ "Input-" ++ getSizeString size ] :: attributes))
             config
             state.phoneInput
             phoneNumber
@@ -655,7 +656,6 @@ checkBoxList :
     , onChange : { onlyStateChange : Bool } -> State -> Set String -> msg
     , status : Status
     , items : List { id : String, text : String }
-    , status : Status
     , requiredText : Maybe String
     }
     -> State
@@ -834,7 +834,7 @@ unwrap (State stateData) =
 
 fileEventDecoder : Json.Decode.Decoder FileInfo
 fileEventDecoder =
-    decode FileInfo
+    succeed FileInfo
         |> requiredAt [ "target", "files", "0", "name" ] Json.Decode.string
         |> requiredAt [ "target", "files", "0", "type" ] Json.Decode.string
         |> Json.Decode.Pipeline.hardcoded Nothing

@@ -1,13 +1,11 @@
 module Engage.Custom.Field.View exposing (Args, checkBoxList, checkbox, class, countryDropdown, datepicker, dropdown, dropdownWithItems, fieldClass, fieldForm, fieldGroupClass, fieldGroupForm, fieldLabelClass, file, membershipTypeList, number, radioList, regionDropdown, staticForm, text, textArea, textBox, view, viewCompletedEntries, viewEntry)
 
-import Date
 import Dict
 import Engage.CssHelpers
 import Engage.Custom.Field as Field
 import Engage.Custom.Field.Events as Events
 import Engage.Custom.Field.Helpers as FieldHelpers
 import Engage.Custom.Types exposing (..)
-import Engage.DateHelper as DateHelper
 import Engage.Entity.Address as Address
 import Engage.Form.Address as Address
 import Engage.Form.MembershipTypeList as MembershipTypeList
@@ -21,7 +19,7 @@ import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Error as Error
 import Engage.UI.Info as Info
 import Engage.UI.Input as Input
-import Engage.Validation exposing (ValidationErrors)
+import Engage.Validation exposing (ValidationResult)
 import Html exposing (Html)
 import Markdown
 import Set exposing (Set)
@@ -261,7 +259,7 @@ text field =
 type alias Args a msg =
     { a
         | config : Config msg
-        , validations : ValidationErrors { fieldId : Int }
+        , validations : ValidationResult { fieldId : Int }
     }
 
 
@@ -597,7 +595,7 @@ dropdownWithItems { config, validations } state ( form, section, fieldGroup, fie
         (FieldHelpers.getValue fieldData |> Maybe.andThen List.head)
 
 
-viewEntry : { a | config : Config msg, validations : ValidationErrors { fieldId : Int } } -> Field -> Html msg
+viewEntry : { a | config : Config msg, validations : ValidationResult { fieldId : Int } } -> Field -> Html msg
 viewEntry { config, validations } field =
     field
         |> FieldHelpers.getValue
@@ -620,7 +618,7 @@ view config { fields } =
             )
 
 
-viewCompletedEntries : { a | config : Config msg, validations : ValidationErrors { fieldId : Int } } -> FieldGroup -> List (Html msg)
+viewCompletedEntries : { a | config : Config msg, validations : ValidationResult { fieldId : Int } } -> FieldGroup -> List (Html msg)
 viewCompletedEntries { config, validations } { fields } =
     if Dict.values fields |> List.any FieldHelpers.isFileField then
         fields

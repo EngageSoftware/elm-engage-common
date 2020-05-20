@@ -1,16 +1,6 @@
 module Engage.RemoteData exposing
-    ( RemoteData(..)
-    , WebData
-    , downgrade
-    , fail
-    , isLoading
-    , isSuccess
-    , loading
-    , map
-    , mapError
-    , toError
-    , toMaybe
-    , upgrade
+    ( RemoteData(..), WebData
+    , downgrade, fail, isLoading, isSuccess, loading, map, mapError, toError, toMaybe, upgrade
     )
 
 {-| RemoteData
@@ -203,6 +193,7 @@ upgrade remoteData =
 {-| Downgrade the RemoteData
 
     Use this with caution, you lose some information with this
+
 -}
 downgrade : RemoteData e a -> RemoteData.RemoteData e a
 downgrade remoteData =

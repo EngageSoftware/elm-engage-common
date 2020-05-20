@@ -1,30 +1,18 @@
 module Engage.Theme exposing
-    ( ColorPalette
-    , Decoration
-    , DecorationOnly
-    , LabelTypography
-    , LabelTypographyOnly
-    , Palette
-    , Spacing
-    , SpacingData
-    , Style
-    , Theme(..)
-    , ThemeData
-    , Typography
-    , TypographyOnly
-    , WithLabel
-    , WithLabelOnly
-    , fromString
-    , toDropdownItem
-    , toString
+    ( ColorPalette, Decoration, DecorationOnly, LabelTypography, LabelTypographyOnly, Palette, Spacing, SpacingData, Style, Theme(..), ThemeData, Typography, TypographyOnly, WithLabel, WithLabelOnly
+    , fromString, toDropdownItem, toString
     )
 
 {-| Basic Theme types
 
+
 # Types
+
 @docs ColorPalette, Decoration, DecorationOnly, LabelTypography, LabelTypographyOnly, Palette, Spacing, SpacingData, Style, Theme, ThemeData, Typography, TypographyOnly, WithLabel, WithLabelOnly
 
+
 # Helpers
+
 @docs fromString, toDropdownItem, toString
 
 -}
@@ -52,7 +40,18 @@ type Theme
 -}
 toString : Theme -> String
 toString theme =
-    Basics.toString theme
+    case theme of
+        Light ->
+            "Light"
+
+        Dark ->
+            "Dark"
+
+        ISMA ->
+            "ISMA"
+
+        None ->
+            "None"
 
 
 {-| Get a theme from a string
@@ -106,6 +105,7 @@ type alias ColorPalette =
 -}
 type alias Spacing =
     ThemeData SpacingDataOnly (SpacingData WithLabelOnly) (SpacingData WithLabelOnly) SpacingDataOnly SpacingDataOnly
+
 
 {-| A style type
 -}

@@ -1,5 +1,7 @@
-module Engage.Form.HideOrShow exposing (HideOrShow, Visibility(..), fromHideBool, fromShowBool, showAll)
-
+module Engage.Form.HideOrShow exposing
+    ( HideOrShow, Visibility(..)
+    , fromHideBool, fromShowBool, showAll
+    )
 
 {-| HideOrShow
 
@@ -34,7 +36,6 @@ type Visibility
     = Hide
     | Show
     | ReadOnly
-
 
 
 {-| Show all

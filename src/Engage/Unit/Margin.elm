@@ -43,8 +43,8 @@ toList unit =
         NotSet ->
             []
 
-        Margin unit ->
-            [ unit ]
+        Margin unit1 ->
+            [ unit1 ]
 
         Margin2 unit1 unit2 ->
             [ unit1, unit2 ]
@@ -76,8 +76,8 @@ fromList units =
 
 
 toCss : Margin -> Css.Style
-toCss margin =
-    case margin of
+toCss marginValue =
+    case marginValue of
         NotSet ->
             Css.batch []
 

@@ -10,6 +10,7 @@ import Engage.Localization as Localization exposing (Localization)
 import Language exposing (Language)
 import Numeral
 
+
 {-| Format a currency
 -}
 format : { a | localization : Localization } -> Language -> Float -> String

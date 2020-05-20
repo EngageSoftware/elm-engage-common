@@ -35,20 +35,20 @@ emptyAttribute =
 
 
 processAttribute : attribute -> List (attribute -> attribute) -> attribute
-processAttribute initialAttribute attributes =
-    List.foldl (\f attribute -> f attribute) initialAttribute attributes
+processAttribute initialAttribute attributesList =
+    List.foldl (\f attribute -> f attribute) initialAttribute attributesList
 
 
 {-| Get the card view
 -}
 card : Namespace -> List (Attribute msg) -> List (Html msg) -> Html msg
-card namespace attributes content =
+card namespace attributesList content =
     let
         class =
             Engage.CssHelpers.withNamespace <| Namespace.toString namespace
 
         attribute =
-            processAttribute emptyAttribute attributes
+            processAttribute emptyAttribute attributesList
     in
     div (class [ "Card" ] :: (attribute.attributes |> Maybe.withDefault []))
         [ headerView namespace attribute
@@ -65,20 +65,20 @@ headerView namespace attribute =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
 
-        subtitle =
+        subtitleHtml =
             attribute.subtitle
                 |> Maybe.map (\subtitleText -> span [ class [ "CardSubtitle" ] ] [ text subtitleText ])
                 |> Maybe.withDefault (text "")
     in
     attribute.title
         |> Maybe.map
-            (\title ->
+            (\cardTitle ->
                 div [ class [ "CardHeader" ] ]
-                    [ span [ class [ "CardTitle" ] ] [ text title ]
-                    , subtitle
+                    [ span [ class [ "CardTitle" ] ] [ text cardTitle ]
+                    , subtitleHtml
                     ]
             )
-        |> Maybe.withDefault (div [ class [ "CardHeader" ] ] [ subtitle ])
+        |> Maybe.withDefault (div [ class [ "CardHeader" ] ] [ subtitleHtml ])
 
 
 editView : Namespace -> InternalAttribute msg -> Html msg

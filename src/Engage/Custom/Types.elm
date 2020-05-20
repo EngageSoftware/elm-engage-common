@@ -1,30 +1,6 @@
 module Engage.Custom.Types exposing
-    ( Answer(..)
-    , AnswerData
-    , BoolEntryData
-    , ChangeArgs
-    , Config
-    , Disable(..)
-    , Entry(..)
-    , EntryData
-    , Field
-    , FieldChoice
-    , FieldGroup
-    , FieldType(..)
-    , FileEntryData
-    , FileStatus(..)
-    , FileUploadError
-    , FileUploadProgress
-    , FileUploadStatus
-    , Form
-    , Level(..)
-    , MultipleEntryData
-    , Section
-    , StaticFormType(..)
-    , UpdateOptions(..)
-    , defaultCompanyForm
-    , defaultConfig
-    , defaultParticipantForm
+    ( Answer(..), AnswerData, BoolEntryData, ChangeArgs, Config, Disable(..), Entry(..), EntryData, Field, FieldChoice, FieldGroup, FieldType(..), FileEntryData, FileStatus(..), FileUploadError, FileUploadProgress, FileUploadStatus, Form, Level(..), MultipleEntryData, Section, StaticFormType(..), UpdateOptions(..)
+    , defaultCompanyForm, defaultConfig, defaultParticipantForm
     )
 
 {-| Custom.Types
@@ -35,9 +11,6 @@ module Engage.Custom.Types exposing
 
 -}
 
-import Date
-import Date.Extra.Config.Config_en_us as Config
-import Date.Extra.Format
 import Dict exposing (Dict)
 import Engage.Entity.Address as Address
 import Engage.Form.MembershipTypeList as MembershipTypeList exposing (MembershipType)
@@ -46,7 +19,7 @@ import Engage.UI.Accordion as Accordion
 import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Input as Input
-import Engage.Validation as Validation exposing (ValidationErrors)
+import Engage.Validation as Validation exposing (ValidationResult)
 import Set exposing (Set)
 
 
@@ -59,7 +32,7 @@ type alias Form =
     , sections : Dict Int Section
     , formLevel : Level
     , relativeOrder : Int
-    , validations : ValidationErrors { fieldId : Int }
+    , validations : ValidationResult { fieldId : Int }
     }
 
 

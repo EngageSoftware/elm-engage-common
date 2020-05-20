@@ -33,42 +33,42 @@ relative4 =
 
 
 singular : Relative -> Float
-singular relative =
-    case relative of
-        Relative relative ->
-            relative
+singular relativeValue =
+    case relativeValue of
+        Relative relative1 ->
+            relative1
 
-        Relative2 relative _ ->
-            relative
+        Relative2 relative1 _ ->
+            relative1
 
-        Relative3 relative _ _ ->
-            relative
+        Relative3 relative1 _ _ ->
+            relative1
 
-        Relative4 relative _ _ _ ->
-            relative
+        Relative4 relative1 _ _ _ ->
+            relative1
 
 
 toList : Relative -> List Float
-toList relative =
-    case relative of
-        Relative relative ->
-            [ relative ]
+toList relativeValue =
+    case relativeValue of
+        Relative relative1 ->
+            [ relative1 ]
 
-        Relative2 relative1 relative2 ->
-            [ relative1, relative2 ]
+        Relative2 relative1 relativeValue2 ->
+            [ relative1, relativeValue2 ]
 
-        Relative3 relative1 relative2 relative3 ->
-            [ relative1, relative2, relative3 ]
+        Relative3 relative1 relativeValue2 relativeValue3 ->
+            [ relative1, relativeValue2, relativeValue3 ]
 
-        Relative4 relative1 relative2 relative3 relative4 ->
-            [ relative1, relative2, relative3, relative4 ]
+        Relative4 relative1 relativeValue2 relativeValue3 relativeValue4 ->
+            [ relative1, relativeValue2, relativeValue3, relativeValue4 ]
 
 
 applyToPadding : Relative -> Padding -> Padding
-applyToPadding relative base =
+applyToPadding relativeValue base =
     let
         relatives =
-            toList relative
+            toList relativeValue
 
         paddings =
             Padding.toList base
@@ -78,10 +78,10 @@ applyToPadding relative base =
 
 
 applyToMargin : Relative -> Margin -> Margin
-applyToMargin relative base =
+applyToMargin relativeValue base =
     let
         relatives =
-            toList relative
+            toList relativeValue
 
         paddings =
             Margin.toList base
@@ -91,5 +91,5 @@ applyToMargin relative base =
 
 
 applyToSize : Relative -> Size -> Size
-applyToSize relative base =
-    Size.map ((*) (singular relative)) base
+applyToSize relativeValue base =
+    Size.map ((*) (singular relativeValue)) base

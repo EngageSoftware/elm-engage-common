@@ -1,8 +1,8 @@
 module Engage.Mode exposing
     ( Mode(..)
-    , decoder
     , fromBool
     , isReactor
+    , decoder
     )
 
 {-| Mode helpers
@@ -18,6 +18,7 @@ module Engage.Mode exposing
 -}
 
 import Json.Decode as JD
+
 
 {-| A mode that the application is running
 -}

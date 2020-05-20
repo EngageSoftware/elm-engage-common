@@ -1,7 +1,4 @@
-module Engage.Form.Company.Types exposing
-    ( CompaniesData
-    , CompanyData
-    )
+module Engage.Form.Company.Types exposing (CompaniesData, CompanyData)
 
 {-| Form.Company.Types
 
@@ -9,8 +6,8 @@ module Engage.Form.Company.Types exposing
 
 -}
 
-import Date exposing (Date)
 import Engage.Entity.Address exposing (Address)
+import Time exposing (Posix)
 
 
 {-| A CompaniesData type
@@ -29,7 +26,7 @@ type alias CompanyData =
     , participantCompanyId : Maybe Int
     , name : String
     , position : String
-    , startDate : Maybe Date
-    , endDate : Maybe Date
+    , startDate : Maybe Posix
+    , endDate : Maybe Posix
     , address : Address
     }

@@ -11,9 +11,6 @@ module Engage.Form.Profile exposing
 
 -}
 
-import Date exposing (Date)
-import Date.Extra.Config.Config_en_us
-import Date.Extra.Format
 import Engage.CssHelpers
 import Engage.Entity.Address exposing (Address, Countries, RegionsCountry)
 import Engage.Entity.Gender as Gender exposing (Gender)

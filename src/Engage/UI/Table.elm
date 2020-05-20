@@ -11,10 +11,7 @@ module Engage.UI.Table exposing
 
 -}
 
-import Date.Extra.Config.Configs as DateConfigs
-import Date.Extra.Format exposing (format)
 import Engage.CssHelpers
-import Engage.DateHelper as DateHelper
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Importance(..))
 import Engage.UI.Button as Button
@@ -25,7 +22,7 @@ import Html.Events exposing (onClick)
 import Language as NumeralLanguage
 import Numeral
 import Table
-import Time exposing (Time)
+import Time exposing (Posix)
 
 
 {-| Get the table view
@@ -179,7 +176,7 @@ intColumn : String -> (data -> Int) -> Column data msg
 intColumn name toInt =
     Column
         { name = name
-        , viewData = always (toInt >> toString >> textDetails)
+        , viewData = always (toInt >> String.fromInt >> textDetails)
         , sorter = Table.increasingOrDecreasingBy toInt
         }
 
@@ -190,14 +187,14 @@ floatColumn : String -> (data -> Float) -> Column data msg
 floatColumn name toFloat =
     Column
         { name = name
-        , viewData = always (toFloat >> toString >> textDetails)
+        , viewData = always (toFloat >> String.fromFloat >> textDetails)
         , sorter = Table.increasingOrDecreasingBy toFloat
         }
 
 
 {-| Get a date column
 -}
-dateColumn : String -> (data -> Time) -> String -> String -> Column data msg
+dateColumn : String -> (data -> Posix) -> String -> String -> Column data msg
 dateColumn name toTime locale dateFormat =
     Column
         { name = name

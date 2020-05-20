@@ -1,10 +1,6 @@
 module Engage.Entity.PhoneNumber exposing
     ( PhoneNumber
-    , decoder
-    , defaultIsoCode
-    , empty
-    , encoder
-    , format
+    , decoder, defaultIsoCode, empty, encoder, format
     )
 
 {-| Entity.PhoneNumber
@@ -19,8 +15,8 @@ import Dict
 import Engage.String exposing (space)
 import IntlPhoneInput.Config
 import IntlPhoneInput.Type
-import Json.Decode exposing (Decoder, null, oneOf, string)
-import Json.Decode.Pipeline exposing (decode, required)
+import Json.Decode exposing (Decoder, null, oneOf, string, succeed)
+import Json.Decode.Pipeline exposing (required)
 import Json.Encode
 import String
 
@@ -60,7 +56,7 @@ defaultIsoCode phoneNumber =
 -}
 decoder : Decoder PhoneNumber
 decoder =
-    decode (\isoCode phoneNumber -> { isoCode = isoCode, phoneNumber = phoneNumber } |> defaultIsoCode)
+    succeed (\isoCode phoneNumber -> { isoCode = isoCode, phoneNumber = phoneNumber } |> defaultIsoCode)
         |> required "isoCode" (oneOf [ null "", string ])
         |> required "phoneNumber" (oneOf [ null "", string ])
 

@@ -1,13 +1,6 @@
 module Engage.Entity.Contact exposing
-    ( Contact
-    , ContactType
-    , ContactTypes
-    , contactTypeDecoder
-    , contactTypesDecoder
-    , decoder
-    , empty
-    , encoder
-    , encoderWith
+    ( Contact, ContactType, ContactTypes
+    , contactTypeDecoder, contactTypesDecoder, decoder, empty, encoder, encoderWith
     )
 
 {-| Entity.Contact
@@ -102,7 +95,7 @@ empty =
 -}
 decoder : Decoder Contact
 decoder =
-    JDP.decode Contact
+    JD.succeed Contact
         |> JDP.required "contactType" (JD.map Just contactTypeDecoder)
         |> JDP.required "contactId" (JD.nullable JD.int)
         |> JDP.required "prefix" (JD.oneOf [ JD.string, JD.null "" ])
@@ -131,7 +124,7 @@ decoder =
 -}
 contactTypeDecoder : Decoder ContactType
 contactTypeDecoder =
-    JDP.decode ContactType
+    JD.succeed ContactType
         |> JDP.required "contactTypeId" JD.int
         |> JDP.required "shortDescription" (JD.oneOf [ JD.string, JD.null "" ])
         |> JDP.required "longDescription" (JD.oneOf [ JD.string, JD.null "" ])

@@ -7,7 +7,6 @@ module Engage.Wizard.Json exposing
     , wizardStepEncoder
     )
 
-import Date exposing (Date)
 import Dict
 import Engage.Custom.Form.Json as CustomForm
 import Engage.Custom.Types as Custom
@@ -19,11 +18,11 @@ import Engage.Form.Company.Json as Company
 import Engage.Form.Company.Types as Company
 import Engage.Form.Participant as Participant
 import Engage.RemoteData
+import Engage.SelectDict exposing (SelectDict)
 import Engage.Wizard exposing (..)
 import Json.Decode as Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 import Json.Encode as Encode
-import Engage.SelectDict exposing (SelectDict)
 
 
 {-| Preparing for when we need to handle in the case the user have multiple pending registration.
@@ -101,7 +100,7 @@ updateMembershipEventId wizardData =
 
 wizardStepTupleDecoder : Date -> Decode.Decoder ( Int, Step )
 wizardStepTupleDecoder now =
-    decode (,)
+    decode (\a b -> ( a, b ))
         |> required "relativeOrder" int
         |> custom (wizardStepDecoder now)
 
@@ -179,7 +178,7 @@ formsStepDecoder now =
 
 wizardFormTupleDecoder : Date -> Decode.Decoder ( Int, Form )
 wizardFormTupleDecoder now =
-    decode (,)
+    decode (\a b -> ( a, b ))
         |> required "relativeOrder" int
         |> custom (wizardFormDecoder now)
 

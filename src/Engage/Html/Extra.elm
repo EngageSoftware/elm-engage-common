@@ -1,8 +1,4 @@
-module Engage.Html.Extra exposing
-    ( domLoadNotifier
-    , none
-    , stylesheet
-    )
+module Engage.Html.Extra exposing (domLoadNotifier, none, stylesheet)
 
 {-| Html.Extra
 
@@ -49,7 +45,7 @@ domLoadNotifier : msg -> Html msg
 domLoadNotifier msg =
     Html.img
         [ Html.Attributes.src "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-        , Html.Attributes.style [ ( "display", "none" ) ]
+        , Html.Attributes.style "display" "none"
         , Html.Events.on "load" (Json.Decode.succeed msg)
         ]
         []

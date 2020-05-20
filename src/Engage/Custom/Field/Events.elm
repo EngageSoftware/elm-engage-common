@@ -1,6 +1,5 @@
 module Engage.Custom.Field.Events exposing (onChangeHandler, onCheckHandler, onDateChangeHandler, onFileSelectHandler, onIntInputHandler, onMembershipTypeHandler, onMultipleAnswerChangeHandler)
 
-import Date
 import Engage.Custom.Types exposing (..)
 import Engage.Form.MembershipTypeList as MembershipTypeList
 import Engage.UI.Datepicker as Datepicker

@@ -11,7 +11,7 @@ module Engage.UI.Dialog exposing
 
 -}
 
-import Dom
+import Browser.Dom as Dom
 import Engage.CssHelpers
 import Engage.Form.FormAction as FormAction
 import Engage.Namespace as Namespace exposing (Namespace)
@@ -80,10 +80,10 @@ confirm namespace (State state) attributes body =
 
         visibility =
             if state.visible then
-                style []
+                style "" ""
 
             else
-                style [ ( "display", "none" ) ]
+                style "display" "none"
 
         okClickHandler =
             attribute.onOk

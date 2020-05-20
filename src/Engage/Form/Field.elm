@@ -1,20 +1,4 @@
-module Engage.Form.Field exposing
-    ( checkbox
-    , checkboxWithAttributes
-    , dateField
-    , datepickerField
-    , dropdownField
-    , dropdownFieldValueSort
-    , dropdownFieldWithAttributes
-    , fieldId
-    , inputField
-    , inputFieldWithAttributes
-    , localizeHelp
-    , localizeLabel
-    , phoneField
-    , radioListField
-    , validate
-    )
+module Engage.Form.Field exposing (checkbox, checkboxWithAttributes, dateField, datepickerField, dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes, fieldId, inputField, inputFieldWithAttributes, localizeHelp, localizeLabel, phoneField, radioListField, validate)
 
 {-| Form.Field
 
@@ -22,7 +6,6 @@ module Engage.Form.Field exposing
 
 -}
 
-import Date exposing (Date)
 import Dict exposing (Dict)
 import Engage.Entity.PhoneNumber exposing (PhoneNumber)
 import Engage.Localization as Localization exposing (Localization)
@@ -31,14 +14,14 @@ import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Error as Error
 import Engage.UI.Input as Input
-import Engage.Validation as Validation exposing (ValidationErrors)
+import Engage.Validation as Validation exposing (ValidationResult)
 import Html exposing (Html)
 
 
 type alias InputFieldArgs field msg =
     { namespace : Namespace
     , field : field
-    , onChange : ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> String -> msg
+    , onChange : ValidationResult field -> { onlyStateChange : Bool } -> Input.State -> String -> msg
     , localization : Localization
     , required : Bool
     }
@@ -48,7 +31,7 @@ type alias PhoneFieldArgs field msg =
     { namespace : Namespace
     , isoCodeField : field
     , field : field
-    , onChange : ValidationErrors field -> { onlyStateChange : Bool } -> Input.PhoneState -> PhoneNumber -> Cmd msg -> msg
+    , onChange : ValidationResult field -> { onlyStateChange : Bool } -> Input.PhoneState -> PhoneNumber -> Cmd msg -> msg
     , localization : Localization
     , required : Bool
     }
@@ -56,7 +39,7 @@ type alias PhoneFieldArgs field msg =
 
 {-| Get the phone field view
 -}
-phoneField : PhoneFieldArgs field msg -> ValidationErrors field -> Input.PhoneState -> PhoneNumber -> Html msg
+phoneField : PhoneFieldArgs field msg -> ValidationResult field -> Input.PhoneState -> PhoneNumber -> Html msg
 phoneField args validations state phoneNumber =
     let
         dialCodeValidations updatedPhoneNumber validations =
@@ -114,14 +97,14 @@ phoneField args validations state phoneNumber =
 
 {-| Get the input field view
 -}
-inputField : InputFieldArgs field msg -> ValidationErrors field -> Input.State -> String -> Html msg
+inputField : InputFieldArgs field msg -> ValidationResult field -> Input.State -> String -> Html msg
 inputField args validations state value =
     inputFieldWithAttributes args validations [] state value
 
 
 {-| Get the input field with attributes view
 -}
-inputFieldWithAttributes : InputFieldArgs field msg -> ValidationErrors field -> List (Html.Attribute msg) -> Input.State -> String -> Html msg
+inputFieldWithAttributes : InputFieldArgs field msg -> ValidationResult field -> List (Html.Attribute msg) -> Input.State -> String -> Html msg
 inputFieldWithAttributes args validations attributes state value =
     let
         updatedValidations updatedValue =
@@ -168,7 +151,7 @@ inputFieldWithAttributes args validations attributes state value =
 type alias RadioListFieldArgs field msg =
     { namespace : Namespace
     , field : field
-    , onChange : ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> String -> msg
+    , onChange : ValidationResult field -> { onlyStateChange : Bool } -> Input.State -> String -> msg
     , localization : Localization
     , required : Bool
     , items : List { id : String, text : String }
@@ -177,7 +160,7 @@ type alias RadioListFieldArgs field msg =
 
 {-| Get the radio field view
 -}
-radioListField : RadioListFieldArgs field msg -> ValidationErrors field -> Input.State -> String -> Html msg
+radioListField : RadioListFieldArgs field msg -> ValidationResult field -> Input.State -> String -> Html msg
 radioListField args validations state value =
     let
         updatedValidations updatedValue =
@@ -223,7 +206,7 @@ radioListField args validations state value =
 
 type alias DropdownFieldArgs field msg =
     { namespace : Namespace
-    , onChange : ValidationErrors field -> Dropdown.State -> Maybe ( String, String ) -> msg
+    , onChange : ValidationResult field -> Dropdown.State -> Maybe ( String, String ) -> msg
     , localization : Localization
     , field : field
     , required : Bool
@@ -233,21 +216,21 @@ type alias DropdownFieldArgs field msg =
 
 {-| Get the dropdown field view
 -}
-dropdownField : DropdownFieldArgs field msg -> ValidationErrors field -> Dropdown.State -> Maybe String -> Html msg
+dropdownField : DropdownFieldArgs field msg -> ValidationResult field -> Dropdown.State -> Maybe String -> Html msg
 dropdownField args validations state value =
     dropdownFieldWithAttributes args validations [] state value
 
 
 {-| Get the dropdown field value sort view
 -}
-dropdownFieldValueSort : DropdownFieldArgs field msg -> ValidationErrors field -> Dropdown.State -> Maybe String -> Bool -> Html msg
+dropdownFieldValueSort : DropdownFieldArgs field msg -> ValidationResult field -> Dropdown.State -> Maybe String -> Bool -> Html msg
 dropdownFieldValueSort args validations state value reverseSort =
     dropdownFieldWithAttributesValueSort args validations [] state value reverseSort
 
 
 {-| Get the dropdown field with attributes value sort view
 -}
-dropdownFieldWithAttributesValueSort : DropdownFieldArgs field msg -> ValidationErrors field -> List (Html.Attribute msg) -> Dropdown.State -> Maybe String -> Bool -> Html msg
+dropdownFieldWithAttributesValueSort : DropdownFieldArgs field msg -> ValidationResult field -> List (Html.Attribute msg) -> Dropdown.State -> Maybe String -> Bool -> Html msg
 dropdownFieldWithAttributesValueSort args validations attributes state value reverseSort =
     let
         required =
@@ -302,7 +285,7 @@ dropdownFieldWithAttributesValueSort args validations attributes state value rev
 
 {-| Get the dropdown field with attributes view
 -}
-dropdownFieldWithAttributes : DropdownFieldArgs field msg -> ValidationErrors field -> List (Html.Attribute msg) -> Dropdown.State -> Maybe String -> Html msg
+dropdownFieldWithAttributes : DropdownFieldArgs field msg -> ValidationResult field -> List (Html.Attribute msg) -> Dropdown.State -> Maybe String -> Html msg
 dropdownFieldWithAttributes args validations attributes state value =
     let
         required =
@@ -346,8 +329,8 @@ dropdownFieldWithAttributes args validations attributes state value =
 
 type alias DatepickerFieldArgs field msg =
     { namespace : Namespace
-    , onChange : ValidationErrors field -> Datepicker.State -> Maybe Date -> msg
-    , onStateChange : ValidationErrors field -> Datepicker.State -> msg
+    , onChange : ValidationResult field -> Datepicker.State -> Maybe Date -> msg
+    , onStateChange : ValidationResult field -> Datepicker.State -> msg
     , localization : Localization
     , field : field
     , required : Bool
@@ -357,7 +340,7 @@ type alias DatepickerFieldArgs field msg =
 
 {-| Get the datepicker field view
 -}
-datepickerField : DatepickerFieldArgs field msg -> ValidationErrors field -> Datepicker.State -> Maybe Date -> Html msg
+datepickerField : DatepickerFieldArgs field msg -> ValidationResult field -> Datepicker.State -> Maybe Date -> Html msg
 datepickerField args validations state value =
     let
         updatedValidations updatedValue =
@@ -395,7 +378,7 @@ datepickerField args validations state value =
 
 {-| Get the date field view
 -}
-dateField : DatepickerFieldArgs field msg -> ValidationErrors field -> Datepicker.State -> Maybe Date -> Html msg
+dateField : DatepickerFieldArgs field msg -> ValidationResult field -> Datepicker.State -> Maybe Date -> Html msg
 dateField args validations state value =
     let
         updatedValidations updatedValue =
@@ -434,7 +417,7 @@ dateField args validations state value =
 type alias CheckboxFieldArgs field msg =
     { namespace : Namespace
     , field : field
-    , onCheck : ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> Bool -> msg
+    , onCheck : ValidationResult field -> { onlyStateChange : Bool } -> Input.State -> Bool -> msg
     , localization : Localization
     , required : Bool
     }
@@ -442,14 +425,14 @@ type alias CheckboxFieldArgs field msg =
 
 {-| Get the checkbox view
 -}
-checkbox : CheckboxFieldArgs field msg -> ValidationErrors field -> Input.State -> Bool -> Html msg
+checkbox : CheckboxFieldArgs field msg -> ValidationResult field -> Input.State -> Bool -> Html msg
 checkbox args validations state value =
     checkboxWithAttributes args validations [] state value
 
 
 {-| Get the checkbox with attributes view
 -}
-checkboxWithAttributes : CheckboxFieldArgs field msg -> ValidationErrors field -> List (Html.Attribute msg) -> Input.State -> Bool -> Html msg
+checkboxWithAttributes : CheckboxFieldArgs field msg -> ValidationResult field -> List (Html.Attribute msg) -> Input.State -> Bool -> Html msg
 checkboxWithAttributes args validations attributes state value =
     let
         updatedValidations updatedValue =
@@ -503,7 +486,7 @@ fieldId namespace field =
     Namespace.toString namespace ++ toString field
 
 
-validateBool : field -> Bool -> ValidationErrors field -> ValidationErrors field
+validateBool : field -> Bool -> ValidationResult field -> ValidationResult field
 validateBool field value validations =
     let
         cleanValidations =
@@ -515,7 +498,7 @@ validateBool field value validations =
 
 {-| Validate a field
 -}
-validate : field -> String -> ValidationErrors field -> ValidationErrors field
+validate : field -> String -> ValidationResult field -> ValidationResult field
 validate field value validations =
     let
         cleanValidations =
@@ -525,7 +508,7 @@ validate field value validations =
         ++ Validation.validateStringField (Validation.localize field) field (always value) ()
 
 
-validateMaybe : field -> Maybe a -> ValidationErrors field -> ValidationErrors field
+validateMaybe : field -> Maybe a -> ValidationResult field -> ValidationResult field
 validateMaybe field value validations =
     let
         cleanValidations =

@@ -1,10 +1,4 @@
-module Engage.Form.Company.Json exposing
-    ( decoder
-    , emptyCompanies
-    , emptyCompany
-    , encoder
-    , encoderWith
-    )
+module Engage.Form.Company.Json exposing (decoder, emptyCompanies, emptyCompany, encoder, encoderWith)
 
 {-| Form.Company.Json
 
@@ -12,12 +6,11 @@ module Engage.Form.Company.Json exposing
 
 -}
 
-import Date exposing (Date)
-import Date.Extra.Format
 import Engage.Entity.Address as Address
 import Engage.Form.Company.Types exposing (CompaniesData, CompanyData)
-import Json.Decode as Decode exposing (Decoder)
-import Json.Decode.Pipeline exposing (decode, required)
+import Iso8601
+import Json.Decode as Decode exposing (Decoder, succeed)
+import Json.Decode.Pipeline exposing (required)
 import Json.Encode as Encode
 import String
 
@@ -37,9 +30,9 @@ encoderWith additional { participantId, companies } =
         (additional
             ++ [ ( "participantId", Encode.int participantId )
                , ( "companies"
-                 , Encode.list
-                    [ companyEncoder True companies.currentCompany
-                    , companyEncoder False companies.previousCompany
+                 , Encode.list companyEncoder
+                    [ ( True, companies.currentCompany )
+                    , ( False, companies.previousCompany )
                     ]
                  )
                ]
@@ -48,8 +41,8 @@ encoderWith additional { participantId, companies } =
 
 {-| Get the company encoder
 -}
-companyEncoder : Bool -> CompanyData -> Encode.Value
-companyEncoder isCurrent company =
+companyEncoder : ( Bool, CompanyData ) -> Encode.Value
+companyEncoder ( isCurrent, company ) =
     if String.isEmpty company.name then
         Encode.null
 
@@ -61,12 +54,12 @@ companyEncoder isCurrent company =
             , ( "position", Encode.string company.position )
             , ( "startDate"
               , company.startDate
-                    |> Maybe.map (Date.Extra.Format.isoString >> Encode.string)
+                    |> Maybe.map Iso8601.encode
                     |> Maybe.withDefault Encode.null
               )
             , ( "endDate"
               , company.endDate
-                    |> Maybe.map (Date.Extra.Format.isoString >> Encode.string)
+                    |> Maybe.map Iso8601.encode
                     |> Maybe.withDefault Encode.null
               )
             , ( "address1", Encode.string company.address.address1 )
@@ -109,25 +102,14 @@ decoder =
 
 companyDecoder : Decoder CompanyData
 companyDecoder =
-    decode CompanyData
+    succeed CompanyData
         |> required "companyId" (Decode.maybe Decode.int)
         |> required "participantCompanyId" (Decode.maybe Decode.int)
         |> required "name" Decode.string
         |> required "position" (Decode.maybe Decode.string |> Decode.map (Maybe.withDefault ""))
-        |> required "startDate" (Decode.maybe isoDateDecoder)
-        |> required "endDate" (Decode.maybe isoDateDecoder)
+        |> required "startDate" (Decode.maybe Iso8601.decoder)
+        |> required "endDate" (Decode.maybe Iso8601.decoder)
         |> required "address" (Decode.maybe Address.decoder |> Decode.map (Maybe.withDefault Address.empty))
-
-
-isoDateDecoder : Decoder Date
-isoDateDecoder =
-    Decode.string
-        |> Decode.andThen
-            (\str ->
-                Date.fromString str
-                    |> Result.map Decode.succeed
-                    |> Result.withDefault (Decode.fail "Invalid date format")
-            )
 
 
 {-| Get an empty CompaniesData

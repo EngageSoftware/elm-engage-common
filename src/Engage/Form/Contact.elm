@@ -25,7 +25,7 @@ import Engage.String exposing (comma, space)
 import Engage.UI.Attribute as Attribute
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Input as Input
-import Engage.Validation as Validation exposing (ValidationErrors)
+import Engage.Validation as Validation exposing (ValidationResult)
 import Html exposing (..)
 import Html.Attributes
 import String
@@ -34,26 +34,26 @@ import String
 {-| The Msg type
 -}
 type Msg field
-    = PrefixUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
-    | FirstNameUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
-    | MiddleNameUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
-    | LastNameUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
-    | SuffixUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
-    | EmailUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
-    | AddressNameUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
-    | Address1Updated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
-    | Address2Updated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
-    | CountryUpdated (ValidationErrors field) Dropdown.State (Maybe ( String, String ))
-    | RegionUpdated (ValidationErrors field) Dropdown.State (Maybe ( String, String ))
-    | CityUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
-    | PostalCodeUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
-    | ContactTypeUpdated (ValidationErrors field) Dropdown.State (Maybe ContactType)
-    | PhoneUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.PhoneState PhoneNumber (Cmd (Msg field))
-    | MobilePhoneUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.PhoneState PhoneNumber (Cmd (Msg field))
-    | FaxUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.PhoneState PhoneNumber (Cmd (Msg field))
-    | IsPrimaryContactUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State Bool
-    | IsBillingContactUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State Bool
-    | NotesUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
+    = PrefixUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
+    | FirstNameUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
+    | MiddleNameUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
+    | LastNameUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
+    | SuffixUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
+    | EmailUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
+    | AddressNameUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
+    | Address1Updated (ValidationResult field) { onlyStateChange : Bool } Input.State String
+    | Address2Updated (ValidationResult field) { onlyStateChange : Bool } Input.State String
+    | CountryUpdated (ValidationResult field) Dropdown.State (Maybe ( String, String ))
+    | RegionUpdated (ValidationResult field) Dropdown.State (Maybe ( String, String ))
+    | CityUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
+    | PostalCodeUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
+    | ContactTypeUpdated (ValidationResult field) Dropdown.State (Maybe ContactType)
+    | PhoneUpdated (ValidationResult field) { onlyStateChange : Bool } Input.PhoneState PhoneNumber (Cmd (Msg field))
+    | MobilePhoneUpdated (ValidationResult field) { onlyStateChange : Bool } Input.PhoneState PhoneNumber (Cmd (Msg field))
+    | FaxUpdated (ValidationResult field) { onlyStateChange : Bool } Input.PhoneState PhoneNumber (Cmd (Msg field))
+    | IsPrimaryContactUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State Bool
+    | IsBillingContactUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State Bool
+    | NotesUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
 
 
 {-| The State type
@@ -73,7 +73,7 @@ type State parentField
         , region : Dropdown.State
         , city : Input.State
         , postalCode : Input.State
-        , validations : ValidationErrors parentField
+        , validations : ValidationResult parentField
         , contactType : Dropdown.State
         , phone : Input.PhoneState
         , mobilePhone : Input.PhoneState
@@ -309,12 +309,12 @@ form originalNamespace localization field attributes (State state) contactData =
         namespace =
             Namespace.namespace <| Namespace.toString originalNamespace ++ "Contact"
 
-        onContactTypeChangeHandler : ValidationErrors field -> Dropdown.State -> Maybe ( String, String ) -> Msg field
+        onContactTypeChangeHandler : ValidationResult field -> Dropdown.State -> Maybe ( String, String ) -> Msg field
         onContactTypeChangeHandler validations state value =
             value
                 |> Maybe.map Tuple.first
                 |> Maybe.andThen (String.toInt >> Result.toMaybe)
-                |> Maybe.map2 (,) attribute.contactTypes
+                |> Maybe.map2 (\a b -> ( a, b )) attribute.contactTypes
                 |> Maybe.andThen (\( contactTypes, contactTypeId ) -> Dict.get contactTypeId contactTypes)
                 |> ContactTypeUpdated validations state
     in
@@ -868,7 +868,7 @@ validateAll =
 
 {-| Validate all of the fields with a function
 -}
-validateAllWith : List (Contact -> ValidationErrors parentField) -> (ValidationField -> parentField) -> State parentField -> Contact -> State parentField
+validateAllWith : List (Contact -> ValidationResult parentField) -> (ValidationField -> parentField) -> State parentField -> Contact -> State parentField
 validateAllWith additionalValidations parentField (State state) data =
     State
         { state
@@ -878,7 +878,7 @@ validateAllWith additionalValidations parentField (State state) data =
 
 {-| Validate a field with a function
 -}
-validateFieldWith : List (Contact -> ValidationErrors parentField) -> (ValidationField -> parentField) -> Contact -> ValidationErrors parentField
+validateFieldWith : List (Contact -> ValidationResult parentField) -> (ValidationField -> parentField) -> Contact -> ValidationResult parentField
 validateFieldWith additionalValidations parentField data =
     Validation.validateField
         ([ Validation.validateStringField (Validation.localize (parentField FirstName)) (parentField FirstName) .firstName

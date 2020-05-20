@@ -1,11 +1,6 @@
 module Engage.RemoteValidation exposing
     ( RemoteValidationErrors
-    , httpErrorToValidationResult
-    , isValid
-    , isValidWebData
-    , serverErrorDecoder
-    , toValidationResult
-    , webDataToError
+    , httpErrorToValidationResult, isValid, isValidWebData, serverErrorDecoder, toValidationResult, webDataToError
     )
 
 {-| RemoteValidation
@@ -104,21 +99,24 @@ toValidationResult validationErrors =
 httpErrorToValidationResult : Http.Error -> Status
 httpErrorToValidationResult error =
     case error of
-        Http.BadUrl error ->
-            Error.Error { reasons = [ error ] }
+        Http.BadUrl errorValue ->
+            Error.Error { reasons = [ errorValue ] }
 
-        Http.BadStatus response ->
+        Http.BadBody response ->
             Error.Error
                 { reasons =
-                    response.body
+                    response
                         |> Decode.decodeString serverErrorDecoder
                         |> Result.toMaybe
                         |> Maybe.map serverErrorToErrors
-                        |> Maybe.withDefault [ response.status.message ]
+                        |> Maybe.withDefault [ response ]
                 }
 
-        Http.BadPayload error response ->
-            Error.Error { reasons = [ error ] }
+        Http.BadStatus statusCode ->
+            Error.Error
+                { reasons =
+                    [ "Bad Status: " ++ String.fromInt statusCode ]
+                }
 
         Http.Timeout ->
             Error.Error { reasons = [ "Timeout" ] }
@@ -134,7 +132,7 @@ isValidWebData webData =
     Engage.RemoteData.isSuccess webData
 
 
-{-| Check if RemoteValidationErrors is valid 
+{-| Check if RemoteValidationErrors is valid
 -}
 isValid : RemoteValidationErrors -> Bool
 isValid =

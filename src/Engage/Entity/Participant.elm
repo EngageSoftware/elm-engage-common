@@ -1,10 +1,6 @@
 module Engage.Entity.Participant exposing
     ( Participant
-    , decoder
-    , empty
-    , encoder
-    , encoderWith
-    , toParticipant
+    , decoder, empty, encoder, encoderWith, toParticipant
     )
 
 {-| Entity.Participant
@@ -15,7 +11,6 @@ module Engage.Entity.Participant exposing
 
 -}
 
-import Date exposing (Date)
 import Engage.Entity.Account as Account exposing (Account)
 import Engage.Entity.Address as Address exposing (Address)
 import Engage.Entity.Gender as Gender exposing (Gender)
@@ -24,7 +19,7 @@ import Engage.ListItem as ListItem exposing (ListItem)
 import Json.Decode as JD exposing (Decoder)
 import Json.Decode.Pipeline as JDP
 import Json.Encode as JE
-import Time
+import Time exposing (Posix)
 
 
 {-| The Participant type
@@ -40,7 +35,7 @@ type alias Participant =
     , mobilePhone : PhoneNumber
     , profilePicture : String
     , gender : Gender
-    , birthDate : Maybe Date
+    , birthDate : Maybe Posix
     , birthDateYear : Maybe ListItem
     , birthDateMonth : Maybe ListItem
     , account : Maybe Account
@@ -80,7 +75,7 @@ type alias ParticipantLike a =
         , mobilePhone : PhoneNumber
         , profilePicture : String
         , gender : Gender
-        , birthDate : Maybe Date
+        , birthDate : Maybe Posix
         , birthDateYear : Maybe ListItem
         , birthDateMonth : Maybe ListItem
         , account : Maybe Account
@@ -112,7 +107,7 @@ toParticipant data =
 -}
 decoder : Decoder Participant
 decoder =
-    JDP.decode Participant
+    JD.succeed Participant
         |> JDP.required "participantId" (JD.map Just JD.int)
         |> JDP.required "firstName" (JD.oneOf [ JD.null "", JD.string ])
         |> JDP.required "lastName" (JD.oneOf [ JD.null "", JD.string ])
@@ -123,7 +118,7 @@ decoder =
         |> JDP.required "mobilePhone" PhoneNumber.decoder
         |> JDP.required "profilePicture" (JD.oneOf [ JD.null "", JD.string ])
         |> JDP.required "gender" Gender.decoder
-        |> JDP.required "birthDatePosix" (JD.nullable (JD.float |> JD.map ((*) Time.second >> Date.fromTime)))
+        |> JDP.required "birthDatePosix" (JD.nullable (JD.int |> JD.map Time.millisToPosix))
         |> JDP.required "birthDateYear" (JD.maybe (JD.int |> JD.map (\val -> ( val, "" ))))
         |> JDP.required "birthDateMonth" (JD.maybe (JD.int |> JD.map (\val -> ( val, "" ))))
         |> JDP.required "account" (JD.maybe Account.decoder)
@@ -151,7 +146,7 @@ encoderWith fields participantData =
                , ( "mobilePhone", PhoneNumber.encoder participantData.mobilePhone )
                , ( "profilePicture", JE.string participantData.profilePicture )
                , ( "gender", Gender.encoder participantData.gender )
-               , ( "birthDatePosix", participantData.birthDate |> Maybe.map (Date.toTime >> Time.inSeconds >> JE.float) |> Maybe.withDefault JE.null )
+               , ( "birthDatePosix", Maybe.map (Tuple.first >> JE.int) participantData.birthDateYear |> Maybe.withDefault JE.null )
                , ( "birthDateYear", Maybe.map (Tuple.first >> JE.int) participantData.birthDateYear |> Maybe.withDefault JE.null )
                , ( "birthDateMonth", Maybe.map (Tuple.first >> JE.int) participantData.birthDateMonth |> Maybe.withDefault JE.null )
                , ( "account", Maybe.map Account.encoder participantData.account |> Maybe.withDefault JE.null )

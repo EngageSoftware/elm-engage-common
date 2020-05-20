@@ -40,13 +40,13 @@ toCss size =
             ""
 
         Em number ->
-            toString number ++ "em"
+            String.fromFloat number ++ "em"
 
         Rem number ->
-            toString number ++ "rem"
+            String.fromFloat number ++ "rem"
 
         Px number ->
-            toString number ++ "px"
+            String.fromFloat number ++ "px"
 
 
 fontSize : Size -> Css.Style

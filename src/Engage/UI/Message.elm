@@ -84,7 +84,7 @@ inlineMessage { namespace, messageType } contents =
 {-| Get a control message
 -}
 controlMessage : Config msg -> State -> Html msg -> Html msg
-controlMessage { namespace, messageType, onChange } ((State stateData) as state) contents =
+controlMessage { namespace, messageType, onChange } (State stateData) contents =
     let
         class =
             namespace

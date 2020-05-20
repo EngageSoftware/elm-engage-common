@@ -1,9 +1,6 @@
 module Engage.Entity.Gender exposing
     ( Gender(..)
-    , decoder
-    , encoder
-    , fromString
-    , toString
+    , decoder, encoder, fromString, toString
     )
 
 {-| Entity.Gender

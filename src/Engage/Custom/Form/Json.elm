@@ -1,7 +1,4 @@
-module Engage.Custom.Form.Json exposing
-    ( decoder
-    , encoder
-    )
+module Engage.Custom.Form.Json exposing (decoder, encoder)
 
 {-| Custom.Form.Json
 
@@ -9,7 +6,6 @@ module Engage.Custom.Form.Json exposing
 
 -}
 
-import Date exposing (Date)
 import Dict
 import Engage.Custom.Field.Json as CustomField
 import Engage.Custom.Section as CustomSection exposing (sectionTupleDecoder)

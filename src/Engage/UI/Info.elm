@@ -1,8 +1,8 @@
-module Engage.UI.Info exposing (bool, email, fax, group, info, label, mobilePhone, multiple, phone)
+module Engage.UI.Info exposing (bool, email, fax, group, info, getLabel, mobilePhone, multiple, phone)
 
 {-| UI.Info
 
-@docs bool, email, fax, group, info, label, mobilePhone, multiple, phone
+@docs bool, email, fax, group, info, getLabel, mobilePhone, multiple, phone
 
 -}
 
@@ -23,8 +23,8 @@ type Label
 
 {-| Get a Label from a String
 -}
-label : String -> Label
-label =
+getLabel : String -> Label
+getLabel =
     Label
 
 
@@ -80,18 +80,18 @@ multiple namespace label content =
 {-| Get the mobilePhone view
 -}
 mobilePhone : Namespace -> Label -> String -> Html msg
-mobilePhone namespace (Label label) mobilePhone =
+mobilePhone namespace (Label label) mobilePhoneNumber =
     let
         class =
             Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
-    if String.isEmpty <| String.trim <| mobilePhone then
+    if String.isEmpty <| String.trim <| mobilePhoneNumber then
         text ""
 
     else
         div [ class [ "Info", "InfoMobilePhone" ] ]
             [ Svg.mobilePhone namespace label []
-            , textView namespace mobilePhone
+            , textView namespace mobilePhoneNumber
             ]
 
 

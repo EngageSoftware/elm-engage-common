@@ -1,10 +1,4 @@
-module Engage.Custom.Update exposing
-    ( updateAnswer
-    , updateFileUploadError
-    , updateFileUploadProgress
-    , updateFileUploadStatus
-    , updateMembershipEventId
-    )
+module Engage.Custom.Update exposing (updateAnswer, updateFileUploadError, updateFileUploadProgress, updateFileUploadStatus, updateMembershipEventId)
 
 {-| Custom.Update
 

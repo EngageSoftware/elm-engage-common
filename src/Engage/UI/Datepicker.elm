@@ -11,8 +11,7 @@ module Engage.UI.Datepicker exposing
 
 -}
 
-import Date exposing (Date)
-import DateTimePicker
+import DateTimePicker exposing (DateTime)
 import DateTimePicker.Config
 import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
@@ -23,6 +22,8 @@ import Engage.UI.FormControl as FormControl
 import Engage.UI.Message as Message
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Styled exposing (toUnstyled)
+import Html.Styled.Attributes exposing (fromUnstyled)
 
 
 {-| The State type
@@ -39,7 +40,7 @@ type alias StateData =
 
 {-| Get the initial State
 -}
-initialState : Date -> State
+initialState : DateTime -> State
 initialState now =
     State
         { datepicker = DateTimePicker.initialStateWithToday now
@@ -51,7 +52,7 @@ initialState now =
 -}
 datepicker :
     { id : String
-    , onChange : State -> Maybe Date -> msg
+    , onChange : State -> Maybe DateTime -> msg
     , onStateChange : State -> msg
     , labelText : String
     , requiredText : Maybe String
@@ -59,7 +60,7 @@ datepicker :
     , status : Status
     }
     -> State
-    -> Maybe Date
+    -> Maybe DateTime
     -> Html msg
 datepicker args state value =
     datepickerWithSize
@@ -78,7 +79,7 @@ datepicker args state value =
 
 datepickerWithSize :
     { id : String
-    , onChange : State -> Maybe Date -> msg
+    , onChange : State -> Maybe DateTime -> msg
     , onStateChange : State -> msg
     , labelText : String
     , requiredText : Maybe String
@@ -87,7 +88,7 @@ datepickerWithSize :
     , status : Status
     }
     -> State
-    -> Maybe Date
+    -> Maybe DateTime
     -> Html msg
 datepickerWithSize args state value =
     let
@@ -111,11 +112,13 @@ datepickerWithSize args state value =
         [ label
             [ class [ "Label" ], for args.id ]
             [ text args.labelText, requiredIndicator ]
-        , DateTimePicker.datePicker
-            (\state -> args.onChange (State { stateData | datepicker = state }))
-            [ class [ "Datepicker-" ++ getSizeString args.size ] ]
-            stateData.datepicker
-            value
+        , toUnstyled
+            (DateTimePicker.datePicker
+                (\newState -> args.onChange (State { stateData | datepicker = newState }))
+                [ fromUnstyled (class [ "Datepicker-" ++ getSizeString args.size ]) ]
+                stateData.datepicker
+                value
+            )
         , Error.inlineError
             { namespace = args.namespace
             , status = args.status
@@ -129,7 +132,7 @@ datepickerWithSize args state value =
 -}
 date :
     { id : String
-    , onChange : State -> Maybe Date -> msg
+    , onChange : State -> Maybe DateTime -> msg
     , onStateChange : State -> msg
     , labelText : String
     , requiredText : Maybe String
@@ -137,7 +140,7 @@ date :
     , status : Status
     }
     -> State
-    -> Maybe Date
+    -> Maybe DateTime
     -> Html msg
 date args state value =
     let
@@ -153,7 +156,7 @@ date args state value =
             args.onStateChange (State { stateData | error = errorState })
 
         config =
-            DateTimePicker.Config.defaultDatePickerConfig (\state -> args.onChange (State { stateData | datepicker = state }))
+            DateTimePicker.Config.defaultDatePickerConfig (\newState -> args.onChange (State { stateData | datepicker = newState }))
     in
     FormControl.formControl
         { namespace = args.namespace
@@ -166,11 +169,13 @@ date args state value =
         , onValidationStateChange = onValidationStateChange
         }
         stateData.error
-        (DateTimePicker.datePickerWithConfig
-            { config | usePicker = False, attributes = [ class [ "Container" ] ] }
-            [ class [ "Date-Large" ] ]
-            stateData.datepicker
-            value
+        (toUnstyled
+            (DateTimePicker.datePickerWithConfig
+                { config | usePicker = False, attributes = [ fromUnstyled (class [ "Container" ]) ] }
+                [ fromUnstyled (class [ "Date-Large" ]) ]
+                stateData.datepicker
+                value
+            )
         )
 
 

@@ -47,19 +47,19 @@ type alias Args a msg =
 form : Args a msg -> Accordion.State -> Maybe MembershipType -> Html msg
 form ({ id, membershipTypeList, labelText, onChange, status, helpText, accordionExpandButtonText, requiredText } as args) state membershipType =
     let
-        onChangeHandler { onlyStateChange } state value =
-            onChange { onlyStateChange = onlyStateChange } state (membershipTypeList |> List.filter (.value >> toString >> (==) value) |> List.head)
+        onChangeHandler { onlyStateChange } stateValue value =
+            onChange { onlyStateChange = onlyStateChange } stateValue (membershipTypeList |> List.filter (.value >> String.fromInt >> (==) value) |> List.head)
 
-        toAccordionItem membershipType =
-            { id = toString membershipType.value
-            , text = membershipType.name
+        toAccordionItem membershipTypeValue =
+            { id = String.fromInt membershipTypeValue.value
+            , text = membershipTypeValue.name
             , description =
-                membershipType.description
-                    ++ (if String.isEmpty membershipType.price then
+                membershipTypeValue.description
+                    ++ (if String.isEmpty membershipTypeValue.price then
                             ""
 
                         else
-                            "\n\n" ++ args.priceText ++ membershipType.price
+                            "\n\n" ++ args.priceText ++ membershipTypeValue.price
                        )
             }
     in
@@ -75,4 +75,4 @@ form ({ id, membershipTypeList, labelText, onChange, status, helpText, accordion
         , accordionExpandButtonText = accordionExpandButtonText
         }
         state
-        (membershipType |> Maybe.map (.value >> toString) |> Maybe.withDefault "")
+        (membershipType |> Maybe.map (.value >> String.fromInt) |> Maybe.withDefault "")
