@@ -1,10 +1,13 @@
-module Engage.UI.MessageType exposing (MessageType(..), toClass)
+module Engage.UI.MessageType exposing
+    ( MessageType(..)
+    , toClass, toString
+    )
 
 {-| MessageType
 
 @docs MessageType
 
-@docs toClass
+@docs toClass, toString
 
 -}
 
@@ -36,3 +39,21 @@ toClass messageType =
 
         Info ->
             Engage.Styles.Class.Info
+
+
+{-| Convert a MesssageType into a string
+-}
+toString : MessageType -> String
+toString messageType =
+    case messageType of
+        Confirmation ->
+            "Confirmation"
+
+        Error ->
+            "Error"
+
+        Warning ->
+            "Warning"
+
+        Info ->
+            "Info"

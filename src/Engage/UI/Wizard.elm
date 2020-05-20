@@ -174,7 +174,7 @@ wizard ({ namespace, config, state, shoppingCart, localize } as args) steps =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    section [ class [ Wizard ] ]
+    section [ class [ "Wizard" ] ]
         ([ wizardHeader args state steps
          ]
             ++ (viewStep args state steps
@@ -200,7 +200,7 @@ viewStep { namespace, config } state steps =
     in
     case step of
         ( stepId, Single { model } ) ->
-            div [ class [ WizardBody ] ] (config.stepRenderer model)
+            div [ class [ "WizardBody" ] ] (config.stepRenderer model)
 
         ( stepId, Multi { pages } ) ->
             viewMultiPages
@@ -233,7 +233,7 @@ viewMultiPages { namespace, config, state, stepId } pages =
             else
                 config.currentPageRenderer
     in
-    div [ class [ WizardBody ] ]
+    div [ class [ "WizardBody" ] ]
         ((before
             |> Dict.map (renderBeforePage config state)
             |> Dict.values
@@ -263,8 +263,8 @@ wizardHeader ({ namespace, config } as args) state steps =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    header [ class [ WizardHeader ] ]
-        [ h2 [ class [ WizardHeaderTitle ] ]
+    header [ class [ "WizardHeader" ] ]
+        [ h2 [ class [ "WizardHeaderTitle" ] ]
             [ steps
                 |> SelectDict.selectedValue
                 |> getStepTitle
@@ -282,7 +282,7 @@ stepIndicator ({ namespace, config } as args) steps =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    div [ class [ PageIndicator ] ]
+    div [ class [ "PageIndicator" ] ]
         [ text <| renderTemplate config steps config.pageIndicatorTemplate
         ]
 
@@ -302,7 +302,7 @@ navigationArrow ({ namespace, config } as args) state =
         ExpandedState ->
             button
                 [ type_ "button"
-                , class [ NavigationArrow Expanded ]
+                , class [ "NavigationArrow-Expanded" ]
                 , onClick ({ stateData | navigationStatus = CollapsedState } |> State |> config.onState)
                 , onBlur ({ stateData | navigationStatus = CollapsedState } |> State |> config.onState)
                 ]
@@ -311,7 +311,7 @@ navigationArrow ({ namespace, config } as args) state =
         CollapsedState ->
             button
                 [ type_ "button"
-                , class [ NavigationArrow Collapsed ]
+                , class [ "NavigationArrow-Collapsed" ]
                 , onClick ({ stateData | navigationStatus = ExpandedState } |> State |> config.onState)
                 ]
                 [ Svg.chevron { namespace = namespace } [] ]
@@ -348,11 +348,11 @@ navigation ({ namespace, config } as args) state steps =
     in
     case stateData.navigationStatus of
         CollapsedState ->
-            nav [ class [ Navigation ] ]
+            nav [ class [ "Navigation" ] ]
                 [ stepIndicator args steps
                 , navigationArrow args state
                 , ol
-                    [ class [ NavigationList Collapsed ]
+                    [ class [ "NavigationList-Collapsed" ]
                     , attribute "aria-hidden" "true"
                     ]
                     (beforeMenuItems
@@ -362,11 +362,11 @@ navigation ({ namespace, config } as args) state steps =
                 ]
 
         ExpandedState ->
-            nav [ class [ Navigation ] ]
+            nav [ class [ "Navigation" ] ]
                 [ stepIndicator args steps
                 , navigationArrow args state
                 , ol
-                    [ class [ NavigationList Expanded ]
+                    [ class [ "NavigationList-Expanded" ]
                     , onMouseDownPreventDefault (State { stateData | navigationStatus = ExpandedState } |> config.onState)
                     ]
                     (beforeMenuItems
@@ -390,10 +390,10 @@ navigationStep { namespace, config, isBefore, isSelected, state } ( stepId, step
     li
         [ class
             [ if isSelected then
-                NavigationItem Selected
+                "NavigationItem-Selected"
 
               else
-                NavigationItem NotSelected
+                "NavigationItem-NotSelected"
             ]
         , Html.Attributes.attribute "data-index" (toString (stepId + 1))
         ]
@@ -417,7 +417,7 @@ navigationControl ({ namespace, config, isLoading } as args) ((State stateData) 
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    div [ class [ NavigationControl ] ]
+    div [ class [ "NavigationControl" ] ]
         [ previousButton args state steps
         , nextButton args state steps
         ]

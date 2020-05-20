@@ -45,12 +45,12 @@ table { namespace, toId, toMsg, columns } state data =
                 , toMsg = toMsg
                 , columns = List.map (toSortableTableColumn namespace) columns
                 , customizations =
-                    { tableAttrs = [ class [ Table ] ]
+                    { tableAttrs = [ class [ "Table" ] ]
                     , caption = Nothing
                     , thead = defaultCustomizations.thead
                     , tfoot = Nothing
                     , tbodyAttrs = []
-                    , rowAttrs = always [ class [ DataRow ] ]
+                    , rowAttrs = always [ class [ "DataRow" ] ]
                     }
                 }
     in

@@ -42,7 +42,7 @@ tooltip { namespace, messageType } state contents =
     in
     case state of
         Hidden ->
-            div [ class [ Tooltip (MessageType.toClass messageType) Css.Hidden ] ] [ contents ]
+            div [ class [ "Tooltip-" ++ MessageType.toString messageType ++ "-Hidden" ] ] [ contents ]
 
         Visible ->
-            div [ class [ Tooltip (MessageType.toClass messageType) Css.Visible ] ] [ contents ]
+            div [ class [ "Tooltip-" ++ MessageType.toString messageType ++ "-Visible" ] ] [ contents ]

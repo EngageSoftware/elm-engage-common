@@ -112,7 +112,7 @@ confirm namespace (State state) attributes body =
                 |> Maybe.withDefault []
     in
     div
-        (class [ DialogOverlay ]
+        (class [ "DialogOverlay" ]
             :: visibility
             :: autofocus True
             :: tabindex 0
@@ -120,28 +120,28 @@ confirm namespace (State state) attributes body =
             :: escapeKeyHandler
         )
         [ node "dialog"
-            [ class [ Dialog ]
+            [ class [ "Dialog" ]
             , if state.visible then
                 Html.Attributes.attribute "open" "open"
 
               else
                 Html.Attributes.attribute "close" "close"
             ]
-            [ div [ class [ DialogQuestion ] ] body
+            [ div [ class [ "DialogQuestion" ] ] body
             , FormAction.formAction namespace
                 []
-                [ div [ class [ DialogAnswer ] ]
+                [ div [ class [ "DialogAnswer" ] ]
                     [ Button.divert
                         { namespace = namespace
                         , attributes =
-                            class [ DialogNo ]
+                            class [ "DialogNo" ]
                                 :: cancelClickHandler
                         , text = attribute.cancelText
                         }
                     , Button.primary
                         { namespace = namespace
                         , attributes =
-                            class [ DialogYes ]
+                            class [ "DialogYes" ]
                                 :: okClickHandler
                         , text = attribute.okText
                         }

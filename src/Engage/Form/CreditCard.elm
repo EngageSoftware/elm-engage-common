@@ -157,10 +157,10 @@ ready (State state) =
 
 form : FormArgs a -> Bool -> State -> BillingAddress -> Html Msg
 form args showCreditCard (State state) data =
-    div [ class [ CustomFormCss.Form ], class [ Css.CreditCard ] ]
-        [ div [ class [ CustomFormCss.FormSection ], class [ Css.CreditCardSection ] ]
-            [ h3 [ class [ Css.FormTitle ] ] [ Localization.localizeText "PaymentInfo" args ]
-            , div [ class [ Css.CreditCardForm ] ]
+    div [ class [ CustomFormCss.Form ], class [ "CreditCard" ] ]
+        [ div [ class [ CustomFormCss.FormSection ], class [ "CreditCardSection" ] ]
+            [ h3 [ class [ "FormTitle" ] ] [ Localization.localizeText "PaymentInfo" args ]
+            , div [ class [ "CreditCardForm" ] ]
                 [ div [ class [ CustomFormCss.FieldGroup ] ]
                     [ Field.inputFieldWithAttributes
                         { namespace = args.namespace
@@ -212,8 +212,8 @@ billingAddressView args state data =
                 |> List.filter isBillingAddressValidation
                 |> Validation.toError
     in
-    div [ class [ CustomFormCss.FormSection ], class [ Css.BillingAddressSection ] ]
-        [ h3 [ class [ Css.FormTitle ] ] [ Localization.localizeText "BillingAddress" args ]
+    div [ class [ CustomFormCss.FormSection ], class [ "BillingAddressSection" ] ]
+        [ h3 [ class [ "FormTitle" ] ] [ Localization.localizeText "BillingAddress" args ]
         , div [ class [ Css.CompletedBillingAddress <| Css.toVisibility <| not <| isEditingBillingAddress (State state) ] ]
             [ div [ class [ CustomFormCss.FormCompleted ] ]
                 [ div

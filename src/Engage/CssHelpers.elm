@@ -1,6 +1,7 @@
 module Engage.CssHelpers exposing (withNamespace)
 
 import Html exposing (Attribute)
+import Html.Attributes
 
 
 withNamespace : String -> (List String -> Attribute msg)
@@ -11,6 +12,6 @@ withNamespace name =
 namespacedClass : String -> List String -> Attribute msg
 namespacedClass name list =
     list
-        |> List.map name
+        |> List.map (\_ -> name)
         |> String.join " "
-        |> Attr.class
+        |> Html.Attributes.class

@@ -16,7 +16,7 @@ import Engage.Entity.PhoneNumber exposing (PhoneNumber)
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.String
-import Engage.Styles.Class exposing (Class(FormControl), Importance(..), Size(..))
+import Engage.Styles.Class exposing (Class(FormControl), Importance(..), Size(..), getSizeString)
 import Engage.UI.Error as Error exposing (Status)
 import Engage.UI.FormControl as FormControl
 import Engage.UI.Loading as Loading
@@ -155,7 +155,7 @@ phoneWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, statu
         }
         state.message
         (IntlPhoneInput.customInput
-            (class [ Input size ] :: attributes)
+            (class [ "Input-" ++ getSizeString size ] :: attributes)
             config
             state.phoneInput
             phoneNumber
@@ -275,7 +275,7 @@ textWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, status
         stateData
         (Input.Text.input
             options
-            (attributes ++ [ Html.Attributes.id id, class [ Input size ] ])
+            (attributes ++ [ Html.Attributes.id id, class [ "Input-" ++ getSizeString size ] ])
             value
         )
 
@@ -392,7 +392,7 @@ numberWithSize { namespace, id, labelText, helpText, onChange, status, size, max
         stateData
         (Input.Number.input
             { options | maxValue = maxValue, minValue = minValue }
-            [ Html.Attributes.id id, class [ Input size ] ]
+            [ Html.Attributes.id id, class [ "Input-" ++ getSizeString size ] ]
             value
         )
 
@@ -444,7 +444,7 @@ bigNumber ({ namespace, id, labelText, helpText, onChange, status } as args) sta
         stateData
         (Input.BigNumber.input
             options
-            [ Html.Attributes.id id, class [ Input Large ] ]
+            [ Html.Attributes.id id, class [ "Input-Large" ] ]
             value
         )
 
@@ -523,7 +523,7 @@ textAreaWithSize args value =
         (Html.textarea
             [ Html.Attributes.id args.id
             , Html.Events.onInput onInputChange
-            , class [ TextArea args.size ]
+            , class [ "TextArea-" ++ getSizeString args.size ]
             ]
             [ Html.text value ]
         )
@@ -569,22 +569,22 @@ checkboxWithAttributes { namespace, labelText, onCheck, status, state, requiredT
 
         requiredIndicator =
             requiredText
-                |> Maybe.map (\required -> span [ class [ Required ], title required ] [ Html.text "*" ])
+                |> Maybe.map (\required -> span [ class [ "Required" ], title required ] [ Html.text "*" ])
                 |> Maybe.withDefault HtmlExtra.none
     in
-    div [ class [ CheckBoxContainer ] ]
+    div [ class [ "CheckBoxContainer" ] ]
         [ Error.error { namespace = namespace } status
-        , label [ class [ CheckBox Large ] ]
+        , label [ class [ "CheckBox-Large" ] ]
             [ input
                 ([ type_ "checkbox"
                  , Html.Events.onCheck (onCheck { onlyStateChange = False } state)
                  , Html.Attributes.checked checked
-                 , class [ CheckBoxInput ]
+                 , class [ "CheckBoxInput" ]
                  ]
                     ++ attributes
                 )
                 []
-            , span [ class [ Label ] ] [ Html.text labelText, requiredIndicator ]
+            , span [ class [ "Label" ] ] [ Html.text labelText, requiredIndicator ]
             ]
         ]
 
@@ -631,7 +631,7 @@ radioList ({ namespace, labelText, onChange, status, items } as args) state sele
         , requiredText = args.requiredText
         }
         stateData
-        (div [ class [ RadioList Large ] ]
+        (div [ class [ "RadioList-Large" ] ]
             (items
                 |> List.map
                     (toRadio
@@ -688,7 +688,7 @@ checkBoxList ({ namespace, labelText, onChange, status, items } as args) state s
         , requiredText = args.requiredText
         }
         stateData
-        (div [ class [ CheckBoxList Large ] ]
+        (div [ class [ "CheckBoxList-Large" ] ]
             (items
                 |> List.map
                     (toCheckBox
@@ -736,7 +736,7 @@ file args (State state) fileInfo =
         onValidationStateChange validationState =
             args.onChange { onlyStateChange = True } (State validationState) fileInfo
     in
-    div [ class [ File ] ]
+    div [ class [ "File" ] ]
         [ FormControl.labelWrapped
             { namespace = args.namespace
             , size = Large
@@ -749,15 +749,15 @@ file args (State state) fileInfo =
             , requiredText = args.requiredText
             }
             state
-            (div [ class [ FileButton Large ] ]
+            (div [ class [ "FileButton-Large" ] ]
                 [ input
                     [ id args.id
                     , type_ "file"
                     , on "change" (Json.Decode.map onChange fileEventDecoder)
                     ]
                     []
-                , span [ class [ FileName, Input Large ], title fileInfo.name ] [ Html.text fileInfo.name ]
-                , span [ tabindex 0, class [ BaseButton, Button Primary Large ] ] [ Html.text args.browseText ]
+                , span [ class [ "FileName", "Input-Large" ], title fileInfo.name ] [ Html.text fileInfo.name ]
+                , span [ tabindex 0, class [ "BaseButton", "Button-Primary-Large" ] ] [ Html.text args.browseText ]
                 , progressIndicator args fileInfo
                 ]
             )
@@ -791,17 +791,17 @@ toCheckBox { namespace, onChange, labelText } selectedValues item =
                 Set.insert item.id selectedValues
                     |> onChange
     in
-    label [ class [ CheckBoxContainer ] ]
+    label [ class [ "CheckBoxContainer" ] ]
         [ input
             [ type_ "checkbox"
             , name labelText
             , value item.id
-            , class [ CheckBoxInput ]
+            , class [ "CheckBoxInput" ]
             , onClick onClickHandler
             , checked (Set.member item.id selectedValues)
             ]
             []
-        , span [ class [ RadioText ] ] [ Html.text item.text ]
+        , span [ class [ "RadioText" ] ] [ Html.text item.text ]
         ]
 
 
@@ -813,17 +813,17 @@ toRadio { namespace, onChange, labelText } selectedValue item =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    label [ class [ RadioContainer ] ]
+    label [ class [ "RadioContainer" ] ]
         [ input
             [ type_ "radio"
             , name labelText
             , value item.id
-            , class [ RadioInput ]
+            , class [ "RadioInput" ]
             , onClick (onChange item.id)
             , checked (selectedValue == item.id)
             ]
             []
-        , span [ class [ RadioText ] ] [ Html.text item.text ]
+        , span [ class [ "RadioText" ] ] [ Html.text item.text ]
         ]
 
 

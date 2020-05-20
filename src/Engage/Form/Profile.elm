@@ -201,10 +201,10 @@ view ({ namespace, localization } as args) attributes additionalContents =
         attribute =
             Attribute.process emptyAttribute attributes
     in
-    div [ class [ Profile ] ]
+    div [ class [ "Profile" ] ]
         [ avatarView namespace attribute
-        , div [ class [ ProfileInfo ] ]
-            [ div [ class [ ProfileHeader ] ]
+        , div [ class [ "ProfileInfo" ] ]
+            [ div [ class [ "ProfileHeader" ] ]
                 [ nameView namespace attribute
                 , titleView namespace attribute
                 , emailView namespace attribute
@@ -212,7 +212,7 @@ view ({ namespace, localization } as args) attributes additionalContents =
                 , mobilePhoneView namespace attribute
                 , faxView namespace attribute
                 ]
-            , div [ class [ ProfileBody ] ]
+            , div [ class [ "ProfileBody" ] ]
                 ([ genderView namespace attribute
                  , birthDateView namespace localization attribute
                  , birthDateMonthView namespace attribute
@@ -333,7 +333,7 @@ nameView namespace attribute =
         text ""
 
     else
-        h3 [ class [ ProfileName ] ] [ text name ]
+        h3 [ class [ "ProfileName" ] ] [ text name ]
 
 
 titleView : Namespace -> InternalAttribute msg -> Html msg
@@ -345,7 +345,7 @@ titleView namespace attribute =
                 |> Engage.CssHelpers.withNamespace
     in
     attribute.title
-        |> Maybe.map (\title -> div [ class [ ProfileTitle ] ] [ text title ])
+        |> Maybe.map (\title -> div [ class [ "ProfileTitle" ] ] [ text title ])
         |> Maybe.withDefault (text "")
 
 
@@ -386,10 +386,10 @@ avatarView namespace attribute =
                 div
                     [ class
                         (if String.isEmpty avatar then
-                            [ ProfileNoAvatar, ProfileAvatar ]
+                            [ "ProfileNoAvatar", "ProfileAvatar" ]
 
                          else
-                            [ ProfileAvatar ]
+                            [ "ProfileAvatar" ]
                         )
                     ]
                     [ img
@@ -416,7 +416,7 @@ emailView namespace attribute =
                 |> Engage.CssHelpers.withNamespace
     in
     attribute.email
-        |> Maybe.map (\( label, email ) -> div [ class [ ProfileEmail ] ] [ Info.email namespace (Info.label label) email ])
+        |> Maybe.map (\( label, email ) -> div [ class [ "ProfileEmail" ] ] [ Info.email namespace (Info.label label) email ])
         |> Maybe.withDefault (text "")
 
 
@@ -429,7 +429,7 @@ phoneView namespace attribute =
                 |> Engage.CssHelpers.withNamespace
     in
     attribute.phone
-        |> Maybe.map (\( label, phone ) -> div [ class [ ProfilePhone ] ] [ Info.phone namespace (Info.label label) phone ])
+        |> Maybe.map (\( label, phone ) -> div [ class [ "ProfilePhone" ] ] [ Info.phone namespace (Info.label label) phone ])
         |> Maybe.withDefault (text "")
 
 
@@ -442,7 +442,7 @@ mobilePhoneView namespace attribute =
                 |> Engage.CssHelpers.withNamespace
     in
     attribute.mobilePhone
-        |> Maybe.map (\( label, mobilePhone ) -> div [ class [ ProfileCellphone ] ] [ Info.mobilePhone namespace (Info.label label) mobilePhone ])
+        |> Maybe.map (\( label, mobilePhone ) -> div [ class [ "ProfileCellphone" ] ] [ Info.mobilePhone namespace (Info.label label) mobilePhone ])
         |> Maybe.withDefault (text "")
 
 
@@ -455,7 +455,7 @@ faxView namespace attribute =
                 |> Engage.CssHelpers.withNamespace
     in
     attribute.fax
-        |> Maybe.map (\( label, fax ) -> div [ class [ ProfileFax ] ] [ Info.fax namespace (Info.label label) fax ])
+        |> Maybe.map (\( label, fax ) -> div [ class [ "ProfileFax" ] ] [ Info.fax namespace (Info.label label) fax ])
         |> Maybe.withDefault (text "")
 
 
@@ -471,7 +471,7 @@ actionView namespace attribute =
         [ attribute.edit
             |> Maybe.map
                 (\( text, msg ) ->
-                    div [ class [ ProfileEditButton ] ]
+                    div [ class [ "ProfileEditButton" ] ]
                         [ Button.primarySmall
                             { namespace = namespace
                             , attributes = [ onClick msg ]
@@ -483,7 +483,7 @@ actionView namespace attribute =
         , attribute.editAccountLink
             |> Maybe.map
                 (\( text, url ) ->
-                    div [ class [ ProfileEditAccountLink ] ]
+                    div [ class [ "ProfileEditAccountLink" ] ]
                         [ a [ href url, Html.Attributes.attribute "class" "dialog-link" ] [ Html.text text ] ]
                 )
             |> Maybe.withDefault (text "")

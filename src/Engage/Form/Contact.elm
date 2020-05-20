@@ -264,7 +264,7 @@ completedViewWithAdditional namespace localization additionalText data =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    div [ class [ Css.Sections ] ]
+    div [ class [ "Sections" ] ]
         [ if isEmpty data then
             ul [] [ li [] [ Localization.localizeText "N/A" args ] ]
 
@@ -323,7 +323,7 @@ form originalNamespace localization field attributes (State state) contactData =
         [ attribute.contactTypes
             |> Maybe.map
                 (\contactTypes ->
-                    div [ class [ Css.FieldGroup ] ]
+                    div [ class [ "FieldGroup" ] ]
                         [ Field.dropdownFieldWithAttributes
                             { namespace = namespace
                             , onChange = onContactTypeChangeHandler
@@ -339,7 +339,7 @@ form originalNamespace localization field attributes (State state) contactData =
                         ]
                 )
             |> Maybe.withDefault HtmlExtra.none
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.inputField
                 { namespace = namespace
                 , onChange = FirstNameUpdated
@@ -371,7 +371,7 @@ form originalNamespace localization field attributes (State state) contactData =
                 state.lastName
                 contactData.lastName
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.inputField
                 { namespace = namespace
                 , onChange = PrefixUpdated
@@ -403,7 +403,7 @@ form originalNamespace localization field attributes (State state) contactData =
                 state.email
                 contactData.email
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.inputFieldWithAttributes
                 { namespace = namespace
                 , onChange = AddressNameUpdated
@@ -416,7 +416,7 @@ form originalNamespace localization field attributes (State state) contactData =
                 state.addressName
                 contactData.addressName
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.inputFieldWithAttributes
                 { namespace = namespace
                 , onChange = Address1Updated
@@ -429,7 +429,7 @@ form originalNamespace localization field attributes (State state) contactData =
                 state.address1
                 contactData.address1
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.inputFieldWithAttributes
                 { namespace = namespace
                 , onChange = Address2Updated
@@ -442,7 +442,7 @@ form originalNamespace localization field attributes (State state) contactData =
                 state.address2
                 contactData.address2
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.dropdownFieldWithAttributes
                 { namespace = namespace
                 , onChange = CountryUpdated
@@ -468,7 +468,7 @@ form originalNamespace localization field attributes (State state) contactData =
                 state.region
                 (Maybe.map (Tuple.first >> toString) contactData.region)
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.inputFieldWithAttributes
                 { namespace = namespace
                 , onChange = CityUpdated
@@ -492,7 +492,7 @@ form originalNamespace localization field attributes (State state) contactData =
                 state.postalCode
                 contactData.postalCode
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.phoneField
                 { namespace = namespace
                 , onChange = PhoneUpdated
@@ -527,7 +527,7 @@ form originalNamespace localization field attributes (State state) contactData =
                 state.fax
                 contactData.fax
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.inputField
                 { namespace = namespace
                 , onChange = NotesUpdated
@@ -539,9 +539,9 @@ form originalNamespace localization field attributes (State state) contactData =
                 state.notes
                 contactData.notes
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ primaryContactCheckBox namespace localization field (State state) contactData ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ billingContactCheckBox namespace localization field (State state) contactData ]
         ]
 

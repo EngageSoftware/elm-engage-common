@@ -17,7 +17,7 @@ import DateTimePicker.Config
 import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
-import Engage.Styles.Class exposing (Class(..), Size(..))
+import Engage.Styles.Class exposing (Class(..), Size(..), getSizeString)
 import Engage.UI.Error as Error exposing (Status(..))
 import Engage.UI.FormControl as FormControl
 import Engage.UI.Message as Message
@@ -98,7 +98,7 @@ datepickerWithSize args state value =
 
         requiredIndicator =
             args.requiredText
-                |> Maybe.map (\required -> span [ class [ Required ], title required ] [ text "*" ])
+                |> Maybe.map (\required -> span [ class [ "Required" ], title required ] [ text "*" ])
                 |> Maybe.withDefault HtmlExtra.none
 
         stateData =
@@ -107,13 +107,13 @@ datepickerWithSize args state value =
         onValidationStateChange errorState =
             args.onStateChange (State { stateData | error = errorState })
     in
-    div [ class [ FormControl args.size ] ]
+    div [ class [ "FormControl-" ++ getSizeString args.size ] ]
         [ label
-            [ class [ Label ], for args.id ]
+            [ class [ "Label" ], for args.id ]
             [ text args.labelText, requiredIndicator ]
         , DateTimePicker.datePicker
             (\state -> args.onChange (State { stateData | datepicker = state }))
-            [ class [ Datepicker args.size ] ]
+            [ class [ "Datepicker-" ++ getSizeString args.size ] ]
             stateData.datepicker
             value
         , Error.inlineError
@@ -167,8 +167,8 @@ date args state value =
         }
         stateData.error
         (DateTimePicker.datePickerWithConfig
-            { config | usePicker = False, attributes = [ class [ Container ] ] }
-            [ class [ Date Large ] ]
+            { config | usePicker = False, attributes = [ class [ "Container" ] ] }
+            [ class [ "Date-Large" ] ]
             stateData.datepicker
             value
         )

@@ -97,13 +97,13 @@ view ({ namespace, localization } as args) attributes additionalContents =
         attribute =
             Attribute.process emptyAttribute attributes
     in
-    div [ class [ Account ] ]
-        [ div [ class [ AccountInfo ] ]
-            [ div [ class [ AccountHeader ] ]
+    div [ class [ "Account" ] ]
+        [ div [ class [ "AccountInfo" ] ]
+            [ div [ class [ "AccountHeader" ] ]
                 [ nameView namespace attribute
                 , phoneView namespace attribute
                 ]
-            , div [ class [ AccountBody ] ] (addressView args attribute :: additionalContents)
+            , div [ class [ "AccountBody" ] ] (addressView args attribute :: additionalContents)
             , actionView namespace attribute
             ]
         ]
@@ -124,7 +124,7 @@ nameView namespace attribute =
         HtmlExtra.none
 
     else
-        h3 [ class [ AccountName ] ] [ text name ]
+        h3 [ class [ "AccountName" ] ] [ text name ]
 
 
 addressView : { args | namespace : Namespace, localization : Localization, countries : Countries, regions : RegionsCountry } -> InternalAttribute msg -> Html msg
@@ -159,7 +159,7 @@ phoneView namespace attribute =
                 |> Engage.CssHelpers.withNamespace
     in
     attribute.phone
-        |> Maybe.map (\( label, phone ) -> div [ class [ AccountPhone ] ] [ Info.phone namespace (Info.label label) phone ])
+        |> Maybe.map (\( label, phone ) -> div [ class [ "AccountPhone" ] ] [ Info.phone namespace (Info.label label) phone ])
         |> Maybe.withDefault HtmlExtra.none
 
 
@@ -175,7 +175,7 @@ actionView namespace attribute =
         [ attribute.edit
             |> Maybe.map
                 (\( text, msg ) ->
-                    div [ class [ AccountEditButton ] ]
+                    div [ class [ "AccountEditButton" ] ]
                         [ Button.primarySmall
                             { namespace = namespace
                             , attributes = [ onClick msg ]

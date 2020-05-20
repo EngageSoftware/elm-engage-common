@@ -15,7 +15,7 @@ import Dropdown
 import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
-import Engage.Styles.Class exposing (Class(..), Size(..))
+import Engage.Styles.Class exposing (Class(..), Size(..), getSizeString)
 import Engage.UI.Error as Error exposing (Status(..))
 import Engage.UI.Message as Message
 import Html exposing (..)
@@ -123,7 +123,7 @@ dropdownWithSizeAndAttributes { id, labelText, requiredText, items, onChange, si
 
         requiredIndicator =
             requiredText
-                |> Maybe.map (\required -> span [ class [ Required ], title required ] [ text "*" ])
+                |> Maybe.map (\required -> span [ class [ "Required" ], title required ] [ text "*" ])
                 |> Maybe.withDefault HtmlExtra.none
 
         options =
@@ -135,9 +135,9 @@ dropdownWithSizeAndAttributes { id, labelText, requiredText, items, onChange, si
         onValidationStateChange errorState =
             onChange { onlyStateChange = True } (State errorState) selectedItem
     in
-    div [ class [ FormControl size ] ]
+    div [ class [ "FormControl-" ++ getSizeString size ] ]
         [ label
-            [ class [ Label ]
+            [ class [ "Label" ]
             , for id
             ]
             [ text labelText, requiredIndicator ]
@@ -145,7 +145,7 @@ dropdownWithSizeAndAttributes { id, labelText, requiredText, items, onChange, si
             { options | items = items, emptyItem = Just { value = "", text = "", enabled = True } }
             (attributes
                 ++ [ Html.Attributes.id id
-                   , class [ Dropdown size ]
+                   , class [ "Dropdown-" ++ getSizeString size ]
                    ]
             )
             selectedItem

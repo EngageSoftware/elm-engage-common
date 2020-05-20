@@ -65,7 +65,7 @@ message { namespace, messageType } contents =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    Html.div [ class [ Message (getMessageTypeClass messageType) ] ] contents
+    Html.div [ class [ "Message-" ++ getMessageTypeString messageType ] ] contents
 
 
 {-| Get an inline message
@@ -78,7 +78,7 @@ inlineMessage { namespace, messageType } contents =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    Html.span [ class [ InlineMessage (getMessageTypeClass messageType) ] ] contents
+    Html.span [ class [ "InlineMessage-" ++ getMessageTypeString messageType ] ] contents
 
 
 {-| Get a control message
@@ -102,7 +102,7 @@ controlMessage { namespace, messageType, onChange } ((State stateData) as state)
                             state
                 }
     in
-    Html.div [ class [ ControlMessage (getMessageTypeClass messageType) ] ]
+    Html.div [ class [ "ControlMessage-" ++ getMessageTypeString messageType ] ]
         [ icon
             { namespace = namespace
             , messageType = messageType
@@ -129,7 +129,7 @@ icon { namespace, messageType } attributes =
                 |> Engage.CssHelpers.withNamespace
     in
     button
-        ([ class [ IconContainer ]
+        ([ class [ "IconContainer" ]
          , type_ "button"
          ]
             ++ attributes
@@ -153,17 +153,17 @@ icon { namespace, messageType } attributes =
 -- Helpers
 
 
-getMessageTypeClass : MessageType -> Engage.Styles.Class.MessageType
-getMessageTypeClass messageType =
+getMessageTypeString : MessageType -> String
+getMessageTypeString messageType =
     case messageType of
         Confirmation ->
-            Engage.Styles.Class.Confirmation
+            "Confirmation"
 
         Error ->
-            Engage.Styles.Class.Error
+            "Error"
 
         Warning ->
-            Engage.Styles.Class.Warning
+            "Warning"
 
         Info ->
-            Engage.Styles.Class.Info
+            "Info"

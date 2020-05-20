@@ -41,7 +41,7 @@ fieldGroupClass form section fieldGroup =
 
 fieldGroupForm : Args a msg -> ( Form, Section ) -> FieldGroup -> Html msg
 fieldGroupForm args ( form, section ) fieldGroup =
-    Html.div [ class [ toString Css.FieldGroup, fieldGroupClass form section fieldGroup ] ]
+    Html.div [ class [ "FieldGroup", fieldGroupClass form section fieldGroup ] ]
         (fieldGroup.fields
             |> Dict.values
             |> List.sortBy .relativeOrder

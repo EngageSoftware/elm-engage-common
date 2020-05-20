@@ -19,7 +19,7 @@ standard : { namespace : Namespace, attributes : List (Attribute msg), text : St
 standard { attributes, text, namespace } =
     custom
         { namespace = namespace
-        , class = Button Standard Large
+        , class = "Button-Standard-Large"
         , attributes = type_ "button" :: attributes
         , contents = [ Html.text text ]
         }
@@ -31,7 +31,7 @@ primary : { namespace : Namespace, attributes : List (Attribute msg), text : Str
 primary { attributes, text, namespace } =
     custom
         { namespace = namespace
-        , class = Button Primary Large
+        , class = "Button-Primary-Large"
         , attributes = type_ "button" :: attributes
         , contents = [ Html.text text ]
         }
@@ -43,7 +43,7 @@ divert : { namespace : Namespace, attributes : List (Attribute msg), text : Stri
 divert { attributes, text, namespace } =
     custom
         { namespace = namespace
-        , class = Button Divert Large
+        , class = "Button-Divert-Large"
         , attributes = type_ "button" :: attributes
         , contents = [ Html.text text ]
         }
@@ -55,7 +55,7 @@ negative : { namespace : Namespace, attributes : List (Attribute msg), text : St
 negative { attributes, text, namespace } =
     custom
         { namespace = namespace
-        , class = Button Negative Large
+        , class = "Button-Negative-Large"
         , attributes = type_ "button" :: attributes
         , contents = [ Html.text text ]
         }
@@ -67,7 +67,7 @@ standardSmall : { namespace : Namespace, attributes : List (Attribute msg), text
 standardSmall { attributes, text, namespace } =
     custom
         { namespace = namespace
-        , class = Button Standard Small
+        , class = "Button-Standard-Small"
         , attributes = type_ "button" :: attributes
         , contents = [ Html.text text ]
         }
@@ -79,7 +79,7 @@ primarySmall : { namespace : Namespace, attributes : List (Attribute msg), text 
 primarySmall { attributes, text, namespace } =
     custom
         { namespace = namespace
-        , class = Button Primary Small
+        , class = "Button-Primary-Small"
         , attributes = type_ "button" :: attributes
         , contents = [ Html.text text ]
         }
@@ -91,7 +91,7 @@ divertSmall : { namespace : Namespace, attributes : List (Attribute msg), text :
 divertSmall { attributes, text, namespace } =
     custom
         { namespace = namespace
-        , class = Button Divert Small
+        , class = "Button-Divert-Small"
         , attributes = type_ "button" :: attributes
         , contents = [ Html.text text ]
         }
@@ -103,7 +103,7 @@ negativeSmall : { namespace : Namespace, attributes : List (Attribute msg), text
 negativeSmall { attributes, text, namespace } =
     custom
         { namespace = namespace
-        , class = Button Negative Small
+        , class = "Button-Negative-Small"
         , attributes = type_ "button" :: attributes
         , contents = [ Html.text text ]
         }
@@ -111,12 +111,12 @@ negativeSmall { attributes, text, namespace } =
 
 {-| Get a custom Button
 -}
-custom : { namespace : Namespace, class : class, attributes : List (Attribute msg), contents : List (Html msg) } -> Html msg
+custom : { namespace : Namespace, class : String, attributes : List (Attribute msg), contents : List (Html msg) } -> Html msg
 custom { namespace, class, attributes, contents } =
     let
-        namespaced =
+        namespacedClass =
             Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     button
-        (namespaced.class [ toString BaseButton, toString class ] :: attributes)
+        (namespacedClass [ "BaseButton", class ] :: attributes)
         contents

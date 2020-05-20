@@ -21,7 +21,7 @@ formAction namespace left right =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    div [ class [ FormAction ] ]
-        [ div [ class [ FormActionLeft ] ] left
-        , div [ class [ FormActionRight ] ] right
+    div [ class [ "FormAction" ] ]
+        [ div [ class [ "FormActionLeft" ] ] left
+        , div [ class [ "FormActionRight" ] ] right
         ]

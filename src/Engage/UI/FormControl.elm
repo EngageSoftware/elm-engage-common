@@ -9,7 +9,7 @@ module Engage.UI.FormControl exposing (formControl, groupFormControl, labelWrapp
 import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
-import Engage.Styles.Class exposing (Class(FormControl), Size(..))
+import Engage.Styles.Class exposing (Class(FormControl), Size(..), getSizeString)
 import Engage.UI.Error as Error exposing (Status(..))
 import Engage.UI.Message as Message
 import Engage.UI.MessageType as MessageType
@@ -42,9 +42,9 @@ formControl args state element =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    div [ class [ FormControl args.size ] ]
+    div [ class [ "FormControl-" ++ getSizeString args.size ] ]
         [ label
-            [ class [ Label ], for args.id ]
+            [ class [ "Label" ], for args.id ]
             [ text args.labelText, requiredIndicator args ]
         , helpMessage args state
         , Error.inlineError
@@ -70,8 +70,8 @@ groupFormControl args state element =
         labelId =
             Namespace.toString args.namespace ++ "label" ++ args.id
     in
-    div [ class [ FormControl args.size ], Aria.role "group", Aria.ariaLabelledby labelId ]
-        [ label [ class [ Label ], for args.id, id labelId ] [ text args.labelText, requiredIndicator args ]
+    div [ class [ "FormControl-" ++ getSizeString args.size ], Aria.role "group", Aria.ariaLabelledby labelId ]
+        [ label [ class [ "Label" ], for args.id, id labelId ] [ text args.labelText, requiredIndicator args ]
         , helpMessage args state
         , Error.inlineError
             { namespace = args.namespace
@@ -93,9 +93,9 @@ labelWrapped args state element other =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    div [ class [ FormControl args.size ] ]
-        [ label [ for args.id, class [ LabelWrapped ] ]
-            [ span [ class [ Label ] ] [ text args.labelText, requiredIndicator args ]
+    div [ class [ "FormControl-" ++ getSizeString args.size ] ]
+        [ label [ for args.id, class [ "LabelWrapped" ] ]
+            [ span [ class [ "Label" ] ] [ text args.labelText, requiredIndicator args ]
             , helpMessage args state
             , Error.inlineError
                 { namespace = args.namespace
@@ -118,7 +118,7 @@ requiredIndicator args =
                 |> Engage.CssHelpers.withNamespace
     in
     args.requiredText
-        |> Maybe.map (\required -> span [ class [ Required ], title required ] [ text "*" ])
+        |> Maybe.map (\required -> span [ class [ "Required" ], title required ] [ text "*" ])
         |> Maybe.withDefault HtmlExtra.none
 
 

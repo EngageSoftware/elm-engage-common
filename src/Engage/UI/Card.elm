@@ -44,16 +44,16 @@ processAttribute initialAttribute attributes =
 card : Namespace -> List (Attribute msg) -> List (Html msg) -> Html msg
 card namespace attributes content =
     let
-        namespaced =
+        class =
             Engage.CssHelpers.withNamespace <| Namespace.toString namespace
 
         attribute =
             processAttribute emptyAttribute attributes
     in
-    div (namespaced.class [ Card ] :: (attribute.attributes |> Maybe.withDefault []))
+    div (class [ "Card" ] :: (attribute.attributes |> Maybe.withDefault []))
         [ headerView namespace attribute
         , editView namespace attribute
-        , div [ namespaced.class [ CardBody ] ] content
+        , div [ class [ "CardBody" ] ] content
         ]
 
 
@@ -67,30 +67,30 @@ headerView namespace attribute =
 
         subtitle =
             attribute.subtitle
-                |> Maybe.map (\subtitleText -> span [ class [ CardSubtitle ] ] [ text subtitleText ])
+                |> Maybe.map (\subtitleText -> span [ class [ "CardSubtitle" ] ] [ text subtitleText ])
                 |> Maybe.withDefault (text "")
     in
     attribute.title
         |> Maybe.map
             (\title ->
-                div [ class [ CardHeader ] ]
-                    [ span [ class [ CardTitle ] ] [ text title ]
+                div [ class [ "CardHeader" ] ]
+                    [ span [ class [ "CardTitle" ] ] [ text title ]
                     , subtitle
                     ]
             )
-        |> Maybe.withDefault (div [ class [ CardHeader ] ] [ subtitle ])
+        |> Maybe.withDefault (div [ class [ "CardHeader" ] ] [ subtitle ])
 
 
 editView : Namespace -> InternalAttribute msg -> Html msg
 editView namespace attribute =
     let
-        namespaced =
+        class =
             Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     attribute.edit
         |> Maybe.map
             (\( text, msg ) ->
-                div [ namespaced.class [ CardEditButton ] ]
+                div [ class [ "CardEditButton" ] ]
                     [ Button.primarySmall { namespace = namespace, attributes = [ onClick msg ], text = text }
                     ]
             )

@@ -1,14 +1,13 @@
 module Engage.Styles.Class exposing
-    ( Class(..)
-    , Importance(..)
-    , MessageType(..)
-    , Size(..)
-    , Visibility(..)
+    ( Class(..), Importance(..), MessageType(..), Size(..), Visibility(..)
+    , getSizeString
     )
 
 {-| Styles.Class
 
 @docs Class, Importance, MessageType, Size, Visibility
+
+@docs getSizeString
 
 -}
 
@@ -49,3 +48,15 @@ type MessageType
 type Visibility
     = Visible
     | Hidden
+
+
+{-| The String value of a Size
+-}
+getSizeString : Size -> String
+getSizeString size =
+    case size of
+        Large ->
+            "Large"
+
+        Small ->
+            "Small"

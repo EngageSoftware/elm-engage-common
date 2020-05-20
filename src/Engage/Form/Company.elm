@@ -127,7 +127,7 @@ type alias FormArgs a =
 -}
 form : FormArgs a -> State -> CompaniesData data -> Html.Html Msg
 form args (State state) data =
-    div [ class [ Css.Form ] ]
+    div [ class [ "Form" ] ]
         [ Html.map CurrentCompany <| currentCompany args state data
         , Html.map PreviousCompany <| previousCompany args state data
         ]
@@ -139,9 +139,9 @@ currentCompany args state data =
         namespace =
             Namespace.namespace <| Namespace.toString args.namespace ++ "Company"
     in
-    fieldset [ class [ Css.FormSection ] ]
+    fieldset [ class [ "FormSection" ] ]
         [ legend [] [ Localization.localizeText "CurrentCompany.Title" args ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.inputField
                 { namespace = namespace
                 , onChange = CompanyNameUpdated
@@ -175,7 +175,7 @@ currentCompany args state data =
                 state.currentCompany.address
                 showAll
                 data.currentCompany.address
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.dateField
                 { namespace = args.namespace
                 , onChange = StartDateUpdated
@@ -199,9 +199,9 @@ previousCompany args state data =
         namespace =
             Namespace.namespace <| Namespace.toString args.namespace ++ "Company"
     in
-    fieldset [ class [ Css.FormSection ] ]
+    fieldset [ class [ "FormSection" ] ]
         [ legend [] [ Localization.localizeText "PreviousCompany.Title" args ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.inputField
                 { namespace = namespace
                 , onChange = CompanyNameUpdated
@@ -235,7 +235,7 @@ previousCompany args state data =
                 state.previousCompany.address
                 showAll
                 data.previousCompany.address
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.dateField
                 { namespace = args.namespace
                 , onChange = StartDateUpdated
@@ -268,7 +268,7 @@ previousCompany args state data =
 -}
 completedView : { a | localization : Localization } -> CompaniesData data -> Html.Html msg
 completedView args data =
-    div [ class [ Css.Sections ] ]
+    div [ class [ "Sections" ] ]
         [ ul []
             (li [] [ strong [] [ Localization.localizeText "CurrentCompany.Title" args ] ]
                 :: (if String.isEmpty data.currentCompany.name then

@@ -34,7 +34,7 @@ view config form =
         |> Dict.values
         |> List.sortBy .relativeOrder
         |> List.map (Section.view config)
-        |> Html.div [ class [ Css.Sections ] ]
+        |> Html.div [ class [ "Sections" ] ]
 
 
 {-| Get the form view
@@ -58,7 +58,7 @@ form config form =
             else
                 Html.h3 [] [ Html.text form.name ]
     in
-    Html.div [ class [ Css.Form ] ] (title :: sections)
+    Html.div [ class [ "Form" ] ] (title :: sections)
 
 
 {-| Get the completed view
@@ -78,7 +78,7 @@ completedView config form =
                 , showName = showSectionName
                 }
             )
-        |> Html.div [ class [ Css.Sections ] ]
+        |> Html.div [ class [ "Sections" ] ]
 
 
 type alias Query a =

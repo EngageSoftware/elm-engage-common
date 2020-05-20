@@ -6,9 +6,9 @@ module Engage.UI.Svg exposing (chevron, confirmation, error, fax, info, mail, mo
 
 -}
 
+import Engage.CssHelpers as CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (MessageType(..))
-import Engage.Svg.CssHelpers as CssHelpers
 import Html exposing (Html)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
@@ -24,7 +24,7 @@ error { namespace } attributes =
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
     in
-    svg ([ height "24", width "24", viewBox "0 0 24 24", class [ toString (Icon Error), toString SvgPhone ] ] ++ attributes)
+    svg ([ height "24", width "24", viewBox "0 0 24 24", class [ "Icon-Error", "SvgPhone" ] ] ++ attributes)
         [ Svg.path [ d "M0 0h24v24H0z", fill "none" ]
             []
         , Svg.path [ d "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" ]
@@ -42,7 +42,7 @@ confirmation { namespace } attributes =
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
     in
-    svg ([ height "24", width "24", viewBox "0 0 24 24", class [ toString (Icon Confirmation), toString SvgBool ] ] ++ attributes)
+    svg ([ height "24", width "24", viewBox "0 0 24 24", class [ "Icon-Confirmation", "SvgBool" ] ] ++ attributes)
         [ Svg.path [ d "M0 0h24v24H0z", fill "none" ]
             []
         , Svg.path [ d "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" ]
@@ -60,7 +60,7 @@ warning { namespace } attributes =
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
     in
-    svg ([ height "24", width "24", viewBox "0 0 24 24", class [ Icon Warning ] ] ++ attributes)
+    svg ([ height "24", width "24", viewBox "0 0 24 24", class [ "Icon-Warning" ] ] ++ attributes)
         [ Svg.path [ d "M0 0h24v24H0z", fill "none" ]
             []
         , Svg.path [ d "M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" ]
@@ -78,7 +78,7 @@ info { namespace } attributes =
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
     in
-    svg ([ height "24", width "24", viewBox "0 0 24 24", class [ Icon Info ] ] ++ attributes)
+    svg ([ height "24", width "24", viewBox "0 0 24 24", class [ "Icon-Info" ] ] ++ attributes)
         [ Svg.path [ d "M0 0h24v24H0z", fill "none" ]
             []
         , Svg.path [ d "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" ]
@@ -96,7 +96,7 @@ chevron { namespace } attributes =
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
     in
-    svg ([ height "11.2", width "16", viewBox "0 0 16 11.2", class [ Chevron ] ] ++ attributes)
+    svg ([ height "11.2", width "16", viewBox "0 0 16 11.2", class [ "Chevron" ] ] ++ attributes)
         [ Svg.title [] [ text "chevron" ]
         , Svg.path [ d "M 16,3.2 12.8,0 8,4.8 3.2,0 0,3.2 l 8,8 z" ] []
         ]
@@ -112,7 +112,7 @@ mail namespace titleText attributes =
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
     in
-    svg ([ fill "#000000", height "24", viewBox "0 0 24 24", width "24", class [ SvgMail ] ] ++ attributes)
+    svg ([ fill "#000000", height "24", viewBox "0 0 24 24", width "24", class [ "SvgMail" ] ] ++ attributes)
         [ Svg.title [] [ Svg.text titleText ]
         , Svg.path [ d "M0 0h24v24H0z", fill "none" ]
             []
@@ -131,7 +131,7 @@ phone namespace titleText attributes =
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
     in
-    svg ([ fill "#000000", height "24", viewBox "0 0 24 24", width "24", class [ SvgPhone ] ] ++ attributes)
+    svg ([ fill "#000000", height "24", viewBox "0 0 24 24", width "24", class [ "SvgPhone" ] ] ++ attributes)
         [ Svg.title [] [ Svg.text titleText ]
         , Svg.path [ d "M0 0h24v24H0z", fill "none" ]
             []
@@ -150,7 +150,7 @@ mobilePhone namespace titleText attributes =
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
     in
-    svg ([ fill "#000000", height "24", viewBox "0 0 24 24", width "24", class [ SvgMobilePhone ] ] ++ attributes)
+    svg ([ fill "#000000", height "24", viewBox "0 0 24 24", width "24", class [ "SvgMobilePhone" ] ] ++ attributes)
         [ Svg.title [] [ Svg.text titleText ]
         , Svg.path [ d "M0 0h24v24H0z", fill "none" ]
             []
@@ -169,7 +169,7 @@ fax namespace titleText attributes =
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
     in
-    svg ([ fill "#000000", height "24", viewBox "0 0 24 24", width "24", class [ SvgFax ] ] ++ attributes)
+    svg ([ fill "#000000", height "24", viewBox "0 0 24 24", width "24", class [ "SvgFax" ] ] ++ attributes)
         [ Svg.title []
             [ Svg.text titleText ]
         , Svg.path [ d "M11,6H16V8H11V6M8,9V3H19V9A3,3 0 0,1 22,12V18H19V21H8V18H7V9H8M10,5V9H17V5H10M10,15V19H17V15H10M19,11A1,1 0 0,0 18,12A1,1 0 0,0 19,13A1,1 0 0,0 20,12A1,1 0 0,0 19,11M4,9H5A1,1 0 0,1 6,10V17A1,1 0 0,1 5,18H4A2,2 0 0,1 2,16V11A2,2 0 0,1 4,9Z" ]
@@ -187,7 +187,7 @@ upload namespace titleText attributes =
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
     in
-    svg ([ fill "#000000", height "24", viewBox "0 0 24 24", width "24", class [ SvgUpload ] ] ++ attributes)
+    svg ([ fill "#000000", height "24", viewBox "0 0 24 24", width "24", class [ "SvgUpload" ] ] ++ attributes)
         [ Svg.title []
             [ Svg.text titleText ]
         , Svg.path [ d "M0 0h24v24H0z", fill "none" ]
@@ -207,7 +207,7 @@ remove namespace titleText attributes =
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
     in
-    svg ([ fill "#000000", height "24", viewBox "0 0 24 24", width "24", class [ SvgRemove ] ] ++ attributes)
+    svg ([ fill "#000000", height "24", viewBox "0 0 24 24", width "24", class [ "SvgRemove" ] ] ++ attributes)
         [ Svg.title []
             [ Svg.text titleText ]
         , Svg.path [ d "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" ]

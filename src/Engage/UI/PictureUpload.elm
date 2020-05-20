@@ -136,7 +136,7 @@ pictureUpload namespace domId attributes =
             Attribute.process emptyAttribute attributes
     in
     Html.Keyed.node "div"
-        [ class [ PictureUpload ] ]
+        [ class [ "PictureUpload" ] ]
         [ ( domId, dropZoneView namespace attribute domId )
         , ( "removeButton", removeButton namespace attribute )
 
@@ -164,7 +164,7 @@ dropZoneView namespace attribute domId =
                 )
     in
     div
-        ([ class [ PictureUploadDropZone ]
+        ([ class [ "PictureUploadDropZone" ]
          , id domId
          , style
             (if String.isEmpty attribute.pictureData then
@@ -211,7 +211,7 @@ removeButton namespace attribute =
         attribute.onRemove
             |> Maybe.map
                 (\( text, msg ) ->
-                    button [ type_ "button", class [ PictureUploadRemoveButton ], onClick msg, title text ]
+                    button [ type_ "button", class [ "PictureUploadRemoveButton" ], onClick msg, title text ]
                         [ Svg.remove namespace text [ Svg.Attributes.width "100%", Svg.Attributes.height "100%" ] ]
                 )
             |> Maybe.withDefault (text "")
@@ -229,7 +229,7 @@ pictureView namespace pictureData =
         HtmlExtra.none
 
     else
-        img [ class [ PictureUploadPreview ], src pictureData ] []
+        img [ class [ "PictureUploadPreview" ], src pictureData ] []
 
 
 browseButton : Namespace -> InternalAttribute msg -> Html msg

@@ -92,7 +92,7 @@ accordionRadioList ({ namespace, labelText, onChange, status, items, accordionEx
         , onValidationStateChange = onValidationStateChange
         }
         stateData.message
-        (div [ class [ AccordionList ] ]
+        (div [ class [ "AccordionList" ] ]
             (items
                 |> List.map
                     (toAccordionRadio
@@ -145,23 +145,23 @@ toAccordionRadio { id, namespace, onChange, labelText, accordionExpandButtonText
         accordionState =
             case Dict.get item.id stateData.collapse of
                 Just Collapsed ->
-                    AccordionCollapsed
+                    "AccordionCollapsed"
 
                 Just Expanded ->
-                    AccordionExpanded
+                    "AccordionExpanded"
 
                 Nothing ->
-                    AccordionCollapsed
+                    "AccordionCollapsed"
     in
-    div [ class [ Accordion ] ]
-        [ div [ class [ AccordionHeader ] ]
-            [ label [ class [ RadioContainer ] ]
+    div [ class [ "Accordion" ] ]
+        [ div [ class [ "AccordionHeader" ] ]
+            [ label [ class [ "RadioContainer" ] ]
                 [ input
                     [ type_ "radio"
                     , Html.Attributes.id radioInputId
                     , name labelText
                     , value item.id
-                    , class [ RadioInput ]
+                    , class [ "RadioInput" ]
                     , onClick radioHandler
                     , checked (selectedValue == item.id)
                     ]
@@ -175,5 +175,5 @@ toAccordionRadio { id, namespace, onChange, labelText, accordionExpandButtonText
                     [ onClick expandButtonHandler ]
                 }
             ]
-        , Markdown.toHtml [ class [ AccordionBody accordionState ] ] item.description
+        , Markdown.toHtml [ class [ "AccordionBody-" ++ accordionState ] ] item.description
         ]

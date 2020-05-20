@@ -77,9 +77,9 @@ view namespace attributes cards =
         attribute =
             processAttribute emptyAttribute attributes
     in
-    div [ class [ CardCollector ] ]
+    div [ class [ "CardCollector" ] ]
         [ titleView namespace attribute
-        , div [ class [ CardCollectorCards ] ] cards
+        , div [ class [ "CardCollectorCards" ] ] cards
         , actionView namespace attribute
         ]
 
@@ -97,7 +97,7 @@ titleView namespace attribute =
                 text ""
 
             else
-                h2 [ class [ CardCollectorTitle ] ] [ text titleText ]
+                h2 [ class [ "CardCollectorTitle" ] ] [ text titleText ]
     in
     attribute.titleText
         |> Maybe.map viewHelper
@@ -112,7 +112,7 @@ actionView namespace attribute =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    div [ class [ CardCollectorAction ] ]
+    div [ class [ "CardCollectorAction" ] ]
         [ attribute.addButtonText
             |> Maybe.map
                 (\( addButtonText, msg ) ->

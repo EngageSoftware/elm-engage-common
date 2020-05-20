@@ -287,7 +287,7 @@ completedViewWithAdditional args additionalText data =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    div [ class [ Css.Sections ] ]
+    div [ class [ "Sections" ] ]
         [ if isEmpty data then
             ul [] [ li [] [ Localization.localizeText "N/A" args ] ]
 
@@ -384,7 +384,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
         [ attribute.addressTypes
             |> Maybe.map
                 (\addressTypes ->
-                    div [ class [ Css.FieldGroup ], style addressTypeDisplayStyle ]
+                    div [ class [ "FieldGroup" ], style addressTypeDisplayStyle ]
                         [ Field.dropdownFieldWithAttributes
                             { namespace = namespace
                             , onChange = onAddressTypeChangeHandler
@@ -400,7 +400,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                         ]
                 )
             |> Maybe.withDefault HtmlExtra.none
-        , div [ class [ Css.FieldGroup ], style addressNameDisplayStyle ]
+        , div [ class [ "FieldGroup" ], style addressNameDisplayStyle ]
             [ Field.inputFieldWithAttributes
                 { namespace = namespace
                 , onChange = NameUpdated
@@ -413,7 +413,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 state.name
                 addressData.name
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.inputFieldWithAttributes
                 { namespace = namespace
                 , onChange = AddressUpdated
@@ -426,7 +426,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 state.address1
                 addressData.address1
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.inputFieldWithAttributes
                 { namespace = namespace
                 , onChange = UnitUpdated
@@ -439,7 +439,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 state.address2
                 addressData.address2
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.dropdownFieldWithAttributes
                 { namespace = namespace
                 , onChange = CountryUpdated
@@ -465,7 +465,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 state.region
                 (Maybe.map (Tuple.first >> toString) addressData.region)
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ Field.inputFieldWithAttributes
                 { namespace = namespace
                 , onChange = CityUpdated
@@ -489,7 +489,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 state.postalCode
                 addressData.postalCode
             ]
-        , div [ class [ Css.FieldGroup ] ]
+        , div [ class [ "FieldGroup" ] ]
             [ attribute.hideAddressPhone
                 |> Engage.Bool.true HtmlExtra.none
                 |> Engage.Bool.false
@@ -538,12 +538,12 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
         , attribute.hidePrimaryAddressCheckbox
             |> Engage.Bool.true HtmlExtra.none
             |> Engage.Bool.false
-                (div [ class [ Css.FieldGroup ] ]
+                (div [ class [ "FieldGroup" ] ]
                     [ primaryAddressCheckbox namespace localization field (State state) addressData ]
                 )
         , attribute.showIncludeInInternalDirectory
             |> Engage.Bool.true
-                (div [ class [ Css.FieldGroup ] ]
+                (div [ class [ "FieldGroup" ] ]
                     [ Field.checkbox
                         { namespace = namespace
                         , localization = localization
@@ -559,7 +559,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
             |> Engage.Bool.false HtmlExtra.none
         , attribute.showIncludeInExternalDirectory
             |> Engage.Bool.true
-                (div [ class [ Css.FieldGroup ] ]
+                (div [ class [ "FieldGroup" ] ]
                     [ Field.checkbox
                         { namespace = namespace
                         , localization = localization

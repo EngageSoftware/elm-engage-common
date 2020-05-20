@@ -18,7 +18,7 @@ list { namespace } items =
         HtmlExtra.none
 
     else
-        ul [ class [ List ] ] (items |> List.map (listItem { namespace = namespace }))
+        ul [ class [ "List" ] ] (items |> List.map (listItem { namespace = namespace }))
 
 
 listItem : { namespace : Namespace } -> List (Html msg) -> Html msg
@@ -29,4 +29,4 @@ listItem { namespace } content =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    li [ class [ ListItem ] ] content
+    li [ class [ "ListItem" ] ] content

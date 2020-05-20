@@ -16,7 +16,7 @@ shoppingCart : Html msg
 shoppingCart =
     div []
         [ node "style" [] [ text css ]
-        , section [ class [ ShoppingCart ] ]
+        , section [ class [ "ShoppingCart" ] ]
             [ shoppingCartItems
             , total
             , Button.primary
@@ -30,18 +30,18 @@ shoppingCart =
 shoppingCartItems : Html msg
 shoppingCartItems =
     ul []
-        [ li [ class [ ShoppingCartItem ] ]
-            [ span [ class [ ItemName ] ] [ text "Abadi Kurniawan" ]
-            , span [ class [ ItemPrice ] ] [ text "$ 1,500.00" ]
+        [ li [ class [ "ShoppingCartItem" ] ]
+            [ span [ class [ "ItemName" ] ] [ text "Abadi Kurniawan" ]
+            , span [ class [ "ItemPrice" ] ] [ text "$ 1,500.00" ]
             ]
         , li
-            [ class [ ShoppingCartItem ] ]
-            [ span [ class [ ItemName ] ] [ text "Chris Marfia" ]
-            , span [ class [ ItemPrice ] ] [ text "$ 1,500.00" ]
+            [ class [ "ShoppingCartItem" ] ]
+            [ span [ class [ "ItemName" ] ] [ text "Chris Marfia" ]
+            , span [ class [ "ItemPrice" ] ] [ text "$ 1,500.00" ]
             ]
         ]
 
 
 total : Html msg
 total =
-    div [ class [ ShoppingCartTotal ] ] [ span [ class [ ItemPrice ] ] [ text "$ 3,000.00" ] ]
+    div [ class [ "ShoppingCartTotal" ] ] [ span [ class [ "ItemPrice" ] ] [ text "$ 3,000.00" ] ]

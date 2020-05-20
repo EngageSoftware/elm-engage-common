@@ -10,7 +10,7 @@ standard : { namespace : Namespace, attributes : List (Html.Attribute msg), text
 standard { attributes, text, namespace } =
     custom
         { namespace = namespace
-        , class = Button Standard Large
+        , class = "Button-Standard-Large"
         , attributes = attributes
         , contents = [ Html.text text ]
         }
@@ -20,18 +20,18 @@ divert : { namespace : Namespace, attributes : List (Html.Attribute msg), text :
 divert { attributes, text, namespace } =
     custom
         { namespace = namespace
-        , class = Button Divert Large
+        , class = "Button-Divert-Large"
         , attributes = attributes
         , contents = [ Html.text text ]
         }
 
 
-custom : { namespace : Namespace, class : Class, attributes : List (Html.Attribute msg), contents : List (Html msg) } -> Html msg
+custom : { namespace : Namespace, class : String, attributes : List (Html.Attribute msg), contents : List (Html msg) } -> Html msg
 custom { namespace, class, attributes, contents } =
     let
-        namespaced =
+        namespacedClass =
             Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     Html.a
-        (namespaced.class [ class ] :: attributes)
+        (namespacedClass [ class ] :: attributes)
         contents

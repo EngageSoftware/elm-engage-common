@@ -240,7 +240,7 @@ form namespace localization now attributes (State state) participantData hideOrS
         birthDateForm =
             let
                 birthDateYear =
-                    div [ class [ Css.FieldGroup ] ]
+                    div [ class [ "FieldGroup" ] ]
                         [ Field.dropdownFieldValueSort
                             { namespace = namespace
                             , onChange = BirthDateYearUpdated
@@ -257,7 +257,7 @@ form namespace localization now attributes (State state) participantData hideOrS
             in
             case hideOrShow.birthDate of
                 "MM/dd/yyyy" ->
-                    div [ class [ Css.FieldGroup ] ]
+                    div [ class [ "FieldGroup" ] ]
                         [ Field.datepickerField
                             { namespace = namespace
                             , onChange = \validation -> BirthDateUpdated validation { onlyStateChange = False }
@@ -285,7 +285,7 @@ form namespace localization now attributes (State state) participantData hideOrS
         birthDateMonth =
             case hideOrShow.birthDate of
                 "MM/yyyy" ->
-                    div [ class [ Css.FieldGroup ] ]
+                    div [ class [ "FieldGroup" ] ]
                         [ Field.dropdownFieldValueSort
                             { namespace = namespace
                             , onChange = BirthDateMonthUpdated
@@ -324,7 +324,7 @@ form namespace localization now attributes (State state) participantData hideOrS
                 div [] []
 
             else
-                div [ class [ Css.ParticipantPicture ] ]
+                div [ class [ "ParticipantPicture" ] ]
                     [ PictureUpload.pictureUpload
                         args.namespace
                         (Namespace.toString args.namespace ++ "ParticipantProfileUpload")
@@ -367,14 +367,14 @@ form namespace localization now attributes (State state) participantData hideOrS
 
                 Show ->
                     div [ class [ toString Css.Form, toString Css.ParticipantAccount ] ]
-                        [ div [ class [ Css.ParticipantForm ] ]
+                        [ div [ class [ "ParticipantForm" ] ]
                             [ h3 [ class [ toString Css.FormTitle, toString Css.ParticipantTitle ] ]
                                 [ Localization.localizeTextWithDefault
                                     "Account Information"
                                     "Account Information.Label"
                                     args
                                 ]
-                            , div [ class [ Css.FieldGroup ] ]
+                            , div [ class [ "FieldGroup" ] ]
                                 [ Field.inputField
                                     { namespace = namespace
                                     , onChange = AccountNameUpdated
@@ -386,7 +386,7 @@ form namespace localization now attributes (State state) participantData hideOrS
                                     state.accountName
                                     account.name
                                 ]
-                            , div [ class [ Css.FieldGroup ] ]
+                            , div [ class [ "FieldGroup" ] ]
                                 [ Field.inputField
                                     { namespace = namespace
                                     , onChange = AccountAddressUpdated
@@ -398,7 +398,7 @@ form namespace localization now attributes (State state) participantData hideOrS
                                     state.accountAddress
                                     account.address
                                 ]
-                            , div [ class [ Css.FieldGroup ] ]
+                            , div [ class [ "FieldGroup" ] ]
                                 [ Field.inputField
                                     { namespace = namespace
                                     , onChange = AccountAddress2Updated
@@ -410,7 +410,7 @@ form namespace localization now attributes (State state) participantData hideOrS
                                     state.accountAddress2
                                     account.address2
                                 ]
-                            , div [ class [ Css.FieldGroup ] ]
+                            , div [ class [ "FieldGroup" ] ]
                                 [ Field.dropdownField
                                     { namespace = namespace
                                     , onChange = AccountCountryUpdated
@@ -434,7 +434,7 @@ form namespace localization now attributes (State state) participantData hideOrS
                                     state.accountRegion
                                     (Maybe.map (Tuple.first >> toString) account.region)
                                 ]
-                            , div [ class [ Css.FieldGroup ] ]
+                            , div [ class [ "FieldGroup" ] ]
                                 [ Field.inputField
                                     { namespace = namespace
                                     , onChange = AccountCityUpdated
@@ -456,7 +456,7 @@ form namespace localization now attributes (State state) participantData hideOrS
                                     state.accountPostalCode
                                     account.postalCode
                                 ]
-                            , div [ class [ Css.FieldGroup ] ]
+                            , div [ class [ "FieldGroup" ] ]
                                 [ Field.inputField
                                     { namespace = namespace
                                     , onChange = AccountPhoneUpdated
@@ -473,14 +473,14 @@ form namespace localization now attributes (State state) participantData hideOrS
 
                 ReadOnly ->
                     div [ class [ toString Css.Form, toString Css.ParticipantAccount ] ]
-                        [ div [ class [ Css.ParticipantForm ] ]
+                        [ div [ class [ "ParticipantForm" ] ]
                             [ h3 [ class [ toString Css.FormTitle, toString Css.ParticipantTitle ] ]
                                 [ Localization.localizeTextWithDefault
                                     "Account Information"
                                     "Account Information.Label"
                                     args
                                 ]
-                            , div [ class [ Css.FieldGroup ] ]
+                            , div [ class [ "FieldGroup" ] ]
                                 [ readOnlyControl AccountName account.name
                                 , readOnlyControl AccountAddress account.address
                                 , readOnlyControl AccountAddress2 account.address2
@@ -495,7 +495,7 @@ form namespace localization now attributes (State state) participantData hideOrS
 
         participantForm : List (Html Msg)
         participantForm =
-            [ div [ class [ Css.FieldGroup ] ]
+            [ div [ class [ "FieldGroup" ] ]
                 [ Field.inputField
                     { namespace = args.namespace
                     , onChange = FirstNameUpdated
@@ -527,7 +527,7 @@ form namespace localization now attributes (State state) participantData hideOrS
                     state.lastName
                     participantData.lastName
                 ]
-            , div [ class [ Css.FieldGroup ] ]
+            , div [ class [ "FieldGroup" ] ]
                 [ Field.inputField
                     { namespace = namespace
                     , onChange = EmailUpdated
@@ -595,7 +595,7 @@ form namespace localization now attributes (State state) participantData hideOrS
     , div [ class [ toString Css.Form, toString Css.Participant ] ]
         [ h3 [ class [ toString Css.FormTitle, toString Css.ParticipantTitle ] ] [ text formTitle ]
         , headshotForm
-        , div [ class [ Css.ParticipantForm ] ]
+        , div [ class [ "ParticipantForm" ] ]
             (participantForm ++ addressForm)
         ]
     ]
@@ -1013,7 +1013,7 @@ completedView data =
         intlPhoneInputConfig =
             IntlPhoneInput.Config.defaultConfig (\_ _ _ -> NoOp)
     in
-    div [ class [ Css.Sections ] ]
+    div [ class [ "Sections" ] ]
         [ ul []
             [ li [] [ text <| fullName data ]
             , li [] [ text data.email ]

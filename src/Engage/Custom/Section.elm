@@ -59,7 +59,7 @@ form args form section =
             else
                 HtmlExtra.none
     in
-    Html.fieldset [ class [ Css.FormSection ] ]
+    Html.fieldset [ class [ "FormSection" ] ]
         (legend
             :: (section.fieldGroups
                     |> Dict.values
