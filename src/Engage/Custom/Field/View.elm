@@ -6,7 +6,6 @@ import Engage.CssHelpers
 import Engage.Custom.Field as Field
 import Engage.Custom.Field.Events as Events
 import Engage.Custom.Field.Helpers as FieldHelpers
-import Engage.Custom.Form.Css as Css
 import Engage.Custom.Types exposing (..)
 import Engage.DateHelper as DateHelper
 import Engage.Entity.Address as Address

@@ -17,7 +17,6 @@ import Engage.Form.FormAction as FormAction
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.Attribute as Attribute
 import Engage.UI.Button as Button
-import Engage.UI.Dialog.Css as Css exposing (Class(..))
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (on, onClick)

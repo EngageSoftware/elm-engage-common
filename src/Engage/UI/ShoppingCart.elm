@@ -1,22 +1,19 @@
 module Engage.UI.ShoppingCart exposing (shoppingCart)
 
 import Css
-import Engage.Styles.Css
+import Engage.Namespace as Namespace
 import Engage.UI.Button as Button
-import Engage.UI.ShoppingCart.Css exposing (Class(..))
 import Html exposing (..)
 
 
 class =
-    Engage.Styles.Css.cssHelpers
+    Namespace.engagecore
+        |> Namespace.toString
+        |> CssHelpers.withNamespace
 
 
 shoppingCart : Html msg
 shoppingCart =
-    let
-        { css } =
-            Css.compile [ Engage.UI.ShoppingCart.Css.css ]
-    in
     div []
         [ node "style" [] [ text css ]
         , section [ class [ ShoppingCart ] ]

@@ -3,7 +3,6 @@ module Engage.UI.Link exposing (custom, standard)
 import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Importance(..))
-import Engage.UI.Link.Css exposing (Class(..))
 import Html exposing (Html)
 
 

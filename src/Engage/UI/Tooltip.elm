@@ -9,7 +9,6 @@ import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class as Css
 import Engage.UI.MessageType as MessageType exposing (MessageType(..))
-import Engage.UI.Tooltip.Css exposing (Class(..))
 import Html exposing (..)
 
 

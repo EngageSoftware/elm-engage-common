@@ -19,7 +19,6 @@ import Engage.Custom.Field.Helpers as Field
 import Engage.Custom.Field.Json exposing (fieldGroupDecoder)
 import Engage.Custom.Field.Validation as Field
 import Engage.Custom.Field.View as Field
-import Engage.Custom.Form.Css as Css exposing (Class(..))
 import Engage.Custom.Types exposing (..)
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace

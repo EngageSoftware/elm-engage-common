@@ -9,7 +9,6 @@ module Engage.UI.Card exposing (attributes, card, edit, none, subtitle, title)
 import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.Button as Button
-import Engage.UI.Card.Css exposing (Class(..))
 import Html exposing (..)
 import Html.Events exposing (onClick)
 

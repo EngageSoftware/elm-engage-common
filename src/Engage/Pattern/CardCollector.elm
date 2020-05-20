@@ -13,7 +13,6 @@ module Engage.Pattern.CardCollector exposing
 
 import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
-import Engage.Pattern.CardCollector.Css exposing (Class(CardCollector, CardCollectorAction, CardCollectorCards, CardCollectorTitle))
 import Engage.UI.Button as Button
 import Html exposing (..)
 import Html.Events exposing (onClick)

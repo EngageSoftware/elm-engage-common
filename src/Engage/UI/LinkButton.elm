@@ -3,7 +3,6 @@ module Engage.UI.LinkButton exposing (custom, divert, standard)
 import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Importance(..), Size(..))
-import Engage.UI.Button.Css exposing (Class(..))
 import Html exposing (Html)
 
 

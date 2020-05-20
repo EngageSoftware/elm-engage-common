@@ -19,7 +19,6 @@ import Engage.SelectDict as SelectDict exposing (SelectDict)
 import Engage.UI.Button as Button
 import Engage.UI.Error as Error exposing (Status)
 import Engage.UI.Svg as Svg
-import Engage.UI.Wizard.Css exposing (Class(..), NavigationStatus(..), SelectedStatus(..))
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)

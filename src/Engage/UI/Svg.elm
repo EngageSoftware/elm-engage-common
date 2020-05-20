@@ -9,8 +9,6 @@ module Engage.UI.Svg exposing (chevron, confirmation, error, fax, info, mail, mo
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (MessageType(..))
 import Engage.Svg.CssHelpers as CssHelpers
-import Engage.UI.Message.Css exposing (Class(..))
-import Engage.UI.Svg.Css exposing (Class(..))
 import Html exposing (Html)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)

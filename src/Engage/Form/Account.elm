@@ -13,7 +13,6 @@ module Engage.Form.Account exposing
 
 import Engage.CssHelpers
 import Engage.Entity.Address exposing (Address, Countries, RegionsCountry)
-import Engage.Form.Account.Css exposing (Class(..))
 import Engage.Form.Address
 import Engage.Form.FormAction as FormAction
 import Engage.Html.Extra as HtmlExtra

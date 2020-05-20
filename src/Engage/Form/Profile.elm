@@ -19,7 +19,6 @@ import Engage.Entity.Address exposing (Address, Countries, RegionsCountry)
 import Engage.Entity.Gender as Gender exposing (Gender)
 import Engage.Form.Address
 import Engage.Form.FormAction as FormAction
-import Engage.Form.Profile.Css exposing (Class(..))
 import Engage.ListItem as ListItem exposing (ListItem)
 import Engage.Localization as Localization exposing (Localization)
 import Engage.Namespace as Namespace exposing (Namespace)

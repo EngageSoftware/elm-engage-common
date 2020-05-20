@@ -3,7 +3,6 @@ module Engage.UI.List exposing (list)
 import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
-import Engage.UI.List.Css exposing (Class(..))
 import Html exposing (..)
 
 

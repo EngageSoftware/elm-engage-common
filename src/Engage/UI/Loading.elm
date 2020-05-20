@@ -9,7 +9,6 @@ module Engage.UI.Loading exposing (loading, loadingOverlay, progress)
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (MessageType(..))
 import Engage.Svg.CssHelpers as CssHelpers
-import Engage.UI.Loading.Css exposing (Class(..), LoadingIcon(..))
 import Html exposing (Html)
 import Html.Attributes
 import Svg exposing (..)

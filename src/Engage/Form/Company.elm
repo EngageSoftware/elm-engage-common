@@ -13,7 +13,6 @@ module Engage.Form.Company exposing
 
 import Date exposing (Date)
 import Engage.CssHelpers
-import Engage.Custom.Form.Css as Css
 import Engage.Entity.Address as Address exposing (RegionsCountry)
 import Engage.Form.Address as Address
 import Engage.Form.Company.Json exposing (emptyCompanies)

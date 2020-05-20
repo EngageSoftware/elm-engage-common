@@ -19,7 +19,6 @@ module Engage.Form.Participant exposing
 import Date exposing (Date)
 import Dict exposing (Dict)
 import Engage.CssHelpers
-import Engage.Custom.Form.Css as Css
 import Engage.Entity.Account as Account exposing (Account)
 import Engage.Entity.Address as Address exposing (Address, Countries, RegionsCountry)
 import Engage.Entity.Gender as Gender exposing (Gender)
@@ -29,7 +28,6 @@ import Engage.Form.Address as Address
 import Engage.Form.Field as Field
 import Engage.Form.Gender as Gender
 import Engage.Form.HideOrShow exposing (HideOrShow, Visibility(..))
-import Engage.Form.Participant.Css as Css
 import Engage.Html.Extra as HtmlExtra
 import Engage.ListItem as ListItem exposing (ListItem)
 import Engage.Localization as Localization exposing (Localization)

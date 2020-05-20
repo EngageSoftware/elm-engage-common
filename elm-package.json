@@ -58,7 +58,6 @@
         "Engage.Entity.Gender",
         "Engage.CreditCard.Ports",
         "Engage.Entity.PhoneNumber",
-        "Engage.Styles.MediaQuery",
         "Engage.Styles.Class",
         "Engage.Html.Extra",
         "Engage.Custom.Types",

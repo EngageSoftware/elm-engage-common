@@ -16,7 +16,6 @@ import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.Attribute as Attribute
 import Engage.UI.Button as Button
-import Engage.UI.PictureUpload.Css exposing (Class(..))
 import Engage.UI.Svg as Svg
 import Html exposing (..)
 import Html.Attributes exposing (..)

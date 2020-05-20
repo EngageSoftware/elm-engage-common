@@ -17,10 +17,8 @@ import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.String
 import Engage.Styles.Class exposing (Class(FormControl), Importance(..), Size(..))
-import Engage.UI.Button.Css exposing (Class(..))
 import Engage.UI.Error as Error exposing (Status)
 import Engage.UI.FormControl as FormControl
-import Engage.UI.Input.Css exposing (Class(..))
 import Engage.UI.Loading as Loading
 import Engage.UI.Message as Message
 import Html exposing (..)

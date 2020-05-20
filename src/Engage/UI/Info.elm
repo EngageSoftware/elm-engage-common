@@ -9,7 +9,6 @@ module Engage.UI.Info exposing (bool, email, fax, group, info, label, mobilePhon
 import Engage.Bool
 import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
-import Engage.UI.Info.Css exposing (Class(..))
 import Engage.UI.Svg as Svg
 import Html exposing (..)
 

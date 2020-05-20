@@ -16,9 +16,7 @@ import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Class(..), Size(..))
-import Engage.UI.Dropdown.Css exposing (Class(..))
 import Engage.UI.Error as Error exposing (Status(..))
-import Engage.UI.Input.Css exposing (Class(Required))
 import Engage.UI.Message as Message
 import Html exposing (..)
 import Html.Attributes exposing (..)

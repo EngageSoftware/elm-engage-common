@@ -14,7 +14,6 @@ module Engage.UI.Message exposing
 import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class
-import Engage.UI.Message.Css exposing (Class(..))
 import Engage.UI.MessageType exposing (MessageType(..))
 import Engage.UI.Svg as Svg
 import Engage.UI.Tooltip as Tooltip
@@ -66,7 +65,7 @@ message { namespace, messageType } contents =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    Html.div [ class [ Engage.UI.Message.Css.Message (getMessageTypeClass messageType) ] ] contents
+    Html.div [ class [ Message (getMessageTypeClass messageType) ] ] contents
 
 
 {-| Get an inline message
@@ -79,7 +78,7 @@ inlineMessage { namespace, messageType } contents =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    Html.span [ class [ Engage.UI.Message.Css.InlineMessage (getMessageTypeClass messageType) ] ] contents
+    Html.span [ class [ InlineMessage (getMessageTypeClass messageType) ] ] contents
 
 
 {-| Get a control message
@@ -103,7 +102,7 @@ controlMessage { namespace, messageType, onChange } ((State stateData) as state)
                             state
                 }
     in
-    Html.div [ class [ Engage.UI.Message.Css.ControlMessage (getMessageTypeClass messageType) ] ]
+    Html.div [ class [ ControlMessage (getMessageTypeClass messageType) ] ]
         [ icon
             { namespace = namespace
             , messageType = messageType

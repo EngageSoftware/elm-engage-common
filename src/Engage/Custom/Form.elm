@@ -8,7 +8,6 @@ module Engage.Custom.Form exposing (allFields, completedView, findField, form, i
 
 import Dict exposing (Dict)
 import Engage.CssHelpers
-import Engage.Custom.Form.Css as Css
 import Engage.Custom.Section as Section exposing (sectionTupleDecoder)
 import Engage.Custom.Types exposing (..)
 import Engage.Html.Extra as HtmlExtra

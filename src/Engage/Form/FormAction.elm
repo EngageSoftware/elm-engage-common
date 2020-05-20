@@ -7,7 +7,6 @@ module Engage.Form.FormAction exposing (formAction)
 -}
 
 import Engage.CssHelpers
-import Engage.Form.FormAction.Css exposing (Class(..))
 import Engage.Namespace as Namespace exposing (Namespace)
 import Html exposing (..)
 

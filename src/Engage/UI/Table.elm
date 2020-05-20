@@ -19,7 +19,6 @@ import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Importance(..))
 import Engage.UI.Button as Button
 import Engage.UI.Link as Link
-import Engage.UI.Table.Css exposing (Class(..))
 import Html exposing (Html)
 import Html.Attributes
 import Html.Events exposing (onClick)
