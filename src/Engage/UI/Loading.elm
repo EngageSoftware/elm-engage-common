@@ -1,6 +1,11 @@
-module Engage.UI.Loading exposing (loading, loadingOverlay, progress)
+module Engage.UI.Loading exposing
+    ( LoadingIcon(..)
+    , loading, loadingOverlay, progress
+    )
 
 {-| UI.Loading
+
+@docs LoadingIcon
 
 @docs loading, loadingOverlay, progress
 
