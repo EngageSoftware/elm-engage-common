@@ -1,9 +1,6 @@
 module Engage.Pattern.CardCollector exposing
     ( Attribute
-    , addButton
-    , none
-    , title
-    , view
+    , addButton, none, title, view
     )
 
 {-| Pattern.CardCollector
@@ -14,11 +11,11 @@ module Engage.Pattern.CardCollector exposing
 
 -}
 
+import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Pattern.CardCollector.Css exposing (Class(CardCollector, CardCollectorAction, CardCollectorCards, CardCollectorTitle))
 import Engage.UI.Button as Button
 import Html exposing (..)
-import Html.CssHelpers
 import Html.Events exposing (onClick)
 import String
 
@@ -73,10 +70,10 @@ addButton text msg =
 view : Namespace -> List (Attribute msg) -> List (Html msg) -> Html msg
 view namespace attributes cards =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         attribute =
             processAttribute emptyAttribute attributes
@@ -91,10 +88,10 @@ view namespace attributes cards =
 titleView : Namespace -> InternalAttribute msg -> Html msg
 titleView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         viewHelper titleText =
             if String.isEmpty titleText then
@@ -111,10 +108,10 @@ titleView namespace attribute =
 actionView : Namespace -> InternalAttribute msg -> Html msg
 actionView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     div [ class [ CardCollectorAction ] ]
         [ attribute.addButtonText

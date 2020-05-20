@@ -1,31 +1,6 @@
 module Engage.Form.Address exposing
-    ( Attribute
-    , Msg
-    , State
-    , ValidationField(..)
-    , addressTypes
-    , completedView
-    , completedViewWithAdditional
-    , countries
-    , countriesToItems
-    , form
-    , hideFax
-    , hidePrimaryAddressCheckbox
-    , hideWebsite
-    , initialState
-    , isEmpty
-    , isValid
-    , regions
-    , regionsToItems
-    , required
-    , showIncludeInExternalDirectory
-    , showIncludeInInternalDirectory
-    , toAllRegions
-    , update
-    , validateAll
-    , validateAllWith
-    , validateFieldWith
-    , view
+    ( Attribute, Msg, State, ValidationField(..)
+    , addressTypes, completedView, completedViewWithAdditional, countries, countriesToItems, form, hideFax, hidePrimaryAddressCheckbox, hideWebsite, initialState, isEmpty, isValid, regions, regionsToItems, required, showIncludeInExternalDirectory, showIncludeInInternalDirectory, toAllRegions, update, validateAll, validateAllWith, validateFieldWith, view
     )
 
 {-| Form.Address
@@ -36,8 +11,9 @@ module Engage.Form.Address exposing
 
 -}
 
-import Engage.Bool
 import Dict exposing (Dict)
+import Engage.Bool
+import Engage.CssHelpers
 import Engage.Custom.Form.Css as Css
 import Engage.Entity.Address as Address exposing (Address, AddressLike, AddressType, AddressTypes, Countries, Regions, RegionsCountry)
 import Engage.Entity.PhoneNumber exposing (PhoneNumber)
@@ -54,7 +30,6 @@ import Engage.UI.Input as Input
 import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.CssHelpers
 import String exposing (..)
 
 
@@ -255,10 +230,10 @@ showIncludeInExternalDirectory =
 view : { a | namespace : Namespace, localization : Localization, countries : Countries, regions : RegionsCountry } -> AddressLike address -> Html msg
 view args data =
     let
-        { class } =
+        class =
             args.namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         maybeCountry =
             data.country
@@ -308,10 +283,10 @@ completedView args data =
 completedViewWithAdditional : { a | namespace : Namespace, localization : Localization } -> List String -> Address -> Html msg
 completedViewWithAdditional args additionalText data =
     let
-        { class } =
+        class =
             args.namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     div [ class [ Css.Sections ] ]
         [ if isEmpty data then
@@ -367,10 +342,10 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
         attribute =
             Attribute.process attributeShow attributes
 
-        { class } =
+        class =
             originalNamespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         namespace =
             Namespace.namespace <| Namespace.toString originalNamespace ++ "Address"

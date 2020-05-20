@@ -1,14 +1,6 @@
 module Engage.UI.Dialog exposing
-    ( Attribute
-    , State
-    , cancelText
-    , confirm
-    , hide
-    , initialState
-    , okText
-    , onCancel
-    , onOk
-    , show
+    ( Attribute, State
+    , cancelText, confirm, hide, initialState, okText, onCancel, onOk, show
     )
 
 {-| UI.Dialog
@@ -20,6 +12,7 @@ module Engage.UI.Dialog exposing
 -}
 
 import Dom
+import Engage.CssHelpers
 import Engage.Form.FormAction as FormAction
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.Attribute as Attribute
@@ -27,7 +20,6 @@ import Engage.UI.Button as Button
 import Engage.UI.Dialog.Css as Css exposing (Class(..))
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.CssHelpers
 import Html.Events exposing (on, onClick)
 import Json.Decode as JD
 import Task exposing (Task)
@@ -79,10 +71,10 @@ type State
 confirm : Namespace -> State -> List (Attribute msg) -> List (Html msg) -> Html msg
 confirm namespace (State state) attributes body =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         attribute =
             Attribute.process emptyAttribute attributes

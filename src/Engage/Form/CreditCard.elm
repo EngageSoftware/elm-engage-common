@@ -20,6 +20,7 @@ module Engage.Form.CreditCard exposing
     )
 
 import Engage.CreditCard.Ports
+import Engage.CssHelpers
 import Engage.Custom.Form.Css as CustomFormCss
 import Engage.Entity.Address as Address exposing (RegionsCountry)
 import Engage.Entity.PhoneNumber as PhoneNumber exposing (PhoneNumber)
@@ -47,7 +48,6 @@ import Engage.UI.Wizard.Css as WizardCss
 import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (..)
 import Html.Attributes
-import Html.CssHelpers
 import Html.Events exposing (onClick)
 import Http
 import IntlPhoneInput.Config
@@ -57,7 +57,7 @@ import String
 
 
 { class, id } =
-    Html.CssHelpers.withNamespace <| Namespace.toString Namespace.engagecore
+    Engage.CssHelpers.withNamespace <| Namespace.toString Namespace.engagecore
 
 
 stripeCardId : String

@@ -5,12 +5,12 @@ module Engage.UI.Tooltip exposing
     , tooltip
     )
 
+import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class as Css
 import Engage.UI.MessageType as MessageType exposing (MessageType(..))
 import Engage.UI.Tooltip.Css exposing (Class(..))
 import Html exposing (..)
-import Html.CssHelpers
 
 
 type State
@@ -36,10 +36,10 @@ not state =
 tooltip : { namespace : Namespace, messageType : MessageType } -> State -> Html msg -> Html msg
 tooltip { namespace, messageType } state contents =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     case state of
         Hidden ->

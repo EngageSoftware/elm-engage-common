@@ -1,19 +1,19 @@
 module Engage.UI.List exposing (list)
 
+import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.List.Css exposing (Class(..))
 import Html exposing (..)
-import Html.CssHelpers
 
 
 list : { namespace : Namespace } -> List (List (Html msg)) -> Html msg
 list { namespace } items =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     if List.isEmpty items then
         HtmlExtra.none
@@ -25,9 +25,9 @@ list { namespace } items =
 listItem : { namespace : Namespace } -> List (Html msg) -> Html msg
 listItem { namespace } content =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     li [ class [ ListItem ] ] content

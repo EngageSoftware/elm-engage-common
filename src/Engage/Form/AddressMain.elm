@@ -2,6 +2,7 @@ module Engage.Form.AddressMain exposing (main)
 
 import Css
 import Dict exposing (Dict)
+import Engage.CssHelpers
 import Engage.Custom.Form.Css
 import Engage.Form.Address as Address exposing (..)
 import Engage.Namespace as Namespace
@@ -14,7 +15,6 @@ import Engage.UI.Message.Css
 import Engage.UI.Tooltip.Css
 import Engage.UI.Wizard.Css
 import Html exposing (..)
-import Html.CssHelpers
 
 
 engagecoreNamespace : String
@@ -44,8 +44,8 @@ main =
 -- view : ( State, AddressData {} ) -> Html Msg
 -- view ( state, model ) =
 --     let
---         { class } =
---             Html.CssHelpers.withNamespace engagecoreNamespace
+--         class =
+--             Engage.CssHelpers.withNamespace engagecoreNamespace
 --         { css } =
 --             Css.compile
 --                 [ Engage.Styles.Css.css engagecoreNamespace

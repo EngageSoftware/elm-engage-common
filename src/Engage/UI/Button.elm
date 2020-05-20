@@ -1,14 +1,4 @@
-module Engage.UI.Button exposing
-    ( custom
-    , divert
-    , divertSmall
-    , negative
-    , negativeSmall
-    , primary
-    , primarySmall
-    , standard
-    , standardSmall
-    )
+module Engage.UI.Button exposing (custom, divert, divertSmall, negative, negativeSmall, primary, primarySmall, standard, standardSmall)
 
 {-| UI.Button
 
@@ -16,12 +6,12 @@ module Engage.UI.Button exposing
 
 -}
 
+import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Importance(..), Size(..))
 import Engage.UI.Button.Css exposing (Class(..))
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.CssHelpers
 
 
 {-| Get a standard Button
@@ -126,7 +116,7 @@ custom : { namespace : Namespace, class : class, attributes : List (Attribute ms
 custom { namespace, class, attributes, contents } =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     button
         (namespaced.class [ toString BaseButton, toString class ] :: attributes)

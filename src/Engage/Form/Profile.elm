@@ -1,22 +1,6 @@
 module Engage.Form.Profile exposing
     ( Attribute
-    , address
-    , avatar
-    , birthDate
-    , birthDateMonth
-    , birthDateYear
-    , edit
-    , editAccountLink
-    , email
-    , fax
-    , firstName
-    , gender
-    , lastName
-    , mobilePhone
-    , none
-    , phone
-    , title
-    , view
+    , address, avatar, birthDate, birthDateMonth, birthDateYear, edit, editAccountLink, email, fax, firstName, gender, lastName, mobilePhone, none, phone, title, view
     )
 
 {-| Form.Profile
@@ -30,6 +14,7 @@ module Engage.Form.Profile exposing
 import Date exposing (Date)
 import Date.Extra.Config.Config_en_us
 import Date.Extra.Format
+import Engage.CssHelpers
 import Engage.Entity.Address exposing (Address, Countries, RegionsCountry)
 import Engage.Entity.Gender as Gender exposing (Gender)
 import Engage.Form.Address
@@ -43,7 +28,6 @@ import Engage.UI.Button as Button
 import Engage.UI.Info as Info
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.CssHelpers
 import Html.Events exposing (onClick)
 import String
 
@@ -210,10 +194,10 @@ editAccountLink text value =
 view : { args | namespace : Namespace, localization : Localization, countries : Countries, regions : RegionsCountry } -> List (Attribute msg) -> List (Html msg) -> Html msg
 view ({ namespace, localization } as args) attributes additionalContents =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         attribute =
             Attribute.process emptyAttribute attributes
@@ -246,10 +230,10 @@ view ({ namespace, localization } as args) attributes additionalContents =
 genderView : Namespace -> InternalAttribute msg -> Html msg
 genderView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         do label gender =
             if String.isEmpty gender then
@@ -266,10 +250,10 @@ genderView namespace attribute =
 birthDateView : Namespace -> Localization -> InternalAttribute msg -> Html msg
 birthDateView namespace localization attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         dateFormat =
             Localization.localizeStringWithDefault "%B %e, %Y" "BirthDateFormat" { localization = localization }
@@ -290,10 +274,10 @@ birthDateView namespace localization attribute =
 birthDateYearView : Namespace -> InternalAttribute msg -> Html msg
 birthDateYearView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         do label maybeItem =
             case maybeItem of
@@ -311,10 +295,10 @@ birthDateYearView namespace attribute =
 birthDateMonthView : Namespace -> InternalAttribute msg -> Html msg
 birthDateMonthView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         do label maybeItem =
             case maybeItem of
@@ -332,10 +316,10 @@ birthDateMonthView namespace attribute =
 nameView : Namespace -> InternalAttribute msg -> Html msg
 nameView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         firstName =
             attribute.firstName |> Maybe.withDefault ""
@@ -356,10 +340,10 @@ nameView namespace attribute =
 titleView : Namespace -> InternalAttribute msg -> Html msg
 titleView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     attribute.title
         |> Maybe.map (\title -> div [ class [ ProfileTitle ] ] [ text title ])
@@ -369,10 +353,10 @@ titleView namespace attribute =
 addressView : { args | namespace : Namespace, localization : Localization, countries : Countries, regions : RegionsCountry } -> InternalAttribute msg -> Html msg
 addressView ({ namespace, localization } as args) attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         isEmpty =
             Engage.Form.Address.isEmpty
@@ -392,10 +376,10 @@ addressView ({ namespace, localization } as args) attribute =
 avatarView : Namespace -> InternalAttribute msg -> Html msg
 avatarView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     attribute.avatar
         |> Maybe.map
@@ -427,10 +411,10 @@ avatarView namespace attribute =
 emailView : Namespace -> InternalAttribute msg -> Html msg
 emailView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     attribute.email
         |> Maybe.map (\( label, email ) -> div [ class [ ProfileEmail ] ] [ Info.email namespace (Info.label label) email ])
@@ -440,10 +424,10 @@ emailView namespace attribute =
 phoneView : Namespace -> InternalAttribute msg -> Html msg
 phoneView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     attribute.phone
         |> Maybe.map (\( label, phone ) -> div [ class [ ProfilePhone ] ] [ Info.phone namespace (Info.label label) phone ])
@@ -453,10 +437,10 @@ phoneView namespace attribute =
 mobilePhoneView : Namespace -> InternalAttribute msg -> Html msg
 mobilePhoneView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     attribute.mobilePhone
         |> Maybe.map (\( label, mobilePhone ) -> div [ class [ ProfileCellphone ] ] [ Info.mobilePhone namespace (Info.label label) mobilePhone ])
@@ -466,10 +450,10 @@ mobilePhoneView namespace attribute =
 faxView : Namespace -> InternalAttribute msg -> Html msg
 faxView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     attribute.fax
         |> Maybe.map (\( label, fax ) -> div [ class [ ProfileFax ] ] [ Info.fax namespace (Info.label label) fax ])
@@ -479,10 +463,10 @@ faxView namespace attribute =
 actionView : Namespace -> InternalAttribute msg -> Html msg
 actionView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     FormAction.formAction namespace
         [ attribute.edit

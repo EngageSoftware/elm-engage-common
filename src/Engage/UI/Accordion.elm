@@ -5,21 +5,15 @@ module Engage.UI.Accordion exposing
     )
 
 import Dict exposing (Dict)
+import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Class(FormControl), Importance(..), Size(..))
-import Engage.UI.Accordion.Css as Css
-    exposing
-        ( AccordionState(AccordionCollapsed, AccordionExpanded)
-        , Class(Accordion, AccordionBody, AccordionHeader, AccordionList)
-        )
 import Engage.UI.Button as Button
 import Engage.UI.Error as Error exposing (Status)
 import Engage.UI.FormControl as FormControl
-import Engage.UI.Input.Css exposing (Class(..))
 import Engage.UI.Message as Message
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.CssHelpers
 import Html.Events exposing (..)
 import Markdown
 
@@ -73,10 +67,10 @@ accordionRadioList :
     -> Html msg
 accordionRadioList ({ namespace, labelText, onChange, status, items, accordionExpandButtonText } as args) state selectedValue =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         namespacedId =
             Namespace.toString namespace ++ args.id
@@ -131,10 +125,10 @@ toggleCollapse id dict =
 toAccordionRadio : { id : String, namespace : Namespace, onChange : { onlyStateChange : Bool } -> State -> String -> msg, labelText : String, accordionExpandButtonText : String } -> State -> String -> { id : String, text : String, description : String } -> Html msg
 toAccordionRadio { id, namespace, onChange, labelText, accordionExpandButtonText } ((State stateData) as state) selectedValue item =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         radioInputId =
             Namespace.toString namespace ++ "RadioInput" ++ id ++ item.id

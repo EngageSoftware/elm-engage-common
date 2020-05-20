@@ -1,18 +1,6 @@
 module Engage.UI.Wizard exposing
-    ( Config
-    , Page
-    , ShoppingCart
-    , SinglePageType(..)
-    , State
-    , Step
-    , defaultConfig
-    , getStepError
-    , getStepModel
-    , getStepTitle
-    , initialState
-    , multiPages
-    , singlePage
-    , wizard
+    ( Config, Page, ShoppingCart, SinglePageType(..), State, Step
+    , defaultConfig, getStepError, getStepModel, getStepTitle, initialState, multiPages, singlePage, wizard
     )
 
 {-| UI.Wizard
@@ -24,20 +12,20 @@ module Engage.UI.Wizard exposing
 -}
 
 import Dict exposing (Dict)
+import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
+import Engage.SelectDict as SelectDict exposing (SelectDict)
 import Engage.UI.Button as Button
 import Engage.UI.Error as Error exposing (Status)
 import Engage.UI.Svg as Svg
 import Engage.UI.Wizard.Css exposing (Class(..), NavigationStatus(..), SelectedStatus(..))
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.CssHelpers
 import Html.Events exposing (..)
 import Json.Decode
 import Maybe.Extra
 import Mustache
-import Engage.SelectDict as SelectDict exposing (SelectDict)
 
 
 
@@ -182,10 +170,10 @@ wizard :
     -> Html msg
 wizard ({ namespace, config, state, shoppingCart, localize } as args) steps =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     section [ class [ Wizard ] ]
         ([ wizardHeader args state steps
@@ -206,10 +194,10 @@ viewStep { namespace, config } state steps =
         step =
             SelectDict.selected steps
 
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     case step of
         ( stepId, Single { model } ) ->
@@ -231,10 +219,10 @@ viewMultiPages { namespace, config, state, stepId } pages =
         ( before, selected, after ) =
             SelectDict.segments pages
 
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         stateData =
             unwrap state
@@ -271,10 +259,10 @@ renderBeforePage config state pageId page =
 wizardHeader : { a | namespace : Namespace, config : Config msg model comparable } -> State -> SelectDict comparable (Step model comparable) -> Html msg
 wizardHeader ({ namespace, config } as args) state steps =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     header [ class [ WizardHeader ] ]
         [ h2 [ class [ WizardHeaderTitle ] ]
@@ -290,10 +278,10 @@ wizardHeader ({ namespace, config } as args) state steps =
 stepIndicator : { a | namespace : Namespace, config : Config msg model comparable } -> SelectDict comparable (Step model comparable) -> Html msg
 stepIndicator ({ namespace, config } as args) steps =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     div [ class [ PageIndicator ] ]
         [ text <| renderTemplate config steps config.pageIndicatorTemplate
@@ -306,10 +294,10 @@ navigationArrow ({ namespace, config } as args) state =
         stateData =
             unwrap state
 
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     case stateData.navigationStatus of
         ExpandedState ->
@@ -333,10 +321,10 @@ navigationArrow ({ namespace, config } as args) state =
 navigation : { a | namespace : Namespace, config : Config msg model comparable } -> State -> SelectDict comparable (Step model comparable) -> Html msg
 navigation ({ namespace, config } as args) state steps =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         stateData =
             unwrap state
@@ -392,10 +380,10 @@ navigation ({ namespace, config } as args) state steps =
 navigationStep : { namespace : Namespace, config : Config msg model comparable, isBefore : Bool, isSelected : Bool, state : State } -> ( comparable, Step model comparable ) -> Html msg
 navigationStep { namespace, config, isBefore, isSelected, state } ( stepId, step ) =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         stateData =
             unwrap state
@@ -425,10 +413,10 @@ navigationStep { namespace, config, isBefore, isSelected, state } ( stepId, step
 navigationControl : { a | namespace : Namespace, config : Config msg model comparable, isLoading : Bool } -> State -> SelectDict comparable (Step model comparable) -> Html msg
 navigationControl ({ namespace, config, isLoading } as args) ((State stateData) as state) steps =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     div [ class [ NavigationControl ] ]
         [ previousButton args state steps

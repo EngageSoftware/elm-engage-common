@@ -1,14 +1,6 @@
 module Engage.Form.Company exposing
-    ( Msg
-    , State
-    , cast
-    , completedView
-    , emptyForm
-    , form
-    , initialState
-    , isValid
-    , update
-    , validateAll
+    ( Msg, State
+    , cast, completedView, emptyForm, form, initialState, isValid, update, validateAll
     )
 
 {-| Form.Company
@@ -20,6 +12,7 @@ module Engage.Form.Company exposing
 -}
 
 import Date exposing (Date)
+import Engage.CssHelpers
 import Engage.Custom.Form.Css as Css
 import Engage.Entity.Address as Address exposing (RegionsCountry)
 import Engage.Form.Address as Address
@@ -34,14 +27,13 @@ import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Input as Input
 import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (..)
-import Html.CssHelpers
 import String
 
 
-{ class } =
+class =
     Namespace.engagecore
         |> Namespace.toString
-        |> Html.CssHelpers.withNamespace
+        |> Engage.CssHelpers.withNamespace
 
 
 type alias CompanyState =

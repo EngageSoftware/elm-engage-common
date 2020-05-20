@@ -7,7 +7,7 @@ import Engage.UI.ShoppingCart.Css exposing (Class(..))
 import Html exposing (..)
 
 
-{ id, class, classList } =
+class =
     Engage.Styles.Css.cssHelpers
 
 

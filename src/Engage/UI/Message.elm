@@ -1,9 +1,6 @@
 module Engage.UI.Message exposing
     ( State
-    , controlMessage
-    , initialState
-    , inlineMessage
-    , message
+    , controlMessage, initialState, inlineMessage, message
     )
 
 {-| UI.Message
@@ -14,6 +11,7 @@ module Engage.UI.Message exposing
 
 -}
 
+import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class
 import Engage.UI.Message.Css exposing (Class(..))
@@ -22,7 +20,6 @@ import Engage.UI.Svg as Svg
 import Engage.UI.Tooltip as Tooltip
 import Html exposing (..)
 import Html.Attributes exposing (type_)
-import Html.CssHelpers
 import Html.Events
 
 
@@ -64,10 +61,10 @@ initialState =
 message : { namespace : Namespace, messageType : MessageType } -> List (Html msg) -> Html msg
 message { namespace, messageType } contents =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     Html.div [ class [ Engage.UI.Message.Css.Message (getMessageTypeClass messageType) ] ] contents
 
@@ -77,10 +74,10 @@ message { namespace, messageType } contents =
 inlineMessage : { namespace : Namespace, messageType : MessageType } -> List (Html msg) -> Html msg
 inlineMessage { namespace, messageType } contents =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     Html.span [ class [ Engage.UI.Message.Css.InlineMessage (getMessageTypeClass messageType) ] ] contents
 
@@ -90,10 +87,10 @@ inlineMessage { namespace, messageType } contents =
 controlMessage : Config msg -> State -> Html msg -> Html msg
 controlMessage { namespace, messageType, onChange } ((State stateData) as state) contents =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         ifNotHovered state =
             State
@@ -127,10 +124,10 @@ controlMessage { namespace, messageType, onChange } ((State stateData) as state)
 icon : { namespace : Namespace, messageType : MessageType } -> List (Html.Attribute msg) -> Html msg
 icon { namespace, messageType } attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     button
         ([ class [ IconContainer ]

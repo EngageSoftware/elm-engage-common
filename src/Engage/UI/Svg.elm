@@ -1,16 +1,4 @@
-module Engage.UI.Svg exposing
-    ( chevron
-    , confirmation
-    , error
-    , fax
-    , info
-    , mail
-    , mobilePhone
-    , phone
-    , remove
-    , upload
-    , warning
-    )
+module Engage.UI.Svg exposing (chevron, confirmation, error, fax, info, mail, mobilePhone, phone, remove, upload, warning)
 
 {-| UI.Svg
 
@@ -33,7 +21,7 @@ import Svg.Attributes exposing (..)
 error : { a | namespace : Namespace } -> List (Html.Attribute msg) -> Html msg
 error { namespace } attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
@@ -51,7 +39,7 @@ error { namespace } attributes =
 confirmation : { a | namespace : Namespace } -> List (Html.Attribute msg) -> Html msg
 confirmation { namespace } attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
@@ -69,7 +57,7 @@ confirmation { namespace } attributes =
 warning : { a | namespace : Namespace } -> List (Html.Attribute msg) -> Html msg
 warning { namespace } attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
@@ -87,7 +75,7 @@ warning { namespace } attributes =
 info : { a | namespace : Namespace } -> List (Html.Attribute msg) -> Html msg
 info { namespace } attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
@@ -105,7 +93,7 @@ info { namespace } attributes =
 chevron : { a | namespace : Namespace } -> List (Html.Attribute msg) -> Html msg
 chevron { namespace } attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
@@ -121,7 +109,7 @@ chevron { namespace } attributes =
 mail : Namespace -> String -> List (Html.Attribute msg) -> Html msg
 mail namespace titleText attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
@@ -140,7 +128,7 @@ mail namespace titleText attributes =
 phone : Namespace -> String -> List (Html.Attribute msg) -> Html msg
 phone namespace titleText attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
@@ -159,7 +147,7 @@ phone namespace titleText attributes =
 mobilePhone : Namespace -> String -> List (Html.Attribute msg) -> Html msg
 mobilePhone namespace titleText attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
@@ -178,7 +166,7 @@ mobilePhone namespace titleText attributes =
 fax : Namespace -> String -> List (Html.Attribute msg) -> Html msg
 fax namespace titleText attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
@@ -196,7 +184,7 @@ fax namespace titleText attributes =
 upload : Namespace -> String -> List (Html.Attribute msg) -> Html msg
 upload namespace titleText attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
@@ -216,7 +204,7 @@ upload namespace titleText attributes =
 remove : Namespace -> String -> List (Html.Attribute msg) -> Html msg
 remove namespace titleText attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
                 |> CssHelpers.withNamespace

@@ -1,14 +1,6 @@
 module Engage.UI.PictureUpload exposing
-    ( Attribute
-    , File
-    , PortOutKey(..)
-    , browse
-    , dropZone
-    , onFiles
-    , onLoad
-    , picture
-    , pictureUpload
-    , remove
+    ( Attribute, File, PortOutKey(..)
+    , browse, dropZone, onFiles, onLoad, picture, pictureUpload, remove
     )
 
 {-| UI.PictureUpload
@@ -19,6 +11,7 @@ module Engage.UI.PictureUpload exposing
 
 -}
 
+import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.Attribute as Attribute
@@ -27,7 +20,6 @@ import Engage.UI.PictureUpload.Css exposing (Class(..))
 import Engage.UI.Svg as Svg
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.CssHelpers
 import Html.Events exposing (onClick)
 import Html.Keyed
 import Json.Decode
@@ -136,10 +128,10 @@ remove text msg =
 pictureUpload : Namespace -> String -> List (Attribute msg) -> Html msg
 pictureUpload namespace domId attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         attribute =
             Attribute.process emptyAttribute attributes
@@ -158,10 +150,10 @@ pictureUpload namespace domId attributes =
 dropZoneView : Namespace -> InternalAttribute msg -> String -> Html msg
 dropZoneView namespace attribute domId =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         onFiles : (List File -> msg) -> Html.Attribute msg
         onFiles msg =
@@ -208,10 +200,10 @@ dropZoneView namespace attribute domId =
 removeButton : Namespace -> InternalAttribute msg -> Html msg
 removeButton namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     if String.isEmpty attribute.pictureData then
         text ""
@@ -229,10 +221,10 @@ removeButton namespace attribute =
 pictureView : Namespace -> String -> Html msg
 pictureView namespace pictureData =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     if String.isEmpty pictureData then
         HtmlExtra.none

@@ -2,14 +2,10 @@ module Engage.UI.Core exposing (core)
 
 import Css
 import DEPRECATED.Css.File
+import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Html exposing (..)
 import Html.Attributes exposing (style)
-import Html.CssHelpers
-
-
-{ id, class, classList } =
-    Html.CssHelpers.withNamespace "engageUIDemo"
 
 
 core : List DEPRECATED.Css.File.Stylesheet -> List (Html msg) -> Html msg

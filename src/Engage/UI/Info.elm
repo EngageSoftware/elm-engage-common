@@ -1,14 +1,4 @@
-module Engage.UI.Info exposing
-    ( bool
-    , email
-    , fax
-    , group
-    , info
-    , label
-    , mobilePhone
-    , multiple
-    , phone
-    )
+module Engage.UI.Info exposing (bool, email, fax, group, info, label, mobilePhone, multiple, phone)
 
 {-| UI.Info
 
@@ -17,11 +7,11 @@ module Engage.UI.Info exposing
 -}
 
 import Engage.Bool
+import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.Info.Css exposing (Class(..))
 import Engage.UI.Svg as Svg
 import Html exposing (..)
-import Html.CssHelpers
 
 
 
@@ -48,10 +38,10 @@ label =
 group : Namespace -> List (Html msg) -> Html msg
 group namespace content =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     div [ class [ InfoGroup ] ] content
 
@@ -62,7 +52,7 @@ info : Namespace -> Label -> String -> Html msg
 info namespace label text =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     div [ namespaced.class [ Info ] ]
         [ labelView namespace label
@@ -76,7 +66,7 @@ multiple : Namespace -> Label -> List (Html msg) -> Html msg
 multiple namespace label content =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     div [ namespaced.class [ Info ] ]
         [ labelView namespace label
@@ -90,7 +80,7 @@ mobilePhone : Namespace -> Label -> String -> Html msg
 mobilePhone namespace (Label label) mobilePhone =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     if String.isEmpty <| String.trim <| mobilePhone then
         text ""
@@ -108,7 +98,7 @@ phone : Namespace -> Label -> String -> Html msg
 phone namespace (Label label) phoneNumber =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     if String.isEmpty <| String.trim <| phoneNumber then
         Html.text ""
@@ -126,7 +116,7 @@ email : Namespace -> Label -> String -> Html msg
 email namespace (Label label) emailAddress =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     if String.isEmpty <| String.trim <| emailAddress then
         Html.text ""
@@ -144,7 +134,7 @@ fax : Namespace -> Label -> String -> Html msg
 fax namespace (Label label) faxNumber =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     if String.isEmpty <| String.trim <| faxNumber then
         Html.text ""
@@ -162,7 +152,7 @@ bool : Namespace -> Label -> Bool -> Html msg
 bool namespace (Label label) value =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     div [ namespaced.class [ Info, InfoBool ] ]
         [ value
@@ -180,7 +170,7 @@ labelView : Namespace -> Label -> Html msg
 labelView namespace (Label labelText) =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     div [ namespaced.class [ InfoTitle ] ] [ text labelText ]
 
@@ -189,7 +179,7 @@ textView : Namespace -> String -> Html msg
 textView namespace text =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     div [ namespaced.class [ InfoContent ] ] [ Html.text text ]
 
@@ -198,6 +188,6 @@ multipleTextView : Namespace -> List (Html msg) -> Html msg
 multipleTextView namespace content =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     div [ namespaced.class [ InfoContent ] ] content

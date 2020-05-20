@@ -1,10 +1,10 @@
 module Engage.UI.Link exposing (custom, standard)
 
+import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Importance(..))
 import Engage.UI.Link.Css exposing (Class(..))
 import Html exposing (Html)
-import Html.CssHelpers
 
 
 standard : { namespace : Namespace, attributes : List (Html.Attribute msg), text : String } -> Html msg
@@ -21,7 +21,7 @@ custom : { namespace : Namespace, class : Class, attributes : List (Html.Attribu
 custom { namespace, class, attributes, contents } =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     Html.a
         (namespaced.class [ class ] :: attributes)

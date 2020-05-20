@@ -1,11 +1,4 @@
-module Engage.UI.Card exposing
-    ( attributes
-    , card
-    , edit
-    , none
-    , subtitle
-    , title
-    )
+module Engage.UI.Card exposing (attributes, card, edit, none, subtitle, title)
 
 {-| UI.Card
 
@@ -13,11 +6,11 @@ module Engage.UI.Card exposing
 
 -}
 
+import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.Button as Button
 import Engage.UI.Card.Css exposing (Class(..))
 import Html exposing (..)
-import Html.CssHelpers
 import Html.Events exposing (onClick)
 
 
@@ -53,7 +46,7 @@ card : Namespace -> List (Attribute msg) -> List (Html msg) -> Html msg
 card namespace attributes content =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
 
         attribute =
             processAttribute emptyAttribute attributes
@@ -68,10 +61,10 @@ card namespace attributes content =
 headerView : Namespace -> InternalAttribute msg -> Html msg
 headerView namespace attribute =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         subtitle =
             attribute.subtitle
@@ -93,7 +86,7 @@ editView : Namespace -> InternalAttribute msg -> Html msg
 editView namespace attribute =
     let
         namespaced =
-            Html.CssHelpers.withNamespace <| Namespace.toString namespace
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
     in
     attribute.edit
         |> Maybe.map

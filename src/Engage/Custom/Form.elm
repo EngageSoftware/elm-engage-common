@@ -1,15 +1,4 @@
-module Engage.Custom.Form exposing
-    ( allFields
-    , completedView
-    , findField
-    , form
-    , isValid
-    , update
-    , updateFileEntryData
-    , validate
-    , validateAll
-    , view
-    )
+module Engage.Custom.Form exposing (allFields, completedView, findField, form, isValid, update, updateFileEntryData, validate, validateAll, view)
 
 {-| Custom.Form
 
@@ -18,6 +7,7 @@ module Engage.Custom.Form exposing
 -}
 
 import Dict exposing (Dict)
+import Engage.CssHelpers
 import Engage.Custom.Form.Css as Css
 import Engage.Custom.Section as Section exposing (sectionTupleDecoder)
 import Engage.Custom.Types exposing (..)
@@ -25,13 +15,12 @@ import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace
 import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (Html)
-import Html.CssHelpers
 
 
-{ class } =
+class =
     Namespace.engagecore
         |> Namespace.toString
-        |> Html.CssHelpers.withNamespace
+        |> Engage.CssHelpers.withNamespace
 
 
 {-| Get the view

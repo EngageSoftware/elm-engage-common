@@ -1,8 +1,4 @@
-module Engage.UI.FormControl exposing
-    ( formControl
-    , groupFormControl
-    , labelWrapped
-    )
+module Engage.UI.FormControl exposing (formControl, groupFormControl, labelWrapped)
 
 {-| UI.FormControl
 
@@ -10,6 +6,7 @@ module Engage.UI.FormControl exposing
 
 -}
 
+import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Class(FormControl), Size(..))
@@ -20,7 +17,6 @@ import Engage.UI.MessageType as MessageType
 import Html exposing (..)
 import Html.Attributes exposing (for, id, title)
 import Html.Attributes.Aria as Aria
-import Html.CssHelpers
 import String
 
 
@@ -42,10 +38,10 @@ type alias Args a msg =
 formControl : Args a msg -> Message.State -> Html msg -> Html msg
 formControl args state element =
     let
-        { class } =
+        class =
             args.namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     div [ class [ FormControl args.size ] ]
         [ label
@@ -67,10 +63,10 @@ formControl args state element =
 groupFormControl : Args a msg -> Message.State -> Html msg -> Html msg
 groupFormControl args state element =
     let
-        { class } =
+        class =
             args.namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         labelId =
             Namespace.toString args.namespace ++ "label" ++ args.id
@@ -93,10 +89,10 @@ groupFormControl args state element =
 labelWrapped : Args a msg -> Message.State -> Html msg -> Html msg -> Html msg
 labelWrapped args state element other =
     let
-        { class } =
+        class =
             args.namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     div [ class [ FormControl args.size ] ]
         [ label [ for args.id, class [ LabelWrapped ] ]
@@ -117,10 +113,10 @@ labelWrapped args state element other =
 requiredIndicator : Args a msg -> Html msg
 requiredIndicator args =
     let
-        { class } =
+        class =
             args.namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     args.requiredText
         |> Maybe.map (\required -> span [ class [ Required ], title required ] [ text "*" ])

@@ -1,27 +1,6 @@
 module Engage.UI.Table exposing
-    ( ActionColumnDetails
-    , Column
-    , ColumnAction(..)
-    , Config
-    , State
-    , actionsColumn
-    , customColumn
-    , dateColumn
-    , decreasingBy
-    , decreasingOrIncreasingBy
-    , floatColumn
-    , formattedNumberColumn
-    , formattedNumberWithLanguageColumn
-    , increasingBy
-    , increasingOrDecreasingBy
-    , initialSort
-    , intColumn
-    , linkColumn
-    , maybeColumn
-    , stringColumn
-    , table
-    , unsortable
-    , withCustomSorter
+    ( ActionColumnDetails, Column, ColumnAction(..), Config, State
+    , actionsColumn, customColumn, dateColumn, decreasingBy, decreasingOrIncreasingBy, floatColumn, formattedNumberColumn, formattedNumberWithLanguageColumn, increasingBy, increasingOrDecreasingBy, initialSort, intColumn, linkColumn, maybeColumn, stringColumn, table, unsortable, withCustomSorter
     )
 
 {-| UI.Table
@@ -34,6 +13,7 @@ module Engage.UI.Table exposing
 
 import Date.Extra.Config.Configs as DateConfigs
 import Date.Extra.Format exposing (format)
+import Engage.CssHelpers
 import Engage.DateHelper as DateHelper
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Importance(..))
@@ -42,7 +22,6 @@ import Engage.UI.Link as Link
 import Engage.UI.Table.Css exposing (Class(..))
 import Html exposing (Html)
 import Html.Attributes
-import Html.CssHelpers
 import Html.Events exposing (onClick)
 import Language as NumeralLanguage
 import Numeral
@@ -55,10 +34,10 @@ import Time exposing (Time)
 table : Config data msg -> State -> List data -> Html msg
 table { namespace, toId, toMsg, columns } state data =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         config : Table.Config data msg
         config =

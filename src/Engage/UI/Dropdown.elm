@@ -1,10 +1,6 @@
 module Engage.UI.Dropdown exposing
-    ( Item
-    , State
-    , dropdown
-    , dropdownWithAttributes
-    , initialState
-    , reset
+    ( Item, State
+    , dropdown, dropdownWithAttributes, initialState, reset
     )
 
 {-| UI.Dropdown
@@ -16,6 +12,7 @@ module Engage.UI.Dropdown exposing
 -}
 
 import Dropdown
+import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Class(..), Size(..))
@@ -25,7 +22,6 @@ import Engage.UI.Input.Css exposing (Class(Required))
 import Engage.UI.Message as Message
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.CssHelpers
 
 
 {-| The State type
@@ -122,10 +118,10 @@ dropdownWithSizeAndAttributes :
     -> Html msg
 dropdownWithSizeAndAttributes { id, labelText, requiredText, items, onChange, size, status, namespace } attributes state selectedItem =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         requiredIndicator =
             requiredText

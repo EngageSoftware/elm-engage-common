@@ -2,6 +2,7 @@ module Engage.Custom.Field.View exposing (Args, checkBoxList, checkbox, class, c
 
 import Date
 import Dict
+import Engage.CssHelpers
 import Engage.Custom.Field as Field
 import Engage.Custom.Field.Events as Events
 import Engage.Custom.Field.Helpers as FieldHelpers
@@ -23,16 +24,15 @@ import Engage.UI.Info as Info
 import Engage.UI.Input as Input
 import Engage.Validation exposing (ValidationErrors)
 import Html exposing (Html)
-import Html.CssHelpers
 import Markdown
 import Set exposing (Set)
 import String
 
 
-{ class } =
+class =
     Namespace.engagecore
         |> Namespace.toString
-        |> Html.CssHelpers.withNamespace
+        |> Engage.CssHelpers.withNamespace
 
 
 fieldGroupClass : Form -> Section -> FieldGroup -> String

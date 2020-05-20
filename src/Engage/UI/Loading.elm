@@ -1,8 +1,4 @@
-module Engage.UI.Loading exposing
-    ( loading
-    , loadingOverlay
-    , progress
-    )
+module Engage.UI.Loading exposing (loading, loadingOverlay, progress)
 
 {-| UI.Loading
 
@@ -37,7 +33,7 @@ loading =
 customLoading : List Class -> { a | namespace : Namespace } -> LoadingIcon -> String -> List (Html.Attribute msg) -> Html msg
 customLoading classes { namespace } icon message attributes =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
                 |> CssHelpers.withNamespace
@@ -72,7 +68,7 @@ customLoading classes { namespace } icon message attributes =
 progress : { a | namespace : Namespace } -> { max : Float, value : Float } -> Html msg
 progress { namespace } { max, value } =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
                 |> CssHelpers.withNamespace

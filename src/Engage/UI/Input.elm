@@ -1,22 +1,6 @@
 module Engage.UI.Input exposing
-    ( FileInfo
-    , PhoneState
-    , State
-    , bigNumber
-    , checkBoxList
-    , checkbox
-    , checkboxWithAttributes
-    , file
-    , initialPhoneState
-    , initialState
-    , number
-    , phone
-    , radioList
-    , reset
-    , smallNumber
-    , text
-    , textArea
-    , textWithAttributes
+    ( FileInfo, PhoneState, State
+    , bigNumber, checkBoxList, checkbox, checkboxWithAttributes, file, initialPhoneState, initialState, number, phone, radioList, reset, smallNumber, text, textArea, textWithAttributes
     )
 
 {-| UI.Input
@@ -27,6 +11,7 @@ module Engage.UI.Input exposing
 
 -}
 
+import Engage.CssHelpers
 import Engage.Entity.PhoneNumber exposing (PhoneNumber)
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
@@ -40,7 +25,6 @@ import Engage.UI.Loading as Loading
 import Engage.UI.Message as Message
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.CssHelpers
 import Html.Events exposing (..)
 import Input.BigNumber
 import Input.Number
@@ -137,10 +121,10 @@ phoneWithSizeAndAttributes :
     -> Html msg
 phoneWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, status, size, requiredText } attributes state phoneNumber =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         safeId =
             Engage.String.toSafeId id
@@ -266,10 +250,10 @@ textWithSizeAndAttributes :
     -> Html msg
 textWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, status, size, requiredText } attributes state value =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         options =
             Input.Text.defaultOptions (onChange { onlyStateChange = False } state)
@@ -383,10 +367,10 @@ numberWithSize :
     -> Html msg
 numberWithSize { namespace, id, labelText, helpText, onChange, status, size, maxValue, minValue, requiredText } state value =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         options =
             Input.Number.defaultOptions (onChange { onlyStateChange = False } state)
@@ -432,10 +416,10 @@ bigNumber :
     -> Html msg
 bigNumber ({ namespace, id, labelText, helpText, onChange, status } as args) state value =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         defaultOptions =
             Input.BigNumber.defaultOptions (onChange state)
@@ -513,10 +497,10 @@ textAreaWithSize :
     -> Html msg
 textAreaWithSize args value =
     let
-        { class } =
+        class =
             args.namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         stateData =
             unwrap args.state
@@ -580,10 +564,10 @@ checkboxWithAttributes :
     -> Html msg
 checkboxWithAttributes { namespace, labelText, onCheck, status, state, requiredText } attributes checked =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         requiredIndicator =
             requiredText
@@ -624,10 +608,10 @@ radioList :
     -> Html msg
 radioList ({ namespace, labelText, onChange, status, items } as args) state selectedValue =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         namespacedId =
             Namespace.toString namespace ++ args.id
@@ -681,10 +665,10 @@ checkBoxList :
     -> Html msg
 checkBoxList ({ namespace, labelText, onChange, status, items } as args) state selectedValues =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         namespacedId =
             Namespace.toString namespace ++ args.id
@@ -743,10 +727,10 @@ file :
     -> Html msg
 file args (State state) fileInfo =
     let
-        { class } =
+        class =
             args.namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         onChange =
             args.onChange { onlyStateChange = False } (State state)
@@ -795,10 +779,10 @@ progressIndicator args fileInfo =
 toCheckBox : { namespace : Namespace, onChange : Set String -> msg, labelText : String } -> Set String -> { id : String, text : String } -> Html msg
 toCheckBox { namespace, onChange, labelText } selectedValues item =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         onClickHandler =
             if Set.member item.id selectedValues then
@@ -826,10 +810,10 @@ toCheckBox { namespace, onChange, labelText } selectedValues item =
 toRadio : { namespace : Namespace, onChange : String -> msg, labelText : String } -> String -> { id : String, text : String } -> Html msg
 toRadio { namespace, onChange, labelText } selectedValue item =
     let
-        { class } =
+        class =
             namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     label [ class [ RadioContainer ] ]
         [ input

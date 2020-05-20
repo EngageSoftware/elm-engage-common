@@ -13,6 +13,7 @@ module Engage.Custom.Section exposing
 
 import Date exposing (Date)
 import Dict
+import Engage.CssHelpers
 import Engage.Custom.Field as Field
 import Engage.Custom.Field.Helpers as Field
 import Engage.Custom.Field.Json exposing (fieldGroupDecoder)
@@ -24,15 +25,14 @@ import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace
 import Engage.Validation exposing (ValidationErrors)
 import Html exposing (Html)
-import Html.CssHelpers
 import Json.Decode as Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 
 
-{ class } =
+class =
     Namespace.engagecore
         |> Namespace.toString
-        |> Html.CssHelpers.withNamespace
+        |> Engage.CssHelpers.withNamespace
 
 
 type alias Query a =

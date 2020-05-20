@@ -18,6 +18,7 @@ module Engage.Form.Participant exposing
 
 import Date exposing (Date)
 import Dict exposing (Dict)
+import Engage.CssHelpers
 import Engage.Custom.Form.Css as Css
 import Engage.Entity.Account as Account exposing (Account)
 import Engage.Entity.Address as Address exposing (Address, Countries, RegionsCountry)
@@ -47,15 +48,14 @@ import Engage.UI.Message as Message
 import Engage.UI.PictureUpload as PictureUpload
 import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (..)
-import Html.CssHelpers
 import IntlPhoneInput.Config
 import Json.Encode
 
 
-{ class } =
+class =
     Namespace.engagecore
         |> Namespace.toString
-        |> Html.CssHelpers.withNamespace
+        |> Engage.CssHelpers.withNamespace
 
 
 type Msg

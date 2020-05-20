@@ -1,26 +1,6 @@
 module Engage.Form.Contact exposing
-    ( Attribute
-    , Msg
-    , State
-    , ValidationField(..)
-    , completedView
-    , completedViewWithAdditional
-    , contactTypes
-    , countries
-    , countriesToItems
-    , form
-    , initialState
-    , isEmpty
-    , isValid
-    , regions
-    , regionsToItems
-    , required
-    , toAllRegions
-    , update
-    , validateAll
-    , validateAllWith
-    , validateFieldWith
-    , view
+    ( Attribute, Msg, State, ValidationField(..)
+    , completedView, completedViewWithAdditional, contactTypes, countries, countriesToItems, form, initialState, isEmpty, isValid, regions, regionsToItems, required, toAllRegions, update, validateAll, validateAllWith, validateFieldWith, view
     )
 
 {-| Form.Contact
@@ -32,6 +12,7 @@ module Engage.Form.Contact exposing
 -}
 
 import Dict exposing (Dict)
+import Engage.CssHelpers
 import Engage.Custom.Form.Css as Css
 import Engage.Entity.Address as Address exposing (Countries, Regions, RegionsCountry)
 import Engage.Entity.Contact as Contact exposing (Contact, ContactType, ContactTypes)
@@ -48,7 +29,6 @@ import Engage.UI.Input as Input
 import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (..)
 import Html.Attributes
-import Html.CssHelpers
 import String
 
 
@@ -223,10 +203,10 @@ view namespace localization countries regions data =
         args =
             { namespace = namespace, localization = localization, countries = countries, regions = regions }
 
-        { class } =
+        class =
             args.namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         maybeCountry =
             data.country
@@ -280,10 +260,10 @@ completedViewWithAdditional namespace localization additionalText data =
         args =
             { namespace = namespace, localization = localization }
 
-        { class } =
+        class =
             args.namespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
     in
     div [ class [ Css.Sections ] ]
         [ if isEmpty data then
@@ -322,10 +302,10 @@ form originalNamespace localization field attributes (State state) contactData =
         attribute =
             Attribute.process emptyAttribute attributes
 
-        { class } =
+        class =
             originalNamespace
                 |> Namespace.toString
-                |> Html.CssHelpers.withNamespace
+                |> Engage.CssHelpers.withNamespace
 
         namespace =
             Namespace.namespace <| Namespace.toString originalNamespace ++ "Contact"
@@ -564,7 +544,6 @@ form originalNamespace localization field attributes (State state) contactData =
             [ primaryContactCheckBox namespace localization field (State state) contactData ]
         , div [ class [ Css.FieldGroup ] ]
             [ billingContactCheckBox namespace localization field (State state) contactData ]
-    
         ]
 
 
@@ -619,6 +598,7 @@ billingContactCheckBox originalNamespace localization field (State state) contac
                 state.validations
                 state.isBillingContact
                 contactData.isBillingContact
+
         Just _ ->
             Field.checkboxWithAttributes
                 { namespace = namespace
@@ -630,8 +610,8 @@ billingContactCheckBox originalNamespace localization field (State state) contac
                 state.validations
                 [ Html.Attributes.disabled (state.originalContact |> Maybe.withDefault contactData |> .isBillingContact) ]
                 state.isBillingContact
-                contactData.isBillingContact                
- 
+                contactData.isBillingContact
+
 
 {-| Update the Contact
 -}
@@ -847,6 +827,7 @@ update msg (State oldState) data =
             , { data | isBillingContact = value }
             , Cmd.none
             )
+
 
 contactTypesToItems : ContactTypes -> Dict String Dropdown.Item
 contactTypesToItems countries =
