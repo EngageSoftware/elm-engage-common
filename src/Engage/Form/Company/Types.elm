@@ -8,7 +8,6 @@ module Engage.Form.Company.Types exposing (CompaniesData, CompanyData)
 
 import Date exposing (Date)
 import Engage.Entity.Address exposing (Address)
-import Time exposing (Posix)
 
 
 {-| A CompaniesData type

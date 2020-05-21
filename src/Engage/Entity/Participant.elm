@@ -11,6 +11,7 @@ module Engage.Entity.Participant exposing
 
 -}
 
+import Date exposing (Date)
 import Engage.Entity.Account as Account exposing (Account)
 import Engage.Entity.Address as Address exposing (Address)
 import Engage.Entity.Gender as Gender exposing (Gender)
@@ -19,7 +20,7 @@ import Engage.ListItem as ListItem exposing (ListItem)
 import Json.Decode as JD exposing (Decoder)
 import Json.Decode.Pipeline as JDP
 import Json.Encode as JE
-import Time exposing (Posix)
+import Time
 
 
 {-| The Participant type
@@ -35,7 +36,7 @@ type alias Participant =
     , mobilePhone : PhoneNumber
     , profilePicture : String
     , gender : Gender
-    , birthDate : Maybe Posix
+    , birthDate : Maybe Date
     , birthDateYear : Maybe ListItem
     , birthDateMonth : Maybe ListItem
     , account : Maybe Account
@@ -75,7 +76,7 @@ type alias ParticipantLike a =
         , mobilePhone : PhoneNumber
         , profilePicture : String
         , gender : Gender
-        , birthDate : Maybe Posix
+        , birthDate : Maybe Date
         , birthDateYear : Maybe ListItem
         , birthDateMonth : Maybe ListItem
         , account : Maybe Account
@@ -118,7 +119,7 @@ decoder =
         |> JDP.required "mobilePhone" PhoneNumber.decoder
         |> JDP.required "profilePicture" (JD.oneOf [ JD.null "", JD.string ])
         |> JDP.required "gender" Gender.decoder
-        |> JDP.required "birthDatePosix" (JD.nullable (JD.int |> JD.map Time.millisToPosix))
+        |> JDP.required "birthDatePosix" (JD.nullable (JD.int |> JD.map ((*) 1000 >> Time.millisToPosix >> Date.fromPosix Time.utc)))
         |> JDP.required "birthDateYear" (JD.maybe (JD.int |> JD.map (\val -> ( val, "" ))))
         |> JDP.required "birthDateMonth" (JD.maybe (JD.int |> JD.map (\val -> ( val, "" ))))
         |> JDP.required "account" (JD.maybe Account.decoder)

@@ -11,6 +11,7 @@ module Engage.UI.Table exposing
 
 -}
 
+import Date exposing (Date)
 import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Importance(..))
@@ -22,10 +23,6 @@ import Html.Events exposing (onClick)
 import Language as NumeralLanguage
 import Numeral
 import Table
-import Task
-import Time exposing (Posix)
-import Time.Format exposing (format)
-import Time.Format.Config.Configs exposing (getConfig)
 
 
 {-| Get the table view
@@ -197,12 +194,12 @@ floatColumn name toFloat =
 
 {-| Get a date column
 -}
-dateColumn : String -> (data -> Posix) -> Time.Zone -> String -> String -> Column data msg
-dateColumn name toTime zone locale dateFormat =
+dateColumn : String -> (data -> Date) -> String -> String -> Column data msg
+dateColumn name toTime locale dateFormat =
     Column
         { name = name
-        , viewData = always (toTime >> format (getConfig locale) dateFormat zone >> textDetails)
-        , sorter = Table.increasingOrDecreasingBy (toTime >> Time.posixToMillis)
+        , viewData = always (toTime >> Date.format dateFormat >> textDetails)
+        , sorter = Table.increasingOrDecreasingBy (toTime >> Date.toRataDie)
         }
 
 
