@@ -33,9 +33,9 @@ import Mustache
 
 {-| Wizard Step data
 -}
-type Step model comparable
+type Step model
     = Single { singlePageType : SinglePageType, title : String, status : Status, model : model }
-    | Multi { title : String, pages : SelectDict (Page model) }
+    | Multi { title : String, pages : SelectDict Int (Page model) }
 
 
 {-| A SinglePageType type
@@ -47,14 +47,14 @@ type SinglePageType
 
 {-| Get a single page Step
 -}
-singlePage : { singlePageType : SinglePageType, title : String, status : Status, model : model } -> Step model Int
+singlePage : { singlePageType : SinglePageType, title : String, status : Status, model : model } -> Step model
 singlePage =
     Single
 
 
 {-| Get a multi pages Step
 -}
-multiPages : { title : String, pages : SelectDict (Page model) } -> Step model Int
+multiPages : { title : String, pages : SelectDict Int (Page model) } -> Step model
 multiPages =
     Multi
 
@@ -164,7 +164,7 @@ wizard :
     , isLoading : Bool
     , localize : String -> String
     }
-    -> SelectDict (Step model Int)
+    -> SelectDict Int (Step model)
     -> Html msg
 wizard ({ namespace, config, state, shoppingCart, localize } as args) steps =
     let
@@ -186,7 +186,7 @@ wizard ({ namespace, config, state, shoppingCart, localize } as args) steps =
         )
 
 
-viewStep : { a | namespace : Namespace, config : Config msg model } -> State -> SelectDict (Step model Int) -> Html msg
+viewStep : { a | namespace : Namespace, config : Config msg model } -> State -> SelectDict Int (Step model) -> Html msg
 viewStep { namespace, config } state steps =
     let
         step =
@@ -211,7 +211,7 @@ viewStep { namespace, config } state steps =
                 pages
 
 
-viewMultiPages : { namespace : Namespace, config : Config msg model, state : State, stepId : Int } -> SelectDict (Page model) -> Html msg
+viewMultiPages : { namespace : Namespace, config : Config msg model, state : State, stepId : Int } -> SelectDict Int (Page model) -> Html msg
 viewMultiPages { namespace, config, state, stepId } pages =
     let
         ( before, selected, after ) =
@@ -254,7 +254,7 @@ renderBeforePage config state pageId page =
     page.model |> config.beforePageRenderer
 
 
-wizardHeader : { a | namespace : Namespace, config : Config msg model } -> State -> SelectDict (Step model Int) -> Html msg
+wizardHeader : { a | namespace : Namespace, config : Config msg model } -> State -> SelectDict Int (Step model) -> Html msg
 wizardHeader ({ namespace, config } as args) state steps =
     let
         class =
@@ -273,7 +273,7 @@ wizardHeader ({ namespace, config } as args) state steps =
         ]
 
 
-stepIndicator : { a | namespace : Namespace, config : Config msg model } -> SelectDict (Step model Int) -> Html msg
+stepIndicator : { a | namespace : Namespace, config : Config msg model } -> SelectDict Int (Step model) -> Html msg
 stepIndicator ({ namespace, config } as args) steps =
     let
         class =
@@ -316,7 +316,7 @@ navigationArrow ({ namespace, config } as args) state =
                 [ Svg.chevron { namespace = namespace } [] ]
 
 
-navigation : { a | namespace : Namespace, config : Config msg model } -> State -> SelectDict (Step model Int) -> Html msg
+navigation : { a | namespace : Namespace, config : Config msg model } -> State -> SelectDict Int (Step model) -> Html msg
 navigation ({ namespace, config } as args) state steps =
     let
         class =
@@ -375,7 +375,7 @@ navigation ({ namespace, config } as args) state steps =
                 ]
 
 
-navigationStep : { namespace : Namespace, config : Config msg model, isBefore : Bool, isSelected : Bool, state : State } -> ( Int, Step model Int ) -> Html msg
+navigationStep : { namespace : Namespace, config : Config msg model, isBefore : Bool, isSelected : Bool, state : State } -> ( Int, Step model ) -> Html msg
 navigationStep { namespace, config, isBefore, isSelected, state } ( stepId, step ) =
     let
         class =
@@ -408,7 +408,7 @@ navigationStep { namespace, config, isBefore, isSelected, state } ( stepId, step
         ]
 
 
-navigationControl : { a | namespace : Namespace, config : Config msg model, isLoading : Bool } -> State -> SelectDict (Step model Int) -> Html msg
+navigationControl : { a | namespace : Namespace, config : Config msg model, isLoading : Bool } -> State -> SelectDict Int (Step model) -> Html msg
 navigationControl ({ namespace, config, isLoading } as args) ((State stateData) as state) steps =
     let
         class =
@@ -422,7 +422,7 @@ navigationControl ({ namespace, config, isLoading } as args) ((State stateData) 
         ]
 
 
-previousButton : { a | namespace : Namespace, config : Config msg model, isLoading : Bool } -> State -> SelectDict (Step model Int) -> Html msg
+previousButton : { a | namespace : Namespace, config : Config msg model, isLoading : Bool } -> State -> SelectDict Int (Step model) -> Html msg
 previousButton ({ namespace, config, isLoading } as args) ((State stateData) as state) steps =
     let
         prev =
@@ -448,7 +448,7 @@ previousButton ({ namespace, config, isLoading } as args) ((State stateData) as 
                     }
 
 
-nextButton : { a | namespace : Namespace, config : Config msg model, isLoading : Bool } -> State -> SelectDict (Step model Int) -> Html msg
+nextButton : { a | namespace : Namespace, config : Config msg model, isLoading : Bool } -> State -> SelectDict Int (Step model) -> Html msg
 nextButton ({ namespace, config, isLoading } as args) ((State stateData) as state) steps =
     let
         current =
@@ -545,7 +545,7 @@ nextButton ({ namespace, config, isLoading } as args) ((State stateData) as stat
                     nextButtonForFormPage
 
 
-renderTemplate : Config msg model -> SelectDict (Step model Int) -> String -> String
+renderTemplate : Config msg model -> SelectDict Int (Step model) -> String -> String
 renderTemplate config steps template =
     let
         next =
@@ -570,7 +570,7 @@ renderTemplate config steps template =
         template
 
 
-errorMessage : { a | namespace : Namespace, config : Config msg model, localize : String -> String } -> SelectDict (Step model Int) -> Html msg
+errorMessage : { a | namespace : Namespace, config : Config msg model, localize : String -> String } -> SelectDict Int (Step model) -> Html msg
 errorMessage { namespace, config, localize } steps =
     let
         step =
@@ -604,7 +604,7 @@ unwrap state =
 
 {-| Get the Step title
 -}
-getStepTitle : Step model Int -> String
+getStepTitle : Step model -> String
 getStepTitle step =
     case step of
         Single { title } ->
@@ -616,7 +616,7 @@ getStepTitle step =
 
 {-| Get the page title
 -}
-getPageTitle : Step model Int -> String
+getPageTitle : Step model -> String
 getPageTitle step =
     case step of
         Single { title } ->
@@ -634,7 +634,7 @@ getPageTitle step =
 
 {-| Get the Step error Status
 -}
-getStepError : Step model Int -> Status
+getStepError : Step model -> Status
 getStepError step =
     case step of
         Single { status } ->
@@ -648,7 +648,7 @@ getStepError step =
 
 {-| Get the Step model
 -}
-getStepModel : Step model Int -> model
+getStepModel : Step model -> model
 getStepModel step =
     case step of
         Single { model } ->
@@ -660,13 +660,13 @@ getStepModel step =
                 |> .model
 
 
-type NextPageResult comparable model
+type NextPageResult model
     = NextPage ( Int, Page model )
-    | NextStep ( Int, Step model Int )
+    | NextStep ( Int, Step model )
     | LastPage
 
 
-getNextPage : SelectDict (Step model Int) -> NextPageResult Int model
+getNextPage : SelectDict Int (Step model) -> NextPageResult model
 getNextPage steps =
     let
         nextStep =
@@ -688,7 +688,7 @@ getNextPage steps =
                 |> Maybe.withDefault nextStep
 
 
-getNextTitle : SelectDict (Step model Int) -> Maybe String
+getNextTitle : SelectDict Int (Step model) -> Maybe String
 getNextTitle steps =
     case SelectDict.selectedValue steps of
         Single _ ->
@@ -703,14 +703,14 @@ getNextTitle steps =
                 |> Maybe.Extra.orElseLazy (\_ -> getNextStepTitle steps)
 
 
-getNextStepTitle : SelectDict (Step model Int) -> Maybe String
+getNextStepTitle : SelectDict Int (Step model) -> Maybe String
 getNextStepTitle steps =
     steps
         |> getNextStep
         |> Maybe.map (Tuple.second >> getStepTitle)
 
 
-getNextStep : SelectDict (Step model Int) -> Maybe ( Int, Step model Int )
+getNextStep : SelectDict Int (Step model) -> Maybe ( Int, Step model )
 getNextStep steps =
     steps
         |> SelectDict.getAfter
@@ -718,12 +718,12 @@ getNextStep steps =
         |> List.head
 
 
-isFirstPage : SelectDict (Page mode) -> Bool
+isFirstPage : SelectDict Int (Page mode) -> Bool
 isFirstPage pages =
     pages |> SelectDict.getBefore |> Dict.isEmpty
 
 
-getPrevTitle : SelectDict (Step model Int) -> Maybe String
+getPrevTitle : SelectDict Int (Step model) -> Maybe String
 getPrevTitle steps =
     steps
         |> SelectDict.getBefore
@@ -745,7 +745,7 @@ onMouseDownPreventDefault msg =
     Html.Events.custom "mousedown" (Json.Decode.succeed eventOptions)
 
 
-shouldReview : Step model Int -> Config msg model -> Bool
+shouldReview : Step model -> Config msg model -> Bool
 shouldReview step { showReview } =
     case step of
         Single page ->
