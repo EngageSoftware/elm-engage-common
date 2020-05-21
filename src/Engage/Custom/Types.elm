@@ -21,6 +21,9 @@ import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Input as Input
 import Engage.Validation as Validation exposing (ValidationResult)
 import Set exposing (Set)
+import Time
+import Time.Format
+import Time.Format.Config.Config_en_us as Config
 
 
 {-| The Form type
@@ -244,7 +247,7 @@ defaultConfig :
 defaultConfig { onChange, onEnter, onGotoPage, localization } =
     { onChange = onChange
     , onEnter = onEnter
-    , dateFormatter = Date.Extra.Format.format Config.config "%m/%d/%Y"
+    , dateFormatter = Time.Format.format Config.config "%m/%d/%Y"
     , onGotoPage = onGotoPage
     , localization = localization
     , countries = Dict.empty
@@ -257,7 +260,7 @@ defaultConfig { onChange, onEnter, onGotoPage, localization } =
 type alias Config msg =
     { onChange : ChangeArgs -> Answer -> msg
     , onEnter : msg
-    , dateFormatter : Date.Date -> String
+    , dateFormatter : Time.Zone -> Time.Posix -> String
     , onGotoPage : { pageId : Int } -> msg
     , localization : Localization.Localization
     , countries : Address.Countries
