@@ -11,9 +11,10 @@ module Engage.Custom.Section exposing
     , view
     )
 
+import Date exposing (Date)
 import Dict
 import Engage.CssHelpers
-import Engage.Custom.Field as Field
+import Engage.Custom.Field as Field exposing (FieldData)
 import Engage.Custom.Field.Helpers as Field
 import Engage.Custom.Field.Json exposing (fieldGroupDecoder)
 import Engage.Custom.Field.Validation as Field
@@ -49,7 +50,7 @@ view config section =
 
 
 form : { a | config : Config msg, validations : ValidationErrors { fieldId : Int }, showSectionName : Bool } -> Form -> Section -> Html msg
-form args form section =
+form args formValue section =
     let
         legend =
             if args.showSectionName then
@@ -63,7 +64,7 @@ form args form section =
             :: (section.fieldGroups
                     |> Dict.values
                     |> List.sortBy Field.getRelativeOrder
-                    |> List.map (Field.fieldGroupForm args ( form, section ))
+                    |> List.map (Field.fieldGroupForm args ( formValue, section ))
                )
         )
 
@@ -91,8 +92,8 @@ nameView args section =
 
 
 update : Query a -> (Field -> Field) -> Form -> Section -> Section
-update query updater form section =
-    { section | fieldGroups = Dict.update query.fieldGroupId (Maybe.map <| Field.update query updater form section) section.fieldGroups }
+update query updater formValue section =
+    { section | fieldGroups = Dict.update query.fieldGroupId (Maybe.map <| Field.update query updater formValue section) section.fieldGroups }
 
 
 validate : { a | fieldId : Int } -> Section -> ValidationErrors { fieldId : Int }
@@ -115,7 +116,7 @@ validateAll section =
 
 sectionDecoder : Date -> Decode.Decoder Section
 sectionDecoder now =
-    decode Section
+    succeed Section
         |> required "formSectionId" int
         |> required "name" string
         |> required "relativeOrder" int
@@ -127,20 +128,20 @@ sectionDecoder now =
 
 sectionTupleDecoder : Date -> Decode.Decoder ( Int, Section )
 sectionTupleDecoder now =
-    decode (\a b -> ( a, b ))
+    succeed (\a b -> ( a, b ))
         |> required "formSectionId" int
         |> custom (sectionDecoder now)
 
 
-allFields : Form -> Section -> List ( Form, Section, FieldGroup, Field )
-allFields form section =
+allFields : Form -> Section -> List FieldData
+allFields formValue section =
     section.fieldGroups
         |> Dict.values
-        |> List.concatMap (Field.allFields form section)
+        |> List.concatMap (Field.allFields formValue section)
 
 
-findField : { a | formId : Int, sectionId : Int, fieldGroupId : Int, fieldId : Int } -> Form -> Section -> Maybe ( Form, Section, FieldGroup, Field )
-findField query form section =
+findField : { a | formId : Int, sectionId : Int, fieldGroupId : Int, fieldId : Int } -> Form -> Section -> Maybe FieldData
+findField query formValue section =
     section.fieldGroups
         |> Dict.get query.fieldGroupId
-        |> Maybe.andThen (Field.findField query form section)
+        |> Maybe.andThen (Field.findField query formValue section)

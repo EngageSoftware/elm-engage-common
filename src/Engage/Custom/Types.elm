@@ -11,6 +11,7 @@ module Engage.Custom.Types exposing
 
 -}
 
+import Date exposing (Date)
 import Dict exposing (Dict)
 import Engage.Entity.Address as Address
 import Engage.Form.MembershipTypeList as MembershipTypeList exposing (MembershipType)
@@ -19,11 +20,9 @@ import Engage.UI.Accordion as Accordion
 import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Input as Input
-import Engage.Validation as Validation exposing (ValidationErrors)
+import Engage.Validation exposing (ValidationErrors)
 import Set exposing (Set)
 import Time
-import Time.Format
-import Time.Format.Config.Config_en_us as Config
 
 
 {-| The Form type
@@ -247,7 +246,7 @@ defaultConfig :
 defaultConfig { onChange, onEnter, onGotoPage, localization } =
     { onChange = onChange
     , onEnter = onEnter
-    , dateFormatter = Time.Format.format Config.config "%m/%d/%Y"
+    , dateFormatter = Date.format "%m/%d/%Y"
     , onGotoPage = onGotoPage
     , localization = localization
     , countries = Dict.empty
@@ -260,7 +259,7 @@ defaultConfig { onChange, onEnter, onGotoPage, localization } =
 type alias Config msg =
     { onChange : ChangeArgs -> Answer -> msg
     , onEnter : msg
-    , dateFormatter : Time.Zone -> Time.Posix -> String
+    , dateFormatter : Date -> String
     , onGotoPage : { pageId : Int } -> msg
     , localization : Localization.Localization
     , countries : Address.Countries

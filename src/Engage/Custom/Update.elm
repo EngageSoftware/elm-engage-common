@@ -84,7 +84,7 @@ resetRegions query form =
                 |> Maybe.map
                     (\section ->
                         Section.allFields form section
-                            |> List.map (\( _, _, _, field ) -> field)
+                            |> List.map (\fieldData -> fieldData.field)
                             |> List.filter Helpers.isRegionField
                             |> List.map (\field -> { query | fieldId = field.fieldId })
                     )

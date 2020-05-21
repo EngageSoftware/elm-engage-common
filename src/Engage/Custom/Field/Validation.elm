@@ -94,7 +94,7 @@ validateCheckBoxList field =
                         |> Maybe.map Set.toList
                         |> Maybe.withDefault []
             in
-            Validation.validateListNotEmptyField (errorMessage field) { fieldId = field.fieldId } (always values) ()
+            Validation.validateField [ Validation.validateListNotEmptyField (errorMessage field) { fieldId = field.fieldId } (always values) ] ()
 
         False ->
             []
@@ -109,7 +109,7 @@ validateText field =
                     Helpers.getValue field
                         |> Maybe.andThen List.head
             in
-            Validation.validateMaybeStringField (errorMessage field) { fieldId = field.fieldId } (always value) ()
+            Validation.validateField [ Validation.validateMaybeStringField (errorMessage field) { fieldId = field.fieldId } (always value) ] ()
 
         False ->
             []
@@ -133,9 +133,11 @@ validateFile field =
                     Helpers.getFileInfo field
                         |> Maybe.map .name
             in
-            Validation.validateMaybeStringField field.errorMessage
-                { fieldId = field.fieldId }
-                (always fileInfo)
+            Validation.validateField
+                [ Validation.validateMaybeStringField field.errorMessage
+                    { fieldId = field.fieldId }
+                    (always fileInfo)
+                ]
                 ()
 
         False ->
@@ -150,7 +152,7 @@ validateCheckBox field =
                 value =
                     Helpers.getBoolValue field |> Maybe.withDefault False
             in
-            Validation.validateBoolField field.errorMessage { fieldId = field.fieldId } (always value) ()
+            Validation.validateField [ Validation.validateBoolField field.errorMessage { fieldId = field.fieldId } (always value) ] ()
 
         False ->
             []
@@ -185,12 +187,12 @@ validateNumber field =
         maybeIntValue =
             Helpers.getValue field
                 |> Maybe.andThen List.head
-                |> Maybe.andThen (String.toInt >> Result.toMaybe)
+                |> Maybe.andThen String.toInt
 
-        errorMessage =
+        errorMessageValue =
             "InvalidNumber.Error"
     in
-    Validation.validateMaybeField errorMessage { fieldId = field.fieldId } (always maybeIntValue) ()
+    Validation.validateField [ Validation.validateMaybeField errorMessageValue { fieldId = field.fieldId } (always maybeIntValue) ] ()
 
 
 validateDate : Field -> ValidationErrors { fieldId : Int }

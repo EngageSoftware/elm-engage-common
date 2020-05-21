@@ -1,6 +1,7 @@
 module Engage.UI.ShoppingCart exposing (shoppingCart)
 
 import Css
+import Engage.CssHelpers
 import Engage.Namespace as Namespace
 import Engage.UI.Button as Button
 import Html exposing (..)
@@ -9,18 +10,18 @@ import Html exposing (..)
 class =
     Namespace.engagecore
         |> Namespace.toString
-        |> CssHelpers.withNamespace
+        |> Engage.CssHelpers.withNamespace
 
 
 shoppingCart : Html msg
 shoppingCart =
     div []
-        [ node "style" [] [ text css ]
-        , section [ class [ "ShoppingCart" ] ]
+        [ section [ class [ "ShoppingCart" ] ]
             [ shoppingCartItems
             , total
             , Button.primary
                 { attributes = []
+                , namespace = Namespace.engagecore
                 , text = "Next"
                 }
             ]

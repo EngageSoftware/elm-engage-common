@@ -15,7 +15,9 @@ import Dict
 import Dict.Extra
 import Engage.Localization as Localization exposing (Localization)
 import Engage.UI.Error as Error exposing (Status)
+import Maybe.Extra
 import RemoteData exposing (WebData)
+import String.Extra
 import Validate exposing (ifBlank, ifNothing)
 
 
@@ -171,72 +173,70 @@ filter fields validations =
 
 {-| Validate a dependent String field
 -}
-validateDependentStringField : (model -> Bool) -> String -> field -> (model -> String) -> model -> ValidationErrors field
-validateDependentStringField dependency error field getter model =
-    if dependency model then
-        validateField [ ifBlank getter ( field, Invalid error ) ] model
+validateDependentStringField : (model -> Bool) -> String -> field -> (model -> String) -> Validate.Validator ( field, ValidationStatus ) model
+validateDependentStringField dependency error field getter =
+    Validate.ifTrue
+        (\model ->
+            if dependency model then
+                String.Extra.isBlank (getter model)
 
-    else
-        validateField [] model
+            else
+                False
+        )
+        ( field, Invalid error )
 
 
 {-| Validate a dependent Maybe field
 -}
-validateDependentMaybeField : (model -> Bool) -> String -> field -> (model -> Maybe a) -> model -> ValidationErrors field
-validateDependentMaybeField dependency error field getter model =
-    if dependency model then
-        validateMaybeField error field getter model
+validateDependentMaybeField : (model -> Bool) -> String -> field -> (model -> Maybe a) -> Validate.Validator ( field, ValidationStatus ) model
+validateDependentMaybeField dependency error field getter =
+    Validate.ifTrue
+        (\model ->
+            if dependency model then
+                Maybe.Extra.isNothing (getter model)
 
-    else
-        validateField [] model
+            else
+                False
+        )
+        ( field, Invalid error )
 
 
 {-| Validate a String field
 -}
-validateStringField : String -> field -> (model -> String) -> model -> ValidationErrors field
+validateStringField : String -> field -> (model -> String) -> Validate.Validator ( field, ValidationStatus ) model
 validateStringField error field getter =
-    validateField [ ifBlank getter ( field, Invalid error ) ]
+    ifBlank getter ( field, Invalid error )
 
 
 {-| Validate a Bool field
 -}
-validateBoolField : String -> field -> (model -> Bool) -> model -> ValidationErrors field
-validateBoolField error field getter model =
-    validateField [ Validate.ifTrue (getter >> not) ( field, Invalid error ) ] model
+validateBoolField : String -> field -> (model -> Bool) -> Validate.Validator ( field, ValidationStatus ) model
+validateBoolField error field getter =
+    Validate.ifTrue (getter >> not) ( field, Invalid error )
 
 
 {-| Validate a Maybe field
 -}
-validateMaybeField : String -> field -> (model -> Maybe a) -> model -> ValidationErrors field
+validateMaybeField : String -> field -> (model -> Maybe a) -> Validate.Validator ( field, ValidationStatus ) model
 validateMaybeField error field getter =
-    validateField [ ifNothing getter ( field, Invalid error ) ]
+    ifNothing getter ( field, Invalid error )
 
 
 {-| Validate a Maybe String field
 -}
-validateMaybeStringField : String -> field -> (model -> Maybe String) -> model -> ValidationErrors field
-validateMaybeStringField error field getter model =
-    validateField
-        [ Validate.all
-            [ Validate.ifNothing getter ( field, Invalid error )
-            , Validate.ifBlank (getter >> Maybe.withDefault "") ( field, Invalid error )
-            ]
+validateMaybeStringField : String -> field -> (model -> Maybe String) -> Validate.Validator ( field, ValidationStatus ) model
+validateMaybeStringField error field getter =
+    Validate.all
+        [ Validate.ifNothing getter ( field, Invalid error )
+        , Validate.ifBlank (getter >> Maybe.withDefault "") ( field, Invalid error )
         ]
-        model
-        |> (\validations ->
-                if List.isEmpty validations then
-                    [ ( field, Valid ) ]
-
-                else
-                    validations
-           )
 
 
 {-| Validate a List not empty field
 -}
-validateListNotEmptyField : String -> field -> (model -> List a) -> model -> ValidationErrors field
+validateListNotEmptyField : String -> field -> (model -> List a) -> Validate.Validator ( field, ValidationStatus ) model
 validateListNotEmptyField error field getter =
-    validateField [ Validate.ifTrue (getter >> List.isEmpty) ( field, Invalid error ) ]
+    Validate.ifTrue (getter >> List.isEmpty) ( field, Invalid error )
 
 
 {-| Validate a field

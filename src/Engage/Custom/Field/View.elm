@@ -1,8 +1,9 @@
 module Engage.Custom.Field.View exposing (Args, checkBoxList, checkbox, class, countryDropdown, datepicker, dropdown, dropdownWithItems, fieldClass, fieldForm, fieldGroupClass, fieldGroupForm, fieldLabelClass, file, membershipTypeList, number, radioList, regionDropdown, staticForm, text, textArea, textBox, view, viewCompletedEntries, viewEntry)
 
+import Date
 import Dict
 import Engage.CssHelpers
-import Engage.Custom.Field as Field
+import Engage.Custom.Field as Field exposing (FieldData)
 import Engage.Custom.Field.Events as Events
 import Engage.Custom.Field.Helpers as FieldHelpers
 import Engage.Custom.Types exposing (..)
@@ -24,6 +25,7 @@ import Html exposing (Html)
 import Markdown
 import Set exposing (Set)
 import String
+import Time
 
 
 class =
@@ -34,7 +36,7 @@ class =
 
 fieldGroupClass : Form -> Section -> FieldGroup -> String
 fieldGroupClass form section fieldGroup =
-    "Form" ++ toString form.formId ++ "-Section" ++ toString section.sectionId ++ "-FieldGroup" ++ toString fieldGroup.fieldGroupId
+    "Form" ++ String.fromInt form.formId ++ "-Section" ++ String.fromInt section.sectionId ++ "-FieldGroup" ++ String.fromInt fieldGroup.fieldGroupId
 
 
 fieldGroupForm : Args a msg -> ( Form, Section ) -> FieldGroup -> Html msg
@@ -49,7 +51,7 @@ fieldGroupForm args ( form, section ) fieldGroup =
 
 fieldClass : Form -> Section -> FieldGroup -> Field -> String
 fieldClass form section fieldGroup field =
-    "Form" ++ toString form.formId ++ "-Section" ++ toString section.sectionId ++ "-FieldGroup" ++ toString fieldGroup.fieldGroupId ++ "-Field" ++ toString field.fieldId
+    "Form" ++ String.fromInt form.formId ++ "-Section" ++ String.fromInt section.sectionId ++ "-FieldGroup" ++ String.fromInt fieldGroup.fieldGroupId ++ "-Field" ++ String.fromInt field.fieldId
 
 
 fieldLabelClass : Field -> String
@@ -65,31 +67,31 @@ fieldForm args ( form, section, fieldGroup ) field =
                 textBox
                     args
                     state
-                    ( form, section, fieldGroup, field )
+                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
             LargeTextBox { state } ->
                 textBox
                     args
                     state
-                    ( form, section, fieldGroup, field )
+                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
             TextArea { state } ->
                 textArea
                     args
                     state
-                    ( form, section, fieldGroup, field )
+                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
             File { state } ->
                 file
                     args
                     state
-                    ( form, section, fieldGroup, field )
+                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
             CheckBox { state } ->
                 checkbox
                     args
                     state
-                    ( form, section, fieldGroup, field )
+                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
             DropDown { state, fieldChoices } ->
                 dropdown
@@ -98,7 +100,7 @@ fieldForm args ( form, section, fieldGroup ) field =
                     , fieldChoices = fieldChoices
                     }
                     state
-                    ( form, section, fieldGroup, field )
+                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
             RadioList { state, fieldChoices } ->
                 radioList
@@ -107,7 +109,7 @@ fieldForm args ( form, section, fieldGroup ) field =
                     , fieldChoices = fieldChoices
                     }
                     state
-                    ( form, section, fieldGroup, field )
+                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
             CheckBoxList { state, fieldChoices } ->
                 checkBoxList
@@ -116,23 +118,23 @@ fieldForm args ( form, section, fieldGroup ) field =
                     , fieldChoices = fieldChoices
                     }
                     state
-                    ( form, section, fieldGroup, field )
+                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
             Quantity { state } ->
                 number
                     { config = args.config
                     , validations = args.validations
-                    , maxValue = field.valueMax |> String.toInt |> Result.toMaybe
-                    , minValue = field.valueMin |> String.toInt |> Result.toMaybe
+                    , maxValue = field.valueMax |> String.toInt
+                    , minValue = field.valueMin |> String.toInt
                     }
                     state
-                    ( form, section, fieldGroup, field )
+                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
             Date { state } ->
                 datepicker
                     args
                     state
-                    ( form, section, fieldGroup, field )
+                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
             Email ->
                 Html.text "email is not implemented"
@@ -150,13 +152,13 @@ fieldForm args ( form, section, fieldGroup ) field =
                 countryDropdown
                     args
                     state
-                    ( form, section, fieldGroup, field )
+                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
             Region { state } ->
                 regionDropdown
                     args
                     state
-                    ( form, section, fieldGroup, field )
+                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
             Text ->
                 text field
@@ -164,14 +166,14 @@ fieldForm args ( form, section, fieldGroup ) field =
             StaticForm staticFormType ->
                 staticForm
                     args
-                    ( form, section, fieldGroup, field )
+                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
                     staticFormType
         ]
 
 
-staticForm : Args a msg -> ( Form, Section, FieldGroup, Field ) -> StaticFormType -> Html msg
-staticForm args ( form, section, fieldGroup, fieldData ) staticFormType =
-    case fieldData.disable of
+staticForm : Args a msg -> FieldData -> StaticFormType -> Html msg
+staticForm args { form, section, fieldGroup, field } staticFormType =
+    case field.disable of
         Hidden ->
             HtmlExtra.none
 
@@ -184,30 +186,30 @@ staticForm args ( form, section, fieldGroup, fieldData ) staticFormType =
                     Html.text <| "ParticipantForm"
 
                 MembershipTypeList data ->
-                    membershipTypeList args ( form, section, fieldGroup, fieldData ) data
+                    membershipTypeList args { form = form, section = section, fieldGroup = fieldGroup, field = field } data
 
 
-membershipTypeList : Args a msg -> ( Form, Section, FieldGroup, Field ) -> { membershipTypeList : List MembershipTypeList.MembershipType, state : Accordion.State, entry : Maybe MembershipTypeList.MembershipType } -> Html msg
-membershipTypeList args ( form, section, fieldGroup, fieldData ) { membershipTypeList, state, entry } =
+membershipTypeList : Args a msg -> FieldData -> { membershipTypeList : List MembershipTypeList.MembershipType, state : Accordion.State, entry : Maybe MembershipTypeList.MembershipType } -> Html msg
+membershipTypeList args { form, section, fieldGroup, field } membership =
     let
         domId =
-            Field.namespacedId fieldData
+            Field.namespacedId field
 
         onChange : { onlyStateChange : Bool } -> Accordion.State -> Maybe MembershipTypeList.MembershipType -> msg
         onChange { onlyStateChange } accordionState membershipType =
             Events.onMembershipTypeHandler args.config
-                { fieldId = fieldData.fieldId
+                { fieldId = field.fieldId
                 , formId = form.formId
                 , sectionId = section.sectionId
                 , fieldGroupId = fieldGroup.fieldGroupId
-                , fieldType = FieldHelpers.updateAccordionState accordionState fieldData.fieldType
+                , fieldType = FieldHelpers.updateAccordionState accordionState field.fieldType
                 , domId = domId
                 , onlyStateChange = onlyStateChange
                 }
                 membershipType
 
         requiredText =
-            if fieldData.required then
+            if field.required then
                 Just (Localization.localizeStringWithDefault "Required" "Required" args.config)
 
             else
@@ -218,16 +220,16 @@ membershipTypeList args ( form, section, fieldGroup, fieldData ) { membershipTyp
     MembershipTypeList.form
         { id = domId
         , priceText = Localization.localizeString "Price:" args.config
-        , membershipTypeList = membershipTypeList
-        , labelText = fieldData.label
-        , helpText = fieldData.description
+        , membershipTypeList = membership.membershipTypeList
+        , labelText = field.label
+        , helpText = field.description
         , requiredText = requiredText
         , onChange = onChange
-        , status = FieldHelpers.toError args.validations fieldData
+        , status = FieldHelpers.toError args.validations field
         , accordionExpandButtonText = Localization.localizeString "More Info" args.config
         }
-        state
-        entry
+        membership.state
+        membership.entry
 
 
 text : Field -> Html msg
@@ -263,29 +265,29 @@ type alias Args a msg =
     }
 
 
-number : Args { a | maxValue : Maybe Int, minValue : Maybe Int } msg -> Input.State -> ( Form, Section, FieldGroup, Field ) -> Html msg
-number { config, validations, maxValue, minValue } state ( form, section, fieldGroup, fieldData ) =
+number : Args { a | maxValue : Maybe Int, minValue : Maybe Int } msg -> Input.State -> FieldData -> Html msg
+number { config, validations, maxValue, minValue } state { form, section, fieldGroup, field } =
     let
         domId =
-            Field.namespacedId fieldData
+            Field.namespacedId field
 
         onChange { onlyStateChange } inputState value =
             Events.onChangeHandler config
-                { fieldId = fieldData.fieldId
+                { fieldId = field.fieldId
                 , formId = form.formId
                 , sectionId = section.sectionId
                 , fieldGroupId = fieldGroup.fieldGroupId
-                , fieldType = FieldHelpers.updateInputState inputState fieldData.fieldType
+                , fieldType = FieldHelpers.updateInputState inputState field.fieldType
                 , domId = domId
                 , onlyStateChange = onlyStateChange
                 }
-                (value |> Maybe.map toString |> Maybe.withDefault "")
+                (value |> Maybe.map String.fromInt |> Maybe.withDefault "")
 
         labelKey =
-            section.name ++ "." ++ fieldData.label
+            section.name ++ "." ++ field.label
 
         requiredText =
-            if fieldData.required then
+            if field.required then
                 Just (Localization.localizeStringWithDefault "Required" "Required" config)
 
             else
@@ -293,42 +295,42 @@ number { config, validations, maxValue, minValue } state ( form, section, fieldG
     in
     Input.number
         { id = domId
-        , labelText = Localization.localizeStringWithDefault fieldData.label labelKey config
-        , helpText = fieldData.description
+        , labelText = Localization.localizeStringWithDefault field.label labelKey config
+        , helpText = field.description
         , requiredText = requiredText
         , onChange = onChange
-        , status = FieldHelpers.toError validations fieldData
+        , status = FieldHelpers.toError validations field
         , namespace = Namespace.engagecore
         , maxValue = maxValue
         , minValue = minValue
         }
         state
-        (FieldHelpers.getValue fieldData |> Maybe.andThen List.head |> Maybe.andThen (String.toInt >> Result.toMaybe))
+        (FieldHelpers.getValue field |> Maybe.andThen List.head |> Maybe.andThen String.toInt)
 
 
-textBox : Args a msg -> Input.State -> ( Form, Section, FieldGroup, Field ) -> Html msg
-textBox { config, validations } state ( form, section, fieldGroup, fieldData ) =
+textBox : Args a msg -> Input.State -> FieldData -> Html msg
+textBox { config, validations } state { form, section, fieldGroup, field } =
     let
         domId =
-            Field.namespacedId fieldData
+            Field.namespacedId field
 
         onChange { onlyStateChange } inputState value =
             Events.onChangeHandler config
-                { fieldId = fieldData.fieldId
+                { fieldId = field.fieldId
                 , formId = form.formId
                 , sectionId = section.sectionId
                 , fieldGroupId = fieldGroup.fieldGroupId
-                , fieldType = FieldHelpers.updateInputState inputState fieldData.fieldType
+                , fieldType = FieldHelpers.updateInputState inputState field.fieldType
                 , domId = domId
                 , onlyStateChange = onlyStateChange
                 }
                 value
 
         labelKey =
-            section.name ++ "." ++ fieldData.label
+            section.name ++ "." ++ field.label
 
         requiredText =
-            if fieldData.required then
+            if field.required then
                 Just (Localization.localizeStringWithDefault "Required" "Required" config)
 
             else
@@ -336,40 +338,40 @@ textBox { config, validations } state ( form, section, fieldGroup, fieldData ) =
     in
     Input.text
         { id = domId
-        , labelText = Localization.localizeStringWithDefault fieldData.label labelKey config
-        , helpText = fieldData.description
+        , labelText = Localization.localizeStringWithDefault field.label labelKey config
+        , helpText = field.description
         , requiredText = requiredText
         , onChange = onChange
-        , status = FieldHelpers.toError validations fieldData
+        , status = FieldHelpers.toError validations field
         , namespace = Namespace.engagecore
         }
         state
-        (FieldHelpers.getValue fieldData |> Maybe.andThen List.head |> Maybe.withDefault "")
+        (FieldHelpers.getValue field |> Maybe.andThen List.head |> Maybe.withDefault "")
 
 
-textArea : Args a msg -> Input.State -> ( Form, Section, FieldGroup, Field ) -> Html msg
-textArea { config, validations } state ( form, section, fieldGroup, fieldData ) =
+textArea : Args a msg -> Input.State -> FieldData -> Html msg
+textArea { config, validations } state { form, section, fieldGroup, field } =
     let
         domId =
-            Field.namespacedId fieldData
+            Field.namespacedId field
 
         onChange { onlyStateChange } inputState value =
             Events.onChangeHandler config
-                { fieldId = fieldData.fieldId
+                { fieldId = field.fieldId
                 , formId = form.formId
                 , sectionId = section.sectionId
                 , fieldGroupId = fieldGroup.fieldGroupId
-                , fieldType = FieldHelpers.updateInputState inputState fieldData.fieldType
+                , fieldType = FieldHelpers.updateInputState inputState field.fieldType
                 , domId = domId
                 , onlyStateChange = onlyStateChange
                 }
                 value
 
         labelKey =
-            section.name ++ "." ++ fieldData.label
+            section.name ++ "." ++ field.label
 
         requiredText =
-            if fieldData.required then
+            if field.required then
                 Just (Localization.localizeStringWithDefault "Required" "Required" config)
 
             else
@@ -377,146 +379,146 @@ textArea { config, validations } state ( form, section, fieldGroup, fieldData ) 
     in
     Input.textArea
         { id = domId
-        , labelText = Localization.localizeStringWithDefault fieldData.label labelKey config
-        , helpText = fieldData.description
+        , labelText = Localization.localizeStringWithDefault field.label labelKey config
+        , helpText = field.description
         , requiredText = requiredText
         , onChange = onChange
-        , status = FieldHelpers.toError validations fieldData
+        , status = FieldHelpers.toError validations field
         , namespace = Namespace.engagecore
         }
         state
-        (FieldHelpers.getValue fieldData |> Maybe.andThen List.head |> Maybe.withDefault "")
+        (FieldHelpers.getValue field |> Maybe.andThen List.head |> Maybe.withDefault "")
 
 
-checkBoxList : Args { fieldChoices : List FieldChoice } msg -> Input.State -> ( Form, Section, FieldGroup, Field ) -> Html msg
-checkBoxList { config, validations, fieldChoices } state ( form, section, fieldGroup, fieldData ) =
+checkBoxList : Args { fieldChoices : List FieldChoice } msg -> Input.State -> FieldData -> Html msg
+checkBoxList { config, validations, fieldChoices } state { form, section, fieldGroup, field } =
     let
         domId =
-            Field.namespacedId fieldData
+            Field.namespacedId field
 
         onChange { onlyStateChange } newState values =
             Events.onMultipleAnswerChangeHandler config
-                { fieldId = fieldData.fieldId
+                { fieldId = field.fieldId
                 , formId = form.formId
                 , sectionId = section.sectionId
                 , fieldGroupId = fieldGroup.fieldGroupId
-                , fieldType = FieldHelpers.updateInputState newState fieldData.fieldType
+                , fieldType = FieldHelpers.updateInputState newState field.fieldType
                 , domId = domId
                 , onlyStateChange = onlyStateChange
                 }
                 values
 
         labelKey =
-            section.name ++ "." ++ fieldData.label
+            section.name ++ "." ++ field.label
 
         requiredText =
-            if fieldData.required then
+            if field.required then
                 Just (Localization.localizeStringWithDefault "Required" "Required" config)
 
             else
                 Nothing
     in
     Input.checkBoxList
-        { labelText = Localization.localizeStringWithDefault fieldData.label labelKey config
+        { labelText = Localization.localizeStringWithDefault field.label labelKey config
         , id = domId
-        , helpText = fieldData.description
+        , helpText = field.description
         , requiredText = requiredText
         , onChange = onChange
-        , status = FieldHelpers.toError validations fieldData
+        , status = FieldHelpers.toError validations field
         , namespace = Namespace.engagecore
         , items = FieldHelpers.toRadioItems fieldChoices
         }
         state
-        (FieldHelpers.getValues fieldData |> Maybe.withDefault Set.empty)
+        (FieldHelpers.getValues field |> Maybe.withDefault Set.empty)
 
 
-radioList : Args { a | fieldChoices : List FieldChoice } msg -> Input.State -> ( Form, Section, FieldGroup, Field ) -> Html msg
-radioList { config, validations, fieldChoices } state ( form, section, fieldGroup, fieldData ) =
+radioList : Args { a | fieldChoices : List FieldChoice } msg -> Input.State -> FieldData -> Html msg
+radioList { config, validations, fieldChoices } state { form, section, fieldGroup, field } =
     let
         domId =
-            Field.namespacedId fieldData
+            Field.namespacedId field
 
         onChange { onlyStateChange } newState value =
             Events.onChangeHandler config
-                { fieldId = fieldData.fieldId
+                { fieldId = field.fieldId
                 , formId = form.formId
                 , sectionId = section.sectionId
                 , fieldGroupId = fieldGroup.fieldGroupId
-                , fieldType = FieldHelpers.updateInputState newState fieldData.fieldType
+                , fieldType = FieldHelpers.updateInputState newState field.fieldType
                 , domId = domId
                 , onlyStateChange = onlyStateChange
                 }
                 value
 
         labelKey =
-            section.name ++ "." ++ fieldData.label
+            section.name ++ "." ++ field.label
 
         requiredText =
-            if fieldData.required then
+            if field.required then
                 Just (Localization.localizeStringWithDefault "Required" "Required" config)
 
             else
                 Nothing
     in
     Input.radioList
-        { labelText = Localization.localizeStringWithDefault fieldData.label labelKey config
+        { labelText = Localization.localizeStringWithDefault field.label labelKey config
         , id = domId
-        , helpText = fieldData.description
+        , helpText = field.description
         , requiredText = requiredText
         , onChange = onChange
-        , status = FieldHelpers.toError validations fieldData
+        , status = FieldHelpers.toError validations field
         , namespace = Namespace.engagecore
         , items = FieldHelpers.toRadioItems fieldChoices
         }
         state
-        (FieldHelpers.getValue fieldData |> Maybe.andThen List.head |> Maybe.withDefault "")
+        (FieldHelpers.getValue field |> Maybe.andThen List.head |> Maybe.withDefault "")
 
 
-checkbox : Args a msg -> Input.State -> ( Form, Section, FieldGroup, Field ) -> Html msg
-checkbox { config, validations } state ( form, section, fieldGroup, fieldData ) =
+checkbox : Args a msg -> Input.State -> FieldData -> Html msg
+checkbox { config, validations } state { form, section, fieldGroup, field } =
     let
         domId =
-            Field.namespacedId fieldData
+            Field.namespacedId field
 
         onCheck { onlyStateChange } inputState value =
             Events.onCheckHandler config
-                { fieldId = fieldData.fieldId
+                { fieldId = field.fieldId
                 , formId = form.formId
                 , sectionId = section.sectionId
                 , fieldGroupId = fieldGroup.fieldGroupId
-                , fieldType = FieldHelpers.updateInputState inputState fieldData.fieldType
+                , fieldType = FieldHelpers.updateInputState inputState field.fieldType
                 , domId = domId
                 , onlyStateChange = onlyStateChange
                 }
                 value
 
         labelKey =
-            section.name ++ "." ++ fieldData.label
+            section.name ++ "." ++ field.label
 
         requiredText =
-            if fieldData.required then
+            if field.required then
                 Just (Localization.localizeStringWithDefault "Required" "Required" config)
 
             else
                 Nothing
     in
     Input.checkbox
-        { labelText = Localization.localizeStringWithDefault fieldData.label labelKey config
-        , helpText = fieldData.description
+        { labelText = Localization.localizeStringWithDefault field.label labelKey config
+        , helpText = field.description
         , requiredText = requiredText
         , onCheck = onCheck
-        , status = FieldHelpers.toError validations fieldData
+        , status = FieldHelpers.toError validations field
         , namespace = Namespace.engagecore
         , state = state
         }
-        (FieldHelpers.getBoolValue fieldData |> Maybe.withDefault False)
+        (FieldHelpers.getBoolValue field |> Maybe.withDefault False)
 
 
-countryDropdown : Args a msg -> Dropdown.State -> ( Form, Section, FieldGroup, Field ) -> Html msg
-countryDropdown args state ( form, section, fieldGroup, fieldData ) =
+countryDropdown : Args a msg -> Dropdown.State -> FieldData -> Html msg
+countryDropdown args state { form, section, fieldGroup, field } =
     dropdownWithItems args
         state
-        ( form, section, fieldGroup, fieldData )
+        { form = form, section = section, fieldGroup = fieldGroup, field = field }
         (args.config.countries
             |> Address.countriesToItems
             |> Dict.values
@@ -524,24 +526,24 @@ countryDropdown args state ( form, section, fieldGroup, fieldData ) =
         )
 
 
-regionDropdown : Args a msg -> Dropdown.State -> ( Form, Section, FieldGroup, Field ) -> Html msg
-regionDropdown args state ( form, section, fieldGroup, fieldData ) =
+regionDropdown : Args a msg -> Dropdown.State -> FieldData -> Html msg
+regionDropdown args state { form, section, fieldGroup, field } =
     let
         maybeSelectedCountry : Maybe Int
         maybeSelectedCountry =
             section.fieldGroups
                 |> Dict.values
                 |> List.concatMap (Field.allFields form section)
-                |> List.map (\( _, _, _, field ) -> field)
+                |> List.map (\fieldData -> fieldData.field)
                 |> List.filter FieldHelpers.isCountryField
                 |> List.head
                 |> Maybe.andThen FieldHelpers.getValue
                 |> Maybe.andThen List.head
-                |> Maybe.andThen (String.toInt >> Result.toMaybe)
+                |> Maybe.andThen String.toInt
     in
     dropdownWithItems args
         state
-        ( form, section, fieldGroup, fieldData )
+        { form = form, section = section, fieldGroup = fieldGroup, field = field }
         (maybeSelectedCountry
             |> Maybe.map (\countryId -> Address.getRegionsForCountry countryId args.config.regions)
             |> Maybe.map (Address.regionsToItems >> Dict.values >> List.sortBy .text)
@@ -549,34 +551,34 @@ regionDropdown args state ( form, section, fieldGroup, fieldData ) =
         )
 
 
-dropdown : Args { a | fieldChoices : List FieldChoice } msg -> Dropdown.State -> ( Form, Section, FieldGroup, Field ) -> Html msg
-dropdown args state ( form, section, fieldGroup, fieldData ) =
-    dropdownWithItems args state ( form, section, fieldGroup, fieldData ) (FieldHelpers.toDropdownItems args.fieldChoices)
+dropdown : Args { a | fieldChoices : List FieldChoice } msg -> Dropdown.State -> FieldData -> Html msg
+dropdown args state { form, section, fieldGroup, field } =
+    dropdownWithItems args state { form = form, section = section, fieldGroup = fieldGroup, field = field } (FieldHelpers.toDropdownItems args.fieldChoices)
 
 
-dropdownWithItems : Args a msg -> Dropdown.State -> ( Form, Section, FieldGroup, Field ) -> List Dropdown.Item -> Html msg
-dropdownWithItems { config, validations } state ( form, section, fieldGroup, fieldData ) items =
+dropdownWithItems : Args a msg -> Dropdown.State -> FieldData -> List Dropdown.Item -> Html msg
+dropdownWithItems { config, validations } state { form, section, fieldGroup, field } items =
     let
         domId =
-            Field.namespacedId fieldData
+            Field.namespacedId field
 
         onChange { onlyStateChange } dropdownState value =
             Events.onChangeHandler config
-                { fieldId = fieldData.fieldId
+                { fieldId = field.fieldId
                 , formId = form.formId
                 , sectionId = section.sectionId
                 , fieldGroupId = fieldGroup.fieldGroupId
-                , fieldType = FieldHelpers.updateDropdownState dropdownState fieldData.fieldType
+                , fieldType = FieldHelpers.updateDropdownState dropdownState field.fieldType
                 , domId = domId
                 , onlyStateChange = onlyStateChange
                 }
                 (Maybe.withDefault "" value)
 
         labelKey =
-            section.name ++ "." ++ fieldData.label
+            section.name ++ "." ++ field.label
 
         requiredText =
-            if fieldData.required then
+            if field.required then
                 Just (Localization.localizeStringWithDefault "Required" "Required" config)
 
             else
@@ -584,15 +586,15 @@ dropdownWithItems { config, validations } state ( form, section, fieldGroup, fie
     in
     Dropdown.dropdown
         { id = domId
-        , labelText = Localization.localizeStringWithDefault fieldData.label labelKey config
+        , labelText = Localization.localizeStringWithDefault field.label labelKey config
         , requiredText = requiredText
         , onChange = onChange
         , items = items
-        , status = FieldHelpers.toError validations fieldData
+        , status = FieldHelpers.toError validations field
         , namespace = Namespace.engagecore
         }
         state
-        (FieldHelpers.getValue fieldData |> Maybe.andThen List.head)
+        (FieldHelpers.getValue field |> Maybe.andThen List.head)
 
 
 viewEntry : { a | config : Config msg, validations : ValidationErrors { fieldId : Int } } -> Field -> Html msg
@@ -612,7 +614,7 @@ view config { fields } =
             (\field ->
                 Html.div [ class [ fieldLabelClass field ] ]
                     [ Info.info Namespace.engagecore
-                        (Info.label field.label)
+                        (Info.getLabel field.label)
                         (field |> FieldHelpers.getText config |> Maybe.map (String.join ", ") |> Maybe.withDefault "")
                     ]
             )
@@ -637,22 +639,22 @@ viewCompletedEntries { config, validations } { fields } =
             |> List.singleton
 
 
-file : Args a msg -> Input.State -> ( Form, Section, FieldGroup, Field ) -> Html msg
-file { config, validations } state ( form, section, fieldGroup, fieldData ) =
+file : Args a msg -> Input.State -> FieldData -> Html msg
+file { config, validations } state { form, section, fieldGroup, field } =
     let
         id =
-            Field.namespacedId fieldData
+            Field.namespacedId field
 
         domId =
-            Field.namespacedId fieldData
+            Field.namespacedId field
 
         onChange { onlyStateChange } inputState value =
             Events.onFileSelectHandler config
-                { fieldId = fieldData.fieldId
+                { fieldId = field.fieldId
                 , formId = form.formId
                 , sectionId = section.sectionId
                 , fieldGroupId = fieldGroup.fieldGroupId
-                , fieldType = FieldHelpers.updateInputState inputState fieldData.fieldType
+                , fieldType = FieldHelpers.updateInputState inputState field.fieldType
                 , domId = domId
                 , onlyStateChange = onlyStateChange
                 }
@@ -664,16 +666,16 @@ file { config, validations } state ( form, section, fieldGroup, fieldData ) =
                     Error.Ok
 
                 NoFile ->
-                    FieldHelpers.toError validations fieldData
+                    FieldHelpers.toError validations field
 
                 Uploading _ ->
-                    FieldHelpers.toError validations fieldData
+                    FieldHelpers.toError validations field
 
                 Error { message } ->
                     Error.Error { reasons = [ message ] }
 
         requiredText =
-            if fieldData.required then
+            if field.required then
                 Just (Localization.localizeStringWithDefault "Required" "Required" config)
 
             else
@@ -682,54 +684,54 @@ file { config, validations } state ( form, section, fieldGroup, fieldData ) =
     Html.div []
         [ Input.file
             { id = domId
-            , labelText = fieldData.label
-            , helpText = fieldData.description
+            , labelText = field.label
+            , helpText = field.description
             , requiredText = requiredText
             , browseText = Localization.localizeStringWithDefault "Browse" "Browse" config
             , onChange = onChange
-            , status = Field.getFileEntryData fieldData |> Maybe.map error |> Maybe.withDefault Error.Unknown
+            , status = Field.getFileEntryData field |> Maybe.map error |> Maybe.withDefault Error.Unknown
             , namespace = Namespace.engagecore
             }
             state
-            (FieldHelpers.getFileInfo fieldData |> Maybe.withDefault { name = "", fileType = "", progressPercentage = Nothing })
+            (FieldHelpers.getFileInfo field |> Maybe.withDefault { name = "", fileType = "", progressPercentage = Nothing })
         ]
 
 
-datepicker : Args a msg -> Datepicker.State -> ( Form, Section, FieldGroup, Field ) -> Html msg
-datepicker { config, validations } state ( form, section, fieldGroup, fieldData ) =
+datepicker : Args a msg -> Datepicker.State -> FieldData -> Html msg
+datepicker { config, validations } state { form, section, fieldGroup, field } =
     let
         domId =
-            Field.namespacedId fieldData
+            Field.namespacedId field
 
         onChange dateState value =
             Events.onChangeHandler config
-                { fieldId = fieldData.fieldId
+                { fieldId = field.fieldId
                 , formId = form.formId
                 , sectionId = section.sectionId
                 , fieldGroupId = fieldGroup.fieldGroupId
-                , fieldType = FieldHelpers.updateDateState dateState fieldData.fieldType
+                , fieldType = FieldHelpers.updateDateState dateState field.fieldType
                 , domId = domId
                 , onlyStateChange = False
                 }
-                (value |> Maybe.map (Date.toTime >> toString) |> Maybe.withDefault "")
+                (value |> Maybe.map Date.toIsoString |> Maybe.withDefault "")
 
         onStateChange dateState =
             Events.onChangeHandler config
-                { fieldId = fieldData.fieldId
+                { fieldId = field.fieldId
                 , formId = form.formId
                 , sectionId = section.sectionId
                 , fieldGroupId = fieldGroup.fieldGroupId
-                , fieldType = FieldHelpers.updateDateState dateState fieldData.fieldType
+                , fieldType = FieldHelpers.updateDateState dateState field.fieldType
                 , domId = domId
                 , onlyStateChange = True
                 }
-                (FieldHelpers.getValue fieldData |> Maybe.andThen List.head |> Maybe.withDefault "")
+                (FieldHelpers.getValue field |> Maybe.andThen List.head |> Maybe.withDefault "")
 
         labelKey =
-            section.name ++ "." ++ fieldData.label
+            section.name ++ "." ++ field.label
 
         requiredText =
-            if fieldData.required then
+            if field.required then
                 Just (Localization.localizeStringWithDefault "Required" "Required" config)
 
             else
@@ -737,12 +739,17 @@ datepicker { config, validations } state ( form, section, fieldGroup, fieldData 
     in
     Datepicker.datepicker
         { id = domId
-        , labelText = Localization.localizeStringWithDefault fieldData.label labelKey config
+        , labelText = Localization.localizeStringWithDefault field.label labelKey config
         , requiredText = requiredText
         , onChange = onChange
         , onStateChange = onStateChange
-        , status = FieldHelpers.toError validations fieldData
+        , status = FieldHelpers.toError validations field
         , namespace = Namespace.engagecore
         }
         state
-        (FieldHelpers.getValue fieldData |> Maybe.andThen List.head |> Maybe.andThen (String.toFloat >> Result.toMaybe) |> Maybe.map DateHelper.toDateIgnoreTimezone)
+        (FieldHelpers.getValue field
+            |> Maybe.andThen List.head
+            |> Maybe.andThen String.toInt
+            |> Maybe.map Time.millisToPosix
+            |> Maybe.map (Date.fromPosix Time.utc)
+        )

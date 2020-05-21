@@ -1,5 +1,6 @@
 module Engage.Custom.Field.Events exposing (onChangeHandler, onCheckHandler, onDateChangeHandler, onFileSelectHandler, onIntInputHandler, onMembershipTypeHandler, onMultipleAnswerChangeHandler)
 
+import Date exposing (Date)
 import Engage.Custom.Types exposing (..)
 import Engage.Form.MembershipTypeList as MembershipTypeList
 import Engage.UI.Datepicker as Datepicker
@@ -45,12 +46,12 @@ onIntInputHandler : Config msg -> ChangeArgs -> (Maybe Int -> msg)
 onIntInputHandler config args =
     let
         toMaybeIntMsg maybeAnswerFunc =
-            \maybeInt -> maybeAnswerFunc (Answer { value = Maybe.map toString maybeInt |> Maybe.withDefault "" })
+            \maybeInt -> maybeAnswerFunc (Answer { value = Maybe.map String.fromInt maybeInt |> Maybe.withDefault "" })
     in
     toMaybeIntMsg (config.onChange args)
 
 
-onDateChangeHandler : Config msg -> ChangeArgs -> (Datepicker.State -> Maybe Date.Date -> msg)
+onDateChangeHandler : Config msg -> ChangeArgs -> (Datepicker.State -> Maybe Date -> msg)
 onDateChangeHandler config args =
     -- Debug.crash "onDateChangeHandler"
     let

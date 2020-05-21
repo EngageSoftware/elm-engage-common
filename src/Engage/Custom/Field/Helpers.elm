@@ -1,5 +1,6 @@
 module Engage.Custom.Field.Helpers exposing (fieldGroupHasAnswer, fieldHasAnswer, getBoolValue, getFileInfo, getProgressPercentage, getRelativeOrder, getStaticFormTypeText, getText, getValue, getValues, intToDisable, isCountryField, isCountryFieldType, isFileField, isFileFieldType, isRegionField, isRegionFieldType, isSameType, shouldUpdate, toCheckBoxEntryData, toDropdownItem, toDropdownItems, toEntryData, toError, toFileEntryData, toRadioItem, toRadioItems, updateAccordionState, updateDateState, updateDropdownState, updateFieldTypeState, updateInputState, updateOptionsToBool)
 
+import Date
 import Dict
 import Engage.Custom.Types exposing (..)
 import Engage.Form.Address as Address
@@ -8,9 +9,10 @@ import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Error as Error exposing (Status)
 import Engage.UI.Input as Input
-import Engage.Validation as Validation
+import Engage.Validation as Validation exposing (ValidationErrors)
 import Set exposing (Set)
 import String
+import Time
 
 
 
@@ -101,7 +103,7 @@ getText config field =
         Country _ ->
             getValue field
                 |> Maybe.andThen List.head
-                |> Maybe.andThen (String.toInt >> Result.toMaybe)
+                |> Maybe.andThen String.toInt
                 |> Maybe.andThen (\value -> Dict.get value config.countries)
                 |> Maybe.map .countryName
                 |> Maybe.map List.singleton
@@ -109,7 +111,7 @@ getText config field =
         Region _ ->
             getValue field
                 |> Maybe.andThen List.head
-                |> Maybe.andThen (String.toInt >> Result.toMaybe)
+                |> Maybe.andThen String.toInt
                 |> Maybe.andThen (\value -> Dict.get value (Address.toAllRegions config.regions))
                 |> Maybe.map .regionName
                 |> Maybe.map List.singleton
@@ -141,9 +143,10 @@ getText config field =
         Date _ ->
             getValue field
                 |> Maybe.andThen List.head
-                |> Maybe.andThen (String.toFloat >> Result.toMaybe)
-                -- |> Maybe.map DateHelper.toDateIgnoreTimezone
-                |> Maybe.map (Date.Extra.Format.format Date.Extra.Config.Config_en_us.config "%B %e, %Y")
+                |> Maybe.andThen String.toInt
+                |> Maybe.map Time.millisToPosix
+                |> Maybe.map (Date.fromPosix Time.utc)
+                |> Maybe.map (Date.format "%B %e, %Y")
                 |> Maybe.map List.singleton
 
         Email ->
@@ -668,7 +671,7 @@ isSameType a b =
                 _ ->
                     False
 
-        StaticForm a ->
+        StaticForm _ ->
             case b of
                 StaticForm _ ->
                     True
@@ -896,7 +899,7 @@ updateFieldTypeState { old, new } =
                     old
 
         StaticForm ParticipantForm ->
-            Debug.crash "Not Implemented"
+            Debug.todo "Not Implemented"
 
 
 updateDropdownState : Dropdown.State -> FieldType -> FieldType

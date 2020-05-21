@@ -1,4 +1,4 @@
-module Engage.Form.AddressMain exposing (main)
+module Engage.Form.AddressMain exposing (..)
 
 import Css
 import Dict exposing (Dict)
@@ -12,10 +12,6 @@ import Html exposing (..)
 engagecoreNamespace : String
 engagecoreNamespace =
     Namespace.toString Namespace.engagecore
-
-
-main =
-    ""
 
 
 

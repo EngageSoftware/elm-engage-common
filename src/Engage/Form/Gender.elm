@@ -90,13 +90,13 @@ form attributes validations state gender =
         Nothing ->
             error attribute.namespace "onChange"
 
-        Just onChange ->
+        Just onChangeValue ->
             case attribute.field of
                 Nothing ->
                     error attribute.namespace "field"
 
-                Just field ->
-                    internalForm (InternalAttribute attribute) onChange field validations state gender
+                Just fieldValue ->
+                    internalForm (InternalAttribute attribute) onChangeValue fieldValue validations state gender
 
 
 error : Namespace -> String -> Html msg
@@ -117,16 +117,16 @@ internalForm :
     -> Input.State
     -> Gender
     -> Html msg
-internalForm (InternalAttribute attribute) onChange field validations state gender =
+internalForm (InternalAttribute attribute) onChangeValue fieldValue validations state gender =
     let
-        radioListOnChange validations onlyStateChange state genderString =
-            onChange validations onlyStateChange state (Gender.fromString genderString)
+        radioListOnChange newValidations onlyStateChange stateValue genderString =
+            onChangeValue newValidations onlyStateChange stateValue (Gender.fromString genderString)
     in
     Field.radioListField
         { namespace = attribute.namespace
         , onChange = radioListOnChange
         , localization = attribute.localization
-        , field = field
+        , field = fieldValue
         , required = attribute.required
         , items =
             [ Male, Female, Other, Unspecified ]

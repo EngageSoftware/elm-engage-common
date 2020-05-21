@@ -1,5 +1,6 @@
 module Engage.Custom.Field exposing
-    ( allFields
+    ( FieldData
+    , allFields
     , findField
     , getFileEntryData
     , namespacedId
@@ -22,6 +23,14 @@ type alias Query a =
     { a | fieldId : Int }
 
 
+type alias FieldData =
+    { form : Form
+    , section : Section
+    , fieldGroup : FieldGroup
+    , field : Field
+    }
+
+
 update : Query a -> (Field -> Field) -> Form -> Section -> FieldGroup -> FieldGroup
 update query updater form section fieldGroup =
     { fieldGroup | fields = Dict.update query.fieldId (Maybe.map updater) fieldGroup.fields }
@@ -29,14 +38,14 @@ update query updater form section fieldGroup =
 
 namespacedId : Field -> String
 namespacedId field =
-    engagecoreNamespace ++ "Field" ++ toString field.fieldId
+    engagecoreNamespace ++ "Field" ++ String.fromInt field.fieldId
 
 
-allFields : Form -> Section -> FieldGroup -> List ( Form, Section, FieldGroup, Field )
+allFields : Form -> Section -> FieldGroup -> List FieldData
 allFields form section fieldGroup =
     fieldGroup.fields
         |> Dict.values
-        |> List.map (\field -> ( form, section, fieldGroup, field ))
+        |> List.map (\field -> { form = form, section = section, fieldGroup = fieldGroup, field = field })
 
 
 getFileEntryData : Field -> Maybe FileEntryData
@@ -49,11 +58,11 @@ getFileEntryData field =
             Nothing
 
 
-findField : { a | formId : Int, sectionId : Int, fieldGroupId : Int, fieldId : Int } -> Form -> Section -> FieldGroup -> Maybe ( Form, Section, FieldGroup, Field )
+findField : { a | formId : Int, sectionId : Int, fieldGroupId : Int, fieldId : Int } -> Form -> Section -> FieldGroup -> Maybe FieldData
 findField query form section fieldGroup =
     fieldGroup.fields
         |> Dict.get query.fieldId
-        |> Maybe.map (\field -> ( form, section, fieldGroup, field ))
+        |> Maybe.map (\field -> { form = form, section = section, fieldGroup = fieldGroup, field = field })
 
 
 reset : Field -> Field

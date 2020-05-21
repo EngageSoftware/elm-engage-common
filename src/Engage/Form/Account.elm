@@ -117,14 +117,14 @@ nameView namespace attribute =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
 
-        name =
+        nameValue =
             attribute.name |> Maybe.withDefault ""
     in
-    if name |> String.trim |> String.isEmpty then
+    if nameValue |> String.trim |> String.isEmpty then
         HtmlExtra.none
 
     else
-        h3 [ class [ "AccountName" ] ] [ text name ]
+        h3 [ class [ "AccountName" ] ] [ text nameValue ]
 
 
 addressView : { args | namespace : Namespace, localization : Localization, countries : Countries, regions : RegionsCountry } -> InternalAttribute msg -> Html msg
@@ -138,15 +138,15 @@ addressView ({ namespace, localization } as args) attribute =
         isEmpty =
             Engage.Form.Address.isEmpty
 
-        do label address =
-            if isEmpty address then
+        do label addressValue =
+            if isEmpty addressValue then
                 HtmlExtra.none
 
             else
-                Info.multiple namespace (Info.label label) [ Engage.Form.Address.view args address ]
+                Info.multiple namespace (Info.getLabel label) [ Engage.Form.Address.view args addressValue ]
     in
     attribute.address
-        |> Maybe.map (\( label, address ) -> do label address)
+        |> Maybe.map (\( label, addressValue ) -> do label addressValue)
         |> Maybe.withDefault HtmlExtra.none
 
 
@@ -159,7 +159,7 @@ phoneView namespace attribute =
                 |> Engage.CssHelpers.withNamespace
     in
     attribute.phone
-        |> Maybe.map (\( label, phone ) -> div [ class [ "AccountPhone" ] ] [ Info.phone namespace (Info.label label) phone ])
+        |> Maybe.map (\( label, phoneValue ) -> div [ class [ "AccountPhone" ] ] [ Info.phone namespace (Info.getLabel label) phoneValue ])
         |> Maybe.withDefault HtmlExtra.none
 
 

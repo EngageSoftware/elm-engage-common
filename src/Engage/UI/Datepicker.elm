@@ -1,16 +1,17 @@
 module Engage.UI.Datepicker exposing
     ( State
-    , date, datepicker, initialState
+    , date, datepicker, initialState, toDateTime
     )
 
 {-| UI.Datepicker
 
 @docs State
 
-@docs date, datepicker, initialState
+@docs date, datepicker, initialState, toDateTime
 
 -}
 
+import Date exposing (Date)
 import DateTimePicker exposing (DateTime)
 import DateTimePicker.Config
 import Engage.CssHelpers
@@ -33,26 +34,38 @@ type State
 
 
 type alias StateData =
-    { datepicker : DateTimePicker.State
+    { datepicker : Maybe DateTimePicker.State
     , error : Message.State
     }
 
 
 {-| Get the initial State
 -}
-initialState : DateTime -> State
+initialState : Date -> State
 initialState now =
-    State
-        { datepicker = DateTimePicker.initialStateWithToday now
-        , error = Message.initialState
-        }
+    let
+        convertedNow =
+            toDateTime (Just now)
+    in
+    case convertedNow of
+        Just nowDate ->
+            State
+                { datepicker = Just (DateTimePicker.initialStateWithToday nowDate)
+                , error = Message.initialState
+                }
+
+        Nothing ->
+            State
+                { datepicker = Nothing
+                , error = Message.initialState
+                }
 
 
 {-| Get the datepicker view
 -}
 datepicker :
     { id : String
-    , onChange : State -> Maybe DateTime -> msg
+    , onChange : State -> Maybe Date -> msg
     , onStateChange : State -> msg
     , labelText : String
     , requiredText : Maybe String
@@ -60,7 +73,7 @@ datepicker :
     , status : Status
     }
     -> State
-    -> Maybe DateTime
+    -> Maybe Date
     -> Html msg
 datepicker args state value =
     datepickerWithSize
@@ -79,7 +92,7 @@ datepicker args state value =
 
 datepickerWithSize :
     { id : String
-    , onChange : State -> Maybe DateTime -> msg
+    , onChange : State -> Maybe Date -> msg
     , onStateChange : State -> msg
     , labelText : String
     , requiredText : Maybe String
@@ -88,7 +101,7 @@ datepickerWithSize :
     , status : Status
     }
     -> State
-    -> Maybe DateTime
+    -> Maybe Date
     -> Html msg
 datepickerWithSize args state value =
     let
@@ -112,13 +125,18 @@ datepickerWithSize args state value =
         [ label
             [ class [ "Label" ], for args.id ]
             [ text args.labelText, requiredIndicator ]
-        , toUnstyled
-            (DateTimePicker.datePicker
-                (\newState -> args.onChange (State { stateData | datepicker = newState }))
-                [ fromUnstyled (class [ "Datepicker-" ++ getSizeString args.size ]) ]
-                stateData.datepicker
-                value
-            )
+        , case stateData.datepicker of
+            Just datepickerState ->
+                toUnstyled
+                    (DateTimePicker.datePicker
+                        (\newState dateTime -> args.onChange (State { stateData | datepicker = Just newState }) (fromDateTime dateTime))
+                        [ fromUnstyled (class [ "Datepicker-" ++ getSizeString args.size ]) ]
+                        datepickerState
+                        (toDateTime value)
+                    )
+
+            Nothing ->
+                text ""
         , Error.inlineError
             { namespace = args.namespace
             , status = args.status
@@ -132,7 +150,7 @@ datepickerWithSize args state value =
 -}
 date :
     { id : String
-    , onChange : State -> Maybe DateTime -> msg
+    , onChange : State -> Maybe Date -> msg
     , onStateChange : State -> msg
     , labelText : String
     , requiredText : Maybe String
@@ -140,7 +158,7 @@ date :
     , status : Status
     }
     -> State
-    -> Maybe DateTime
+    -> Maybe Date
     -> Html msg
 date args state value =
     let
@@ -156,7 +174,7 @@ date args state value =
             args.onStateChange (State { stateData | error = errorState })
 
         config =
-            DateTimePicker.Config.defaultDatePickerConfig (\newState -> args.onChange (State { stateData | datepicker = newState }))
+            DateTimePicker.Config.defaultDatePickerConfig (\newState dateTime -> args.onChange (State { stateData | datepicker = Just newState }) (fromDateTime dateTime))
     in
     FormControl.formControl
         { namespace = args.namespace
@@ -169,16 +187,48 @@ date args state value =
         , onValidationStateChange = onValidationStateChange
         }
         stateData.error
-        (toUnstyled
-            (DateTimePicker.datePickerWithConfig
-                { config | usePicker = False, attributes = [ fromUnstyled (class [ "Container" ]) ] }
-                [ fromUnstyled (class [ "Date-Large" ]) ]
-                stateData.datepicker
-                value
-            )
+        (case stateData.datepicker of
+            Just datePickerState ->
+                toUnstyled
+                    (DateTimePicker.datePickerWithConfig
+                        { config | usePicker = False, attributes = [ fromUnstyled (class [ "Container" ]) ] }
+                        [ fromUnstyled (class [ "Date-Large" ]) ]
+                        datePickerState
+                        (toDateTime value)
+                    )
+
+            Nothing ->
+                text ""
         )
 
 
 unwrap : State -> StateData
 unwrap (State stateData) =
     stateData
+
+
+{-| Convert a Date to a DateTime
+-}
+toDateTime : Maybe Date -> Maybe DateTime
+toDateTime oldDate =
+    case oldDate of
+        Just dateValue ->
+            dateValue
+                |> Date.toIsoString
+                |> DateTimePicker.Config.defaultDateFromInput
+
+        Nothing ->
+            Nothing
+
+
+fromDateTime : Maybe DateTime -> Maybe Date
+fromDateTime oldDateTime =
+    case oldDateTime of
+        Just dateTimeValue ->
+            dateTimeValue
+                |> DateTimePicker.Config.defaultDateToInput
+                |> Date.fromIsoString
+                |> Result.toMaybe
+
+        Nothing ->
+            Nothing

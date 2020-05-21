@@ -6,9 +6,9 @@ module Engage.Form.Company.Json exposing (decoder, emptyCompanies, emptyCompany,
 
 -}
 
+import Date exposing (Date)
 import Engage.Entity.Address as Address
 import Engage.Form.Company.Types exposing (CompaniesData, CompanyData)
-import Iso8601
 import Json.Decode as Decode exposing (Decoder, succeed)
 import Json.Decode.Pipeline exposing (required)
 import Json.Encode as Encode
@@ -54,12 +54,14 @@ companyEncoder ( isCurrent, company ) =
             , ( "position", Encode.string company.position )
             , ( "startDate"
               , company.startDate
-                    |> Maybe.map Iso8601.encode
+                    |> Maybe.map Date.toIsoString
+                    |> Maybe.map Encode.string
                     |> Maybe.withDefault Encode.null
               )
             , ( "endDate"
               , company.endDate
-                    |> Maybe.map Iso8601.encode
+                    |> Maybe.map Date.toIsoString
+                    |> Maybe.map Encode.string
                     |> Maybe.withDefault Encode.null
               )
             , ( "address1", Encode.string company.address.address1 )
@@ -107,8 +109,8 @@ companyDecoder =
         |> required "participantCompanyId" (Decode.maybe Decode.int)
         |> required "name" Decode.string
         |> required "position" (Decode.maybe Decode.string |> Decode.map (Maybe.withDefault ""))
-        |> required "startDate" (Decode.maybe Iso8601.decoder)
-        |> required "endDate" (Decode.maybe Iso8601.decoder)
+        |> required "startDate" (Decode.maybe isoDateDecoder)
+        |> required "endDate" (Decode.maybe isoDateDecoder)
         |> required "address" (Decode.maybe Address.decoder |> Decode.map (Maybe.withDefault Address.empty))
 
 
@@ -133,3 +135,17 @@ emptyCompany =
     , endDate = Nothing
     , address = Address.empty
     }
+
+
+isoDateDecoder : Decoder Date
+isoDateDecoder =
+    Decode.string
+        |> Decode.andThen
+            (\str ->
+                case Date.fromIsoString str of
+                    Ok date ->
+                        Decode.succeed date
+
+                    Err error ->
+                        Decode.fail error
+            )

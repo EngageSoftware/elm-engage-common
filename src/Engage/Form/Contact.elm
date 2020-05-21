@@ -29,6 +29,7 @@ import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (..)
 import Html.Attributes
 import String
+import Validate
 
 
 {-| The Msg type
@@ -197,10 +198,10 @@ contactTypes value =
 {-| Get the view
 -}
 view : Namespace -> Localization -> Countries -> RegionsCountry -> Contact -> Html msg
-view namespace localization countries regions data =
+view namespace localization countriesData regionsData data =
     let
         args =
-            { namespace = namespace, localization = localization, countries = countries, regions = regions }
+            { namespace = namespace, localization = localization, countries = countriesData, regions = regionsData }
 
         class =
             args.namespace
@@ -310,19 +311,19 @@ form originalNamespace localization field attributes (State state) contactData =
             Namespace.namespace <| Namespace.toString originalNamespace ++ "Contact"
 
         onContactTypeChangeHandler : ValidationErrors field -> Dropdown.State -> Maybe ( String, String ) -> Msg field
-        onContactTypeChangeHandler validations state value =
+        onContactTypeChangeHandler validations stateValue value =
             value
                 |> Maybe.map Tuple.first
-                |> Maybe.andThen (String.toInt >> Result.toMaybe)
+                |> Maybe.andThen String.toInt
                 |> Maybe.map2 (\a b -> ( a, b )) attribute.contactTypes
-                |> Maybe.andThen (\( contactTypes, contactTypeId ) -> Dict.get contactTypeId contactTypes)
-                |> ContactTypeUpdated validations state
+                |> Maybe.andThen (\( newContactTypes, contactTypeId ) -> Dict.get contactTypeId newContactTypes)
+                |> ContactTypeUpdated validations stateValue
     in
     div
         []
         [ attribute.contactTypes
             |> Maybe.map
-                (\contactTypes ->
+                (\newContactTypes ->
                     div [ class [ "FieldGroup" ] ]
                         [ Field.dropdownFieldWithAttributes
                             { namespace = namespace
@@ -330,12 +331,12 @@ form originalNamespace localization field attributes (State state) contactData =
                             , localization = localization
                             , field = field ContactType
                             , required = True
-                            , items = contactTypes |> contactTypesToItems
+                            , items = newContactTypes |> contactTypesToItems
                             }
                             state.validations
                             []
                             state.contactType
-                            (Maybe.map (.contactTypeId >> toString) contactData.contactType)
+                            (Maybe.map (.contactTypeId >> String.fromInt) contactData.contactType)
                         ]
                 )
             |> Maybe.withDefault HtmlExtra.none
@@ -454,7 +455,7 @@ form originalNamespace localization field attributes (State state) contactData =
                 state.validations
                 [ Html.Attributes.name "country", Html.Attributes.attribute "autocomplete" "country" ]
                 state.country
-                (Maybe.map (Tuple.first >> toString) contactData.country)
+                (Maybe.map (Tuple.first >> String.fromInt) contactData.country)
             , Field.dropdownFieldWithAttributes
                 { namespace = namespace
                 , onChange = RegionUpdated
@@ -466,7 +467,7 @@ form originalNamespace localization field attributes (State state) contactData =
                 state.validations
                 [ Html.Attributes.name "region", Html.Attributes.attribute "autocomplete" "address-level1" ]
                 state.region
-                (Maybe.map (Tuple.first >> toString) contactData.region)
+                (Maybe.map (Tuple.first >> String.fromInt) contactData.region)
             ]
         , div [ class [ "FieldGroup" ] ]
             [ Field.inputFieldWithAttributes
@@ -829,33 +830,33 @@ update msg (State oldState) data =
 
 
 contactTypesToItems : ContactTypes -> Dict String Dropdown.Item
-contactTypesToItems countries =
-    countries
+contactTypesToItems newCountries =
+    newCountries
         |> Dict.values
         |> List.sortBy .shortDescription
-        |> List.map (\{ contactTypeId, longDescription } -> ( toString contactTypeId, { value = toString contactTypeId, text = longDescription, enabled = True } ))
+        |> List.map (\{ contactTypeId, longDescription } -> ( String.fromInt contactTypeId, { value = String.fromInt contactTypeId, text = longDescription, enabled = True } ))
         |> Dict.fromList
 
 
 {-| Convert Countries to an dropdown
 -}
 countriesToItems : Countries -> Dict String Dropdown.Item
-countriesToItems countries =
-    countries
+countriesToItems newCountries =
+    newCountries
         |> Dict.values
         |> List.sortBy .countryName
-        |> List.map (\{ countryId, countryName } -> ( toString countryId, { value = toString countryId, text = countryName, enabled = True } ))
+        |> List.map (\{ countryId, countryName } -> ( String.fromInt countryId, { value = String.fromInt countryId, text = countryName, enabled = True } ))
         |> Dict.fromList
 
 
 {-| Convert Regions to an dropdown
 -}
 regionsToItems : Regions -> Dict String Dropdown.Item
-regionsToItems regions =
-    regions
+regionsToItems newRegions =
+    newRegions
         |> Dict.values
         |> List.sortBy .regionName
-        |> List.map (\{ regionId, regionName } -> ( toString regionId, { value = toString regionId, text = regionName, enabled = True } ))
+        |> List.map (\{ regionId, regionName } -> ( String.fromInt regionId, { value = String.fromInt regionId, text = regionName, enabled = True } ))
         |> Dict.fromList
 
 
@@ -868,7 +869,7 @@ validateAll =
 
 {-| Validate all of the fields with a function
 -}
-validateAllWith : List (Contact -> ValidationErrors parentField) -> (ValidationField -> parentField) -> State parentField -> Contact -> State parentField
+validateAllWith : List (Validate.Validator ( parentField, Validation.ValidationStatus ) Contact) -> (ValidationField -> parentField) -> State parentField -> Contact -> State parentField
 validateAllWith additionalValidations parentField (State state) data =
     State
         { state
@@ -878,7 +879,7 @@ validateAllWith additionalValidations parentField (State state) data =
 
 {-| Validate a field with a function
 -}
-validateFieldWith : List (Contact -> ValidationErrors parentField) -> (ValidationField -> parentField) -> Contact -> ValidationErrors parentField
+validateFieldWith : List (Validate.Validator ( parentField, Validation.ValidationStatus ) Contact) -> (ValidationField -> parentField) -> Contact -> ValidationErrors parentField
 validateFieldWith additionalValidations parentField data =
     Validation.validateField
         ([ Validation.validateStringField (Validation.localize (parentField FirstName)) (parentField FirstName) .firstName

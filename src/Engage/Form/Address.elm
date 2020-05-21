@@ -30,6 +30,7 @@ import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import String exposing (..)
+import Validate
 
 
 {-| The Msg type
@@ -350,28 +351,28 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
             Namespace.namespace <| Namespace.toString originalNamespace ++ "Address"
 
         onAddressTypeChangeHandler : ValidationErrors field -> Dropdown.State -> Maybe ( String, String ) -> Msg field
-        onAddressTypeChangeHandler validations state value =
+        onAddressTypeChangeHandler validations stateValue value =
             value
                 |> Maybe.map Tuple.first
-                |> Maybe.andThen (String.toInt >> Result.toMaybe)
+                |> Maybe.andThen String.toInt
                 |> Maybe.map2 (\a b -> ( a, b )) attribute.addressTypes
-                |> Maybe.andThen (\( addressTypes, addressTypeId ) -> Dict.get addressTypeId addressTypes)
-                |> AddressTypeUpdated validations state
+                |> Maybe.andThen (\( newAddressTypes, addressTypeId ) -> Dict.get addressTypeId newAddressTypes)
+                |> AddressTypeUpdated validations stateValue
 
         addressTypeDisplayStyle =
             case hideOrShow.addressTypeId of
                 Nothing ->
-                    [ ( "", "" ) ]
+                    style "" ""
 
                 _ ->
-                    [ ( "display", "none" ) ]
+                    style "display" "none"
 
         addressNameDisplayStyle =
             if hideOrShow.addressName == Hide then
-                [ ( "display", "none" ) ]
+                style "display" "none"
 
             else
-                [ ( "", "" ) ]
+                style "" ""
 
         regionsForCountry =
             addressData.country
@@ -383,24 +384,24 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
         []
         [ attribute.addressTypes
             |> Maybe.map
-                (\addressTypes ->
-                    div [ class [ "FieldGroup" ], style addressTypeDisplayStyle ]
+                (\newAddressTypes ->
+                    div [ class [ "FieldGroup" ], addressTypeDisplayStyle ]
                         [ Field.dropdownFieldWithAttributes
                             { namespace = namespace
                             , onChange = onAddressTypeChangeHandler
                             , localization = localization
                             , field = field AddressType
                             , required = True
-                            , items = addressTypes |> addressTypesToItems
+                            , items = newAddressTypes |> addressTypesToItems
                             }
                             state.validations
                             []
                             state.addressType
-                            (Maybe.map (.addressTypeId >> toString) addressData.addressType)
+                            (Maybe.map (.addressTypeId >> String.fromInt) addressData.addressType)
                         ]
                 )
             |> Maybe.withDefault HtmlExtra.none
-        , div [ class [ "FieldGroup" ], style addressNameDisplayStyle ]
+        , div [ class [ "FieldGroup" ], addressNameDisplayStyle ]
             [ Field.inputFieldWithAttributes
                 { namespace = namespace
                 , onChange = NameUpdated
@@ -451,7 +452,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 state.validations
                 [ Html.Attributes.name "country", Html.Attributes.attribute "autocomplete" "country" ]
                 state.country
-                (Maybe.map (Tuple.first >> toString) addressData.country)
+                (Maybe.map (Tuple.first >> String.fromInt) addressData.country)
             , Field.dropdownFieldWithAttributes
                 { namespace = namespace
                 , onChange = RegionUpdated
@@ -463,7 +464,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 state.validations
                 [ Html.Attributes.name "region", Html.Attributes.attribute "autocomplete" "address-level1" ]
                 state.region
-                (Maybe.map (Tuple.first >> toString) addressData.region)
+                (Maybe.map (Tuple.first >> String.fromInt) addressData.region)
             ]
         , div [ class [ "FieldGroup" ] ]
             [ Field.inputFieldWithAttributes
@@ -822,33 +823,33 @@ update msg (State oldState) data =
 
 
 addressTypesToItems : AddressTypes -> Dict String Dropdown.Item
-addressTypesToItems countries =
-    countries
+addressTypesToItems newCountries =
+    newCountries
         |> Dict.values
         |> List.sortBy .shortDescription
-        |> List.map (\{ addressTypeId, longDescription } -> ( toString addressTypeId, { value = toString addressTypeId, text = longDescription, enabled = True } ))
+        |> List.map (\{ addressTypeId, longDescription } -> ( String.fromInt addressTypeId, { value = String.fromInt addressTypeId, text = longDescription, enabled = True } ))
         |> Dict.fromList
 
 
 {-| Convert Countries to items dropdown
 -}
 countriesToItems : Countries -> Dict String Dropdown.Item
-countriesToItems countries =
-    countries
+countriesToItems newCountries =
+    newCountries
         |> Dict.values
         |> List.sortBy .countryName
-        |> List.map (\{ countryId, countryName } -> ( toString countryId, { value = toString countryId, text = countryName, enabled = True } ))
+        |> List.map (\{ countryId, countryName } -> ( String.fromInt countryId, { value = String.fromInt countryId, text = countryName, enabled = True } ))
         |> Dict.fromList
 
 
 {-| Convert Regions to items dropdown
 -}
 regionsToItems : Regions -> Dict String Dropdown.Item
-regionsToItems regions =
-    regions
+regionsToItems newRegions =
+    newRegions
         |> Dict.values
         |> List.sortBy .regionName
-        |> List.map (\{ regionId, regionName } -> ( toString regionId, { value = toString regionId, text = regionName, enabled = True } ))
+        |> List.map (\{ regionId, regionName } -> ( String.fromInt regionId, { value = String.fromInt regionId, text = regionName, enabled = True } ))
         |> Dict.fromList
 
 
@@ -861,22 +862,22 @@ validateAll =
 
 {-| Validate all fields with a function
 -}
-validateAllWith : List (Address -> ValidationErrors parentField) -> (ValidationField -> parentField) -> State parentField -> RegionsCountry -> Address -> State parentField
-validateAllWith additionalValidations parentField (State state) regions data =
+validateAllWith : List (Validate.Validator ( parentField, Validation.ValidationStatus ) Address) -> (ValidationField -> parentField) -> State parentField -> RegionsCountry -> Address -> State parentField
+validateAllWith additionalValidations parentField (State state) regionsData data =
     State
         { state
-            | validations = validateFieldWith additionalValidations parentField regions data
+            | validations = validateFieldWith additionalValidations parentField regionsData data
         }
 
 
 {-| Validate a field with a function
 -}
-validateFieldWith : List (Address -> ValidationErrors parentField) -> (ValidationField -> parentField) -> RegionsCountry -> Address -> ValidationErrors parentField
-validateFieldWith additionalValidations parentField regions data =
+validateFieldWith : List (Validate.Validator ( parentField, Validation.ValidationStatus ) Address) -> (ValidationField -> parentField) -> RegionsCountry -> Address -> ValidationErrors parentField
+validateFieldWith additionalValidations parentField regionsData data =
     let
         availableRegions =
             data.country
-                |> Maybe.map (\( countryId, _ ) -> Address.getRegionsForCountry countryId regions)
+                |> Maybe.map (\( countryId, _ ) -> Address.getRegionsForCountry countryId regionsData)
                 |> Maybe.withDefault Dict.empty
 
         regionValidation =

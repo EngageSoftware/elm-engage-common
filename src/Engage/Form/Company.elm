@@ -11,6 +11,7 @@ module Engage.Form.Company exposing
 
 -}
 
+import Date exposing (Date)
 import Engage.CssHelpers
 import Engage.Entity.Address as Address exposing (RegionsCountry)
 import Engage.Form.Address as Address
@@ -387,16 +388,16 @@ updateAddress addressMsg companyState companyData =
 validateAll : State -> RegionsCountry -> CompaniesData data -> State
 validateAll (State state) regions data =
     let
-        currentCompany =
+        newCurrentCompany =
             state.currentCompany
 
-        previousCompany =
+        newPreviousCompany =
             state.previousCompany
     in
     State
         { state
             | currentCompany =
-                { currentCompany
+                { newCurrentCompany
                     | address = Address.validateAll CurrentCompanyAddress state.currentCompany.address regions data.currentCompany.address
                     , validations =
                         Validation.validateField
@@ -406,7 +407,7 @@ validateAll (State state) regions data =
                             data
                 }
             , previousCompany =
-                { previousCompany
+                { newPreviousCompany
                     | address =
                         if String.isEmpty data.previousCompany.name then
                             Address.initialState

@@ -11,6 +11,7 @@ module Engage.Form.Profile exposing
 
 -}
 
+import Date exposing (Date)
 import Engage.CssHelpers
 import Engage.Entity.Address exposing (Address, Countries, RegionsCountry)
 import Engage.Entity.Gender as Gender exposing (Gender)
@@ -231,15 +232,15 @@ genderView namespace attribute =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
 
-        do label gender =
-            if String.isEmpty gender then
+        do label genderValue =
+            if String.isEmpty genderValue then
                 text ""
 
             else
-                Info.multiple namespace (Info.label label) [ text gender ]
+                Info.multiple namespace (Info.getLabel label) [ text genderValue ]
     in
     attribute.gender
-        |> Maybe.map (\( label, gender ) -> do label (Gender.toString gender))
+        |> Maybe.map (\( label, genderValue ) -> do label (Gender.toString genderValue))
         |> Maybe.withDefault (text "")
 
 
@@ -260,7 +261,7 @@ birthDateView namespace localization attribute =
                     text ""
 
                 Just date ->
-                    Info.multiple namespace (Info.label label) [ text (Date.Extra.Format.format Date.Extra.Config.Config_en_us.config dateFormat date) ]
+                    Info.multiple namespace (Info.getLabel label) [ text (Date.format dateFormat date) ]
     in
     attribute.birthDate
         |> Maybe.map (\( label, date ) -> do label date)
@@ -281,7 +282,7 @@ birthDateYearView namespace attribute =
                     text ""
 
                 Just item ->
-                    Info.multiple namespace (Info.label label) [ text (toString (Tuple.first item)) ]
+                    Info.multiple namespace (Info.getLabel label) [ text (String.fromInt (Tuple.first item)) ]
     in
     attribute.birthDateYear
         |> Maybe.map (\( label, item ) -> do label item)
@@ -302,7 +303,7 @@ birthDateMonthView namespace attribute =
                     text ""
 
                 Just item ->
-                    Info.multiple namespace (Info.label label) [ text (toString (Tuple.first item)) ]
+                    Info.multiple namespace (Info.getLabel label) [ text (String.fromInt (Tuple.first item)) ]
     in
     attribute.birthDateMonth
         |> Maybe.map (\( label, item ) -> do label item)
@@ -317,14 +318,14 @@ nameView namespace attribute =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
 
-        firstName =
+        firstNameValue =
             attribute.firstName |> Maybe.withDefault ""
 
-        lastName =
+        lastNameValue =
             attribute.lastName |> Maybe.withDefault ""
 
         name =
-            firstName ++ " " ++ lastName
+            firstNameValue ++ " " ++ lastNameValue
     in
     if name |> String.trim |> String.isEmpty then
         text ""
@@ -342,7 +343,7 @@ titleView namespace attribute =
                 |> Engage.CssHelpers.withNamespace
     in
     attribute.title
-        |> Maybe.map (\title -> div [ class [ "ProfileTitle" ] ] [ text title ])
+        |> Maybe.map (\newTitle -> div [ class [ "ProfileTitle" ] ] [ text newTitle ])
         |> Maybe.withDefault (text "")
 
 
@@ -357,15 +358,15 @@ addressView ({ namespace, localization } as args) attribute =
         isEmpty =
             Engage.Form.Address.isEmpty
 
-        do label address =
-            if isEmpty address then
+        do label addressValue =
+            if isEmpty addressValue then
                 text ""
 
             else
-                Info.multiple namespace (Info.label label) [ Engage.Form.Address.view args address ]
+                Info.multiple namespace (Info.getLabel label) [ Engage.Form.Address.view args addressValue ]
     in
     attribute.address
-        |> Maybe.map (\( label, address ) -> do label address)
+        |> Maybe.map (\( label, addressValue ) -> do label addressValue)
         |> Maybe.withDefault (text "")
 
 
@@ -379,10 +380,10 @@ avatarView namespace attribute =
     in
     attribute.avatar
         |> Maybe.map
-            (\avatar ->
+            (\avatarValue ->
                 div
                     [ class
-                        (if String.isEmpty avatar then
+                        (if String.isEmpty avatarValue then
                             [ "ProfileNoAvatar", "ProfileAvatar" ]
 
                          else
@@ -391,11 +392,11 @@ avatarView namespace attribute =
                     ]
                     [ img
                         [ src
-                            (if String.isEmpty avatar then
+                            (if String.isEmpty avatarValue then
                                 "/DesktopModules/EngageCore.Participant/images/noprofile.png"
 
                              else
-                                avatar
+                                avatarValue
                             )
                         ]
                         []
@@ -413,7 +414,7 @@ emailView namespace attribute =
                 |> Engage.CssHelpers.withNamespace
     in
     attribute.email
-        |> Maybe.map (\( label, email ) -> div [ class [ "ProfileEmail" ] ] [ Info.email namespace (Info.label label) email ])
+        |> Maybe.map (\( label, emailValue ) -> div [ class [ "ProfileEmail" ] ] [ Info.email namespace (Info.getLabel label) emailValue ])
         |> Maybe.withDefault (text "")
 
 
@@ -426,7 +427,7 @@ phoneView namespace attribute =
                 |> Engage.CssHelpers.withNamespace
     in
     attribute.phone
-        |> Maybe.map (\( label, phone ) -> div [ class [ "ProfilePhone" ] ] [ Info.phone namespace (Info.label label) phone ])
+        |> Maybe.map (\( label, phoneValue ) -> div [ class [ "ProfilePhone" ] ] [ Info.phone namespace (Info.getLabel label) phoneValue ])
         |> Maybe.withDefault (text "")
 
 
@@ -439,7 +440,7 @@ mobilePhoneView namespace attribute =
                 |> Engage.CssHelpers.withNamespace
     in
     attribute.mobilePhone
-        |> Maybe.map (\( label, mobilePhone ) -> div [ class [ "ProfileCellphone" ] ] [ Info.mobilePhone namespace (Info.label label) mobilePhone ])
+        |> Maybe.map (\( label, mobilePhoneValue ) -> div [ class [ "ProfileCellphone" ] ] [ Info.mobilePhone namespace (Info.getLabel label) mobilePhoneValue ])
         |> Maybe.withDefault (text "")
 
 
@@ -452,7 +453,7 @@ faxView namespace attribute =
                 |> Engage.CssHelpers.withNamespace
     in
     attribute.fax
-        |> Maybe.map (\( label, fax ) -> div [ class [ "ProfileFax" ] ] [ Info.fax namespace (Info.label label) fax ])
+        |> Maybe.map (\( label, faxValue ) -> div [ class [ "ProfileFax" ] ] [ Info.fax namespace (Info.getLabel label) faxValue ])
         |> Maybe.withDefault (text "")
 
 

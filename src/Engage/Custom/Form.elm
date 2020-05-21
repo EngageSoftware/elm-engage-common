@@ -1,13 +1,14 @@
-module Engage.Custom.Form exposing (allFields, completedView, findField, form, isValid, update, updateFileEntryData, validate, validateAll, view)
+module Engage.Custom.Form exposing (allFields, completedView, findField, formView, isValid, update, updateFileEntryData, validate, validateAll, view)
 
 {-| Custom.Form
 
-@docs allFields, completedView, findField, form, isValid, update, updateFileEntryData, validate, validateAll, view
+@docs allFields, completedView, findField, formView, isValid, update, updateFileEntryData, validate, validateAll, view
 
 -}
 
 import Dict exposing (Dict)
 import Engage.CssHelpers
+import Engage.Custom.Field exposing (FieldData)
 import Engage.Custom.Section as Section exposing (sectionTupleDecoder)
 import Engage.Custom.Types exposing (..)
 import Engage.Html.Extra as HtmlExtra
@@ -25,12 +26,12 @@ class =
 {-| Get the view
 -}
 view : Config msg -> Form -> Html msg
-view config form =
+view config formValue =
     let
         showSectionName =
-            Dict.size form.sections > 1
+            Dict.size formValue.sections > 1
     in
-    form.sections
+    formValue.sections
         |> Dict.values
         |> List.sortBy .relativeOrder
         |> List.map (Section.view config)
@@ -39,24 +40,24 @@ view config form =
 
 {-| Get the form view
 -}
-form : Config msg -> Form -> Html msg
-form config form =
+formView : Config msg -> Form -> Html msg
+formView config formValue =
     let
         showSectionName =
-            Dict.size form.sections > 1
+            Dict.size formValue.sections > 1
 
         sections =
-            form.sections
+            formValue.sections
                 |> Dict.values
                 |> List.sortBy .relativeOrder
-                |> List.map (Section.form { config = config, validations = form.validations, showSectionName = showSectionName } form)
+                |> List.map (Section.form { config = config, validations = formValue.validations, showSectionName = showSectionName } formValue)
 
         title =
-            if Dict.isEmpty form.sections then
+            if Dict.isEmpty formValue.sections then
                 HtmlExtra.none
 
             else
-                Html.h3 [] [ Html.text form.name ]
+                Html.h3 [] [ Html.text formValue.name ]
     in
     Html.div [ class [ "Form" ] ] (title :: sections)
 
@@ -64,17 +65,17 @@ form config form =
 {-| Get the completed view
 -}
 completedView : Config msg -> Form -> Html msg
-completedView config form =
+completedView config formValue =
     let
         showSectionName =
-            Dict.size form.sections > 1
+            Dict.size formValue.sections > 1
     in
-    form.sections
+    formValue.sections
         |> Dict.values
         |> List.map
             (Section.completedView
                 { config = config
-                , validations = form.validations
+                , validations = formValue.validations
                 , showName = showSectionName
                 }
             )
@@ -117,7 +118,7 @@ validate fieldId form =
             form.sections
                 |> Dict.values
                 |> List.concatMap (Section.validate fieldId)
-                |> Validation.merge (\( { fieldId }, status ) -> fieldId) (cleanValidations fieldId form.validations)
+                |> Validation.merge (\( fields, status ) -> fields.fieldId) (cleanValidations fieldId form.validations)
     }
 
 
@@ -142,7 +143,7 @@ validateAll form =
 
 {-| Get all fields of the Form
 -}
-allFields : Form -> List ( Form, Section, FieldGroup, Field )
+allFields : Form -> List FieldData
 allFields form =
     form.sections
         |> Dict.values
@@ -151,7 +152,7 @@ allFields form =
 
 {-| Field a Form field
 -}
-findField : { a | formId : Int, sectionId : Int, fieldGroupId : Int, fieldId : Int } -> Form -> Maybe ( Form, Section, FieldGroup, Field )
+findField : { a | formId : Int, sectionId : Int, fieldGroupId : Int, fieldId : Int } -> Form -> Maybe FieldData
 findField query form =
     form.sections
         |> Dict.get query.sectionId

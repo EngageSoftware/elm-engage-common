@@ -6,27 +6,29 @@ module Engage.Custom.Field.Json exposing (encoder, fieldDecoder, fieldGroupDecod
 
 -}
 
+import Date
 import Dict
 import Engage.Custom.Types exposing (BoolEntryData, Disable(..), EntryData, Field, FieldChoice, FieldGroup, FieldType(..), FileEntryData, FileStatus(..), MultipleEntryData, StaticFormType(..), UpdateOptions(..))
 import Engage.Form.MembershipTypeList exposing (MembershipType)
 import Engage.UI.Accordion as Accordion
-import Engage.UI.Datepicker as Datepicker
+import Engage.UI.Datepicker as Datepicker exposing (toDateTime)
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Input as Input
 import Json.Decode as Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 import Json.Encode as Encode
 import Set exposing (Set)
+import Time
 
 
 {-| The FieldGroup decoder
 -}
-fieldGroupDecoder : Date -> Decode.Decoder ( Int, FieldGroup )
+fieldGroupDecoder : Date.Date -> Decode.Decoder ( Int, FieldGroup )
 fieldGroupDecoder now =
     let
         toFieldGroupDecoder : List ( Int, Field ) -> Int -> Decode.Decoder ( Int, FieldGroup )
         toFieldGroupDecoder fields relativeOrder =
-            decode
+            succeed
                 ( relativeOrder
                 , { fieldGroupId = relativeOrder
                   , fields = Dict.fromList fields
@@ -34,7 +36,7 @@ fieldGroupDecoder now =
                   }
                 )
     in
-    decode toFieldGroupDecoder
+    succeed toFieldGroupDecoder
         |> required "fields" (list (fieldTupleDecoder now))
         |> required "relativeOrder" int
         |> resolve
@@ -42,18 +44,18 @@ fieldGroupDecoder now =
 
 {-| The Field tuple decoder
 -}
-fieldTupleDecoder : Date -> Decode.Decoder ( Int, Field )
+fieldTupleDecoder : Date.Date -> Decode.Decoder ( Int, Field )
 fieldTupleDecoder now =
-    decode (\a b -> ( a, b ))
+    succeed (\a b -> ( a, b ))
         |> required "fieldId" int
         |> custom (fieldDecoder now)
 
 
 {-| The Field decoder
 -}
-fieldDecoder : Date -> Decode.Decoder Field
+fieldDecoder : Date.Date -> Decode.Decoder Field
 fieldDecoder now =
-    decode Field
+    succeed Engage.Custom.Types.Field
         |> required "fieldId" int
         |> required "relativeOrder" int
         |> required "label" string
@@ -72,26 +74,26 @@ fieldDecoder now =
 -- |> required "entry" (maybe entryDecoder)
 
 
-fieldTypeWithEntryDecoder : Date -> Decode.Decoder FieldType
+fieldTypeWithEntryDecoder : Date.Date -> Decode.Decoder FieldType
 fieldTypeWithEntryDecoder now =
     Decode.oneOf
-        [ decode (entryDatafieldTypeDecoder now)
+        [ succeed (entryDatafieldTypeDecoder now)
             |> required "entry" entryDataDecoder
             |> required "fieldType" string
             |> resolve
-        , decode multipleEntryDataFieldTypeDecoder
+        , succeed multipleEntryDataFieldTypeDecoder
             |> required "entry" multipleEntryDataDecoder
             |> required "fieldType" string
             |> resolve
-        , decode boolEntryDataFieldTypeDecoder
+        , succeed boolEntryDataFieldTypeDecoder
             |> required "entry" boolEntryDataDecoder
             |> required "fieldType" string
             |> resolve
-        , decode fileEntryDatafieldTypeDecoder
+        , succeed fileEntryDatafieldTypeDecoder
             |> required "entry" fileEntryDataDecoder
             |> required "fieldType" string
             |> resolve
-        , decode noEntryFieldTypeDecoder
+        , succeed noEntryFieldTypeDecoder
             |> required "fieldType" string
             |> resolve
         ]
@@ -117,7 +119,7 @@ noEntryFieldTypeDecoder fieldType =
             Decode.fail ("Attempting to access invalid form field type: " ++ fieldType ++ ".")
 
 
-entryDatafieldTypeDecoder : Date -> EntryData -> String -> Decode.Decoder FieldType
+entryDatafieldTypeDecoder : Date.Date -> EntryData -> String -> Decode.Decoder FieldType
 entryDatafieldTypeDecoder now entryData fieldType =
     case fieldType of
         "TextBox" ->
@@ -279,23 +281,23 @@ disableDecoder =
         toDisableDecoder value =
             case value of
                 0 ->
-                    decode None
+                    succeed None
 
                 1 ->
-                    decode Disabled
+                    succeed Disabled
 
                 2 ->
-                    decode Hidden
+                    succeed Hidden
 
                 _ ->
-                    Decode.fail ("Attempting to access invalid form disable value: " ++ toString value ++ ".")
+                    Decode.fail ("Attempting to access invalid form disable value: " ++ String.fromInt value ++ ".")
     in
     int |> Decode.andThen toDisableDecoder
 
 
 fieldChoiceDecoder : Decode.Decoder FieldChoice
 fieldChoiceDecoder =
-    decode FieldChoice
+    succeed FieldChoice
         |> required "fieldChoiceId" (maybe int)
         |> required "name" string
         |> required "value" string
@@ -304,7 +306,7 @@ fieldChoiceDecoder =
 
 membershipTypeDecoder : Decode.Decoder MembershipType
 membershipTypeDecoder =
-    decode MembershipType
+    succeed MembershipType
         |> required "name" string
         |> required "value" int
         |> required "description" string
@@ -314,9 +316,9 @@ membershipTypeDecoder =
 entryDataDecoder : Decode.Decoder EntryData
 entryDataDecoder =
     Decode.oneOf
-        [ decode EntryData
+        [ succeed EntryData
             |> required "value" string
-        , Decode.succeed
+        , succeed
             { value = ""
             }
         ]
@@ -325,7 +327,7 @@ entryDataDecoder =
 multipleEntryDataDecoder : Decode.Decoder MultipleEntryData
 multipleEntryDataDecoder =
     Decode.oneOf
-        [ decode MultipleEntryData
+        [ succeed MultipleEntryData
             |> required "values" (Decode.oneOf [ list string |> map Set.fromList, null Set.empty ])
         , null (MultipleEntryData Set.empty)
         ]
@@ -350,11 +352,11 @@ boolEntryDataDecoder =
                     )
     in
     Decode.oneOf
-        [ decode BoolEntryData
+        [ succeed BoolEntryData
             |> required "value" bool
-        , decode BoolEntryData
+        , succeed BoolEntryData
             |> required "value" boolStringDecoder
-        , Decode.succeed
+        , succeed
             { value = False
             }
         ]
@@ -363,11 +365,11 @@ boolEntryDataDecoder =
 fileEntryDataDecoder : Decode.Decoder FileEntryData
 fileEntryDataDecoder =
     Decode.oneOf
-        [ decode FileEntryData
+        [ succeed FileEntryData
             |> required "name" string
             |> required "fileType" string
             |> hardcoded Uploaded
-        , Decode.succeed
+        , succeed
             { name = ""
             , fileType = ""
             , status = NoFile
@@ -489,7 +491,7 @@ multipleEntryDataEncoder : MultipleEntryData -> ( String, Encode.Value )
 multipleEntryDataEncoder multipleEntryData =
     ( "multipleEntry"
     , Encode.object
-        [ ( "values", Encode.list <| List.map Encode.string <| Set.toList <| multipleEntryData.values )
+        [ ( "values", Encode.list Encode.string <| Set.toList <| multipleEntryData.values )
         ]
     )
 

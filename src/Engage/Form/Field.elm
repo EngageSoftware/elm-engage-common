@@ -6,6 +6,7 @@ module Engage.Form.Field exposing (checkbox, checkboxWithAttributes, dateField, 
 
 -}
 
+import Date exposing (Date)
 import Dict exposing (Dict)
 import Engage.Entity.PhoneNumber exposing (PhoneNumber)
 import Engage.Localization as Localization exposing (Localization)
@@ -42,21 +43,21 @@ type alias PhoneFieldArgs field msg =
 phoneField : PhoneFieldArgs field msg -> ValidationErrors field -> Input.PhoneState -> PhoneNumber -> Html msg
 phoneField args validations state phoneNumber =
     let
-        dialCodeValidations updatedPhoneNumber validations =
+        dialCodeValidations updatedPhoneNumber newValidations =
             case args.required of
                 True ->
-                    validate args.isoCodeField updatedPhoneNumber.isoCode validations
+                    validate args.isoCodeField updatedPhoneNumber.isoCode newValidations
 
                 False ->
-                    validations
+                    newValidations
 
-        phoneNumberValidations updatedPhoneNumber validations =
+        phoneNumberValidations updatedPhoneNumber newValidations =
             case args.required of
                 True ->
-                    validate args.field updatedPhoneNumber.phoneNumber validations
+                    validate args.field updatedPhoneNumber.phoneNumber newValidations
 
                 False ->
-                    validations
+                    newValidations
 
         onChange { onlyStateChange } updatedState updatedPhoneNumber =
             args.onChange
@@ -248,8 +249,8 @@ dropdownFieldWithAttributesValueSort args validations attributes state value rev
                 |> Maybe.andThen (\key -> Dict.get key args.items)
                 |> Maybe.map2 (\key item -> ( key, item.text )) updatedValue
 
-        onChange { onlyStateChange } state updatedValue =
-            args.onChange (updatedValidations updatedValue) state (toKeyValue updatedValue)
+        onChange { onlyStateChange } stateValue updatedValue =
+            args.onChange (updatedValidations updatedValue) stateValue (toKeyValue updatedValue)
 
         requiredText =
             if required then
@@ -265,9 +266,7 @@ dropdownFieldWithAttributesValueSort args validations attributes state value rev
         , items =
             args.items
                 |> Dict.values
-                |> List.map (\item -> { item | value = String.toInt item.value |> Result.withDefault 0 })
                 |> List.sortBy .value
-                |> List.map (\item -> { item | value = toString item.value })
                 |> (if reverseSort then
                         List.reverse
 
@@ -303,8 +302,8 @@ dropdownFieldWithAttributes args validations attributes state value =
                 |> Maybe.andThen (\key -> Dict.get key args.items)
                 |> Maybe.map2 (\key item -> ( key, item.text )) updatedValue
 
-        onChange { onlyStateChange } state updatedValue =
-            args.onChange (updatedValidations updatedValue) state (toKeyValue updatedValue)
+        onChange { onlyStateChange } stateValue updatedValue =
+            args.onChange (updatedValidations updatedValue) stateValue (toKeyValue updatedValue)
 
         requiredText =
             if required then
@@ -350,11 +349,11 @@ datepickerField args validations state value =
             else
                 validations
 
-        onStateChange state =
-            args.onStateChange (updatedValidations value) state
+        onStateChange stateValue =
+            args.onStateChange (updatedValidations value) stateValue
 
-        onChange state updatedValue =
-            args.onChange (updatedValidations updatedValue) state updatedValue
+        onChange stateValue updatedValue =
+            args.onChange (updatedValidations updatedValue) stateValue updatedValue
 
         requiredText =
             if args.required then
@@ -388,11 +387,11 @@ dateField args validations state value =
             else
                 validations
 
-        onStateChange state =
-            args.onStateChange (updatedValidations value) state
+        onStateChange stateValue =
+            args.onStateChange (updatedValidations value) stateValue
 
-        onChange state updatedValue =
-            args.onChange (updatedValidations updatedValue) state updatedValue
+        onChange stateValue updatedValue =
+            args.onChange (updatedValidations updatedValue) stateValue updatedValue
 
         requiredText =
             if args.required then
@@ -483,7 +482,7 @@ checkboxWithAttributes args validations attributes state value =
 -}
 fieldId : Namespace -> field -> String
 fieldId namespace field =
-    Namespace.toString namespace ++ toString field
+    Namespace.toString namespace ++ Debug.toString field
 
 
 validateBool : field -> Bool -> ValidationErrors field -> ValidationErrors field
@@ -493,7 +492,7 @@ validateBool field value validations =
             validations |> Validation.filter [ field ]
     in
     cleanValidations
-        ++ Validation.validateBoolField (Validation.localize field) field (always value) ()
+        ++ Validation.validateField [ Validation.validateBoolField (Validation.localize field) field (always value) ] ()
 
 
 {-| Validate a field
@@ -505,7 +504,7 @@ validate field value validations =
             validations |> Validation.filter [ field ]
     in
     cleanValidations
-        ++ Validation.validateStringField (Validation.localize field) field (always value) ()
+        ++ Validation.validateField [ Validation.validateStringField (Validation.localize field) field (always value) ] ()
 
 
 validateMaybe : field -> Maybe a -> ValidationErrors field -> ValidationErrors field
@@ -515,18 +514,18 @@ validateMaybe field value validations =
             validations |> Validation.filter [ field ]
     in
     cleanValidations
-        ++ Validation.validateMaybeField (Validation.localize field) field (always value) ()
+        ++ Validation.validateField [ Validation.validateMaybeField (Validation.localize field) field (always value) ] ()
 
 
 {-| Localize a label String
 -}
 localizeLabel : { a | field : field, localization : Localization } -> String
 localizeLabel ({ field } as args) =
-    Localization.localizeString (toString field ++ ".label") args
+    Localization.localizeString (Debug.toString field ++ ".label") args
 
 
 {-| Localize a help String
 -}
 localizeHelp : { a | field : field, localization : Localization } -> String
 localizeHelp ({ field } as args) =
-    Localization.localizeStringWithDefault "" (toString field ++ ".help") args
+    Localization.localizeStringWithDefault "" (Debug.toString field ++ ".help") args
