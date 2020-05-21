@@ -12,7 +12,7 @@ import Engage.Custom.Section as Section exposing (sectionTupleDecoder)
 import Engage.Custom.Types exposing (..)
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace
-import Engage.Validation as Validation exposing (ValidationResult)
+import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (Html)
 
 
@@ -123,7 +123,7 @@ validate fieldId form =
 
 {-| Clear validations
 -}
-cleanValidations : { a | fieldId : Int } -> ValidationResult { fieldId : Int } -> ValidationResult { fieldId : Int }
+cleanValidations : { a | fieldId : Int } -> ValidationErrors { fieldId : Int } -> ValidationErrors { fieldId : Int }
 cleanValidations fieldId validations =
     validations |> List.filter (\( currentFieldId, _ ) -> currentFieldId.fieldId /= fieldId.fieldId)
 

@@ -1,13 +1,13 @@
 module Engage.Validation exposing
-    ( RemoteValidationErrors, ValidationResult, ValidationStatus(..)
-    , getErrors, fieldError, fields, filter, findErrorMessage, isInvalidField, isValidField, localize, merge, toError, validateBoolField, validateDependentMaybeField, validateDependentStringField, validateField, validateListNotEmptyField, validateMaybeField, validateMaybeStringField, validateStringField
+    ( RemoteValidationErrors, ValidationErrors, ValidationStatus(..)
+    , getErrors, fieldError, getFields, filter, findErrorMessage, isInvalid, isInvalidField, isValid, isValidField, localize, merge, toError, validateBoolField, validateDependentMaybeField, validateDependentStringField, validateField, validateListNotEmptyField, validateMaybeField, validateMaybeStringField, validateStringField
     )
 
 {-| Validation
 
-@docs RemoteValidationErrors, ValidationResult, ValidationStatus
+@docs RemoteValidationErrors, ValidationErrors, ValidationStatus
 
-@docs getErrors, fieldError, fields, filter, findErrorMessage, isInvalidField, isValidField, localize, merge, toError, validateBoolField, validateDependentMaybeField, validateDependentStringField, validateField, validateListNotEmptyField, validateMaybeField, validateMaybeStringField, validateStringField
+@docs getErrors, fieldError, getFields, filter, findErrorMessage, isInvalid, isInvalidField, isValid, isValidField, localize, merge, toError, validateBoolField, validateDependentMaybeField, validateDependentStringField, validateField, validateListNotEmptyField, validateMaybeField, validateMaybeStringField, validateStringField
 
 -}
 
@@ -16,7 +16,7 @@ import Dict.Extra
 import Engage.Localization as Localization exposing (Localization)
 import Engage.UI.Error as Error exposing (Status)
 import RemoteData exposing (WebData)
-import Validate exposing (ifBlank, ifNothing, ifTrue)
+import Validate exposing (ifBlank, ifNothing)
 
 
 {-| A ValidationStatus type
@@ -29,8 +29,8 @@ type ValidationStatus
 
 {-| A ValidationErrors type
 -}
-type alias ValidationResult field model =
-    Result (List ( field, ValidationStatus )) (Validate.Valid model)
+type alias ValidationErrors field =
+    List ( field, ValidationStatus )
 
 
 {-| A RemoteValidationErrors type
@@ -41,7 +41,7 @@ type alias RemoteValidationErrors =
 
 {-| Convert a ValidationErrors to a Status
 -}
-toError : ValidationResult a m -> Status
+toError : ValidationErrors a -> Status
 toError validations =
     case getErrors validations of
         [] ->
@@ -53,7 +53,7 @@ toError validations =
 
 {-| Get a field error Status
 -}
-fieldError : Localization -> field -> ValidationResult field model -> Status
+fieldError : Localization -> field -> ValidationErrors field -> Status
 fieldError localization field validations =
     case findErrorMessage field validations of
         Nothing ->
@@ -65,16 +65,11 @@ fieldError localization field validations =
 
 {-| Convert ValidationErrors to a List
 -}
-getErrors : ValidationResult field model -> List String
+getErrors : ValidationErrors field -> List String
 getErrors validations =
-    case validations of
-        Err errors ->
-            errors
-                |> List.map Tuple.second
-                |> List.filterMap getErrorMessage
-
-        Ok _ ->
-            []
+    validations
+        |> List.map Tuple.second
+        |> List.filterMap getErrorMessage
 
 
 {-| Check if a ValidationStatus is valid
@@ -119,67 +114,64 @@ getErrorMessage validationStatus =
             Nothing
 
 
-{-| Get the fields from the ValidationResult
+{-| Get the fields from the ValidationErrors
 -}
-fields : ValidationResult field model -> List field
-fields validations =
-    case validations of
-        Err errors ->
-            errors
-                |> List.map Tuple.first
-
-        Ok _ ->
-            []
+getFields : ValidationErrors field -> List field
+getFields =
+    List.map Tuple.first
 
 
-{-| Check if a ValidationResult field is valid
+{-| Check if a ValidationErrors is valid
 -}
-isValidField : field -> ValidationResult field model -> Bool
+isValid : ValidationErrors field -> Bool
+isValid =
+    List.filter (\( field, value ) -> isInvalidStatus value)
+        >> List.isEmpty
+
+
+{-| Check if a ValidationErrors is invalid
+-}
+isInvalid : ValidationErrors field -> Bool
+isInvalid =
+    List.filter (\( field, value ) -> isInvalidStatus value) >> List.isEmpty >> not
+
+
+{-| Check if a ValidationErrors field is valid
+-}
+isValidField : field -> ValidationErrors field -> Bool
 isValidField fieldToCheck errors =
     not (isInvalidField fieldToCheck errors)
 
 
-{-| Check if a ValidationResult field is invalid
+{-| Check if a ValidationErrors field is invalid
 -}
-isInvalidField : field -> ValidationResult field model -> Bool
-isInvalidField fieldToCheck validations =
-    case validations of
-        Err errors ->
-            errors
-                |> List.any (\( field, _ ) -> field == fieldToCheck)
-
-        Ok _ ->
-            False
+isInvalidField : field -> ValidationErrors field -> Bool
+isInvalidField fieldToCheck errors =
+    errors
+        |> List.any (\( field, _ ) -> field == fieldToCheck)
 
 
 {-| Find an error message for a field
 -}
-findErrorMessage : field -> ValidationResult field model -> Maybe String
-findErrorMessage field validations =
-    case validations of
-        Err errors ->
-            errors
-                |> List.filter (\( f, msg ) -> f == field)
-                |> List.head
-                |> Maybe.map Tuple.second
-                |> Maybe.andThen getErrorMessage
-
-        Ok _ ->
-            Nothing
+findErrorMessage : field -> ValidationErrors field -> Maybe String
+findErrorMessage field errors =
+    errors
+        |> List.filter (\( f, msg ) -> f == field)
+        |> List.head
+        |> Maybe.map Tuple.second
+        |> Maybe.andThen getErrorMessage
 
 
-{-| Filter ValidationResult using a List of fields
+{-| Filter ValidationErrors using a List of fields
 -}
-filter : List field -> ValidationResult field model -> ValidationResult field model
-filter fieldList validations =
-    validations
-        |> Result.mapError
-            (List.filter (\( f, msg ) -> not <| List.any ((==) f) fieldList))
+filter : List field -> ValidationErrors field -> ValidationErrors field
+filter fields validations =
+    List.filter (\( f, msg ) -> not <| List.any ((==) f) fields) validations
 
 
 {-| Validate a dependent String field
 -}
-validateDependentStringField : (model -> Bool) -> String -> field -> (model -> String) -> model -> ValidationResult field model
+validateDependentStringField : (model -> Bool) -> String -> field -> (model -> String) -> model -> ValidationErrors field
 validateDependentStringField dependency error field getter model =
     if dependency model then
         validateField [ ifBlank getter ( field, Invalid error ) ] model
@@ -190,7 +182,7 @@ validateDependentStringField dependency error field getter model =
 
 {-| Validate a dependent Maybe field
 -}
-validateDependentMaybeField : (model -> Bool) -> String -> field -> (model -> Maybe a) -> model -> ValidationResult field model
+validateDependentMaybeField : (model -> Bool) -> String -> field -> (model -> Maybe a) -> model -> ValidationErrors field
 validateDependentMaybeField dependency error field getter model =
     if dependency model then
         validateMaybeField error field getter model
@@ -201,28 +193,28 @@ validateDependentMaybeField dependency error field getter model =
 
 {-| Validate a String field
 -}
-validateStringField : String -> field -> (model -> String) -> model -> ValidationResult field model
+validateStringField : String -> field -> (model -> String) -> model -> ValidationErrors field
 validateStringField error field getter =
     validateField [ ifBlank getter ( field, Invalid error ) ]
 
 
 {-| Validate a Bool field
 -}
-validateBoolField : String -> field -> (model -> Bool) -> model -> ValidationResult field model
+validateBoolField : String -> field -> (model -> Bool) -> model -> ValidationErrors field
 validateBoolField error field getter model =
     validateField [ Validate.ifTrue (getter >> not) ( field, Invalid error ) ] model
 
 
 {-| Validate a Maybe field
 -}
-validateMaybeField : String -> field -> (model -> Maybe a) -> model -> ValidationResult field model
-validateMaybeField error field getter model =
-    validateField [ ifNothing getter ( field, Invalid error ) ] model
+validateMaybeField : String -> field -> (model -> Maybe a) -> model -> ValidationErrors field
+validateMaybeField error field getter =
+    validateField [ ifNothing getter ( field, Invalid error ) ]
 
 
 {-| Validate a Maybe String field
 -}
-validateMaybeStringField : String -> field -> (model -> Maybe String) -> model -> ValidationResult field model
+validateMaybeStringField : String -> field -> (model -> Maybe String) -> model -> ValidationErrors field
 validateMaybeStringField error field getter model =
     validateField
         [ Validate.all
@@ -232,50 +224,37 @@ validateMaybeStringField error field getter model =
         ]
         model
         |> (\validations ->
-                validations
-                    |> Result.mapError
-                        (\errors ->
-                            if List.isEmpty errors then
-                                [ ( field, Valid ) ]
+                if List.isEmpty validations then
+                    [ ( field, Valid ) ]
 
-                            else
-                                errors
-                        )
+                else
+                    validations
            )
 
 
 {-| Validate a List not empty field
 -}
-validateListNotEmptyField : String -> field -> (model -> List a) -> model -> ValidationResult field model
-validateListNotEmptyField error field getter model =
-    validateField [ Validate.ifTrue (getter >> List.isEmpty) ( field, Invalid error ) ] model
+validateListNotEmptyField : String -> field -> (model -> List a) -> model -> ValidationErrors field
+validateListNotEmptyField error field getter =
+    validateField [ Validate.ifTrue (getter >> List.isEmpty) ( field, Invalid error ) ]
 
 
 {-| Validate a field
 -}
-validateField : List (Validate.Validator ( field, ValidationStatus ) model) -> model -> ValidationResult field model
-validateField validators getter =
-    Validate.validate (Validate.all validators) getter
+validateField : List (Validate.Validator ( field, ValidationStatus ) model) -> model -> ValidationErrors field
+validateField validators model =
+    getErrorsFromResult (Validate.validate (Validate.all validators) model)
 
 
-{-| Merge two ValidationResult errors
+{-| Merge two ValidationErrors
 -}
-merge : (( field, ValidationStatus ) -> comparable) -> ValidationResult field model -> ValidationResult field model -> ValidationResult field model
-merge toComparable firstResult secondResult =
-    firstResult
-        |> Result.mapError
-            (\first ->
-                case secondResult of
-                    Err second ->
-                        (first ++ second)
-                            |> Dict.Extra.groupBy toComparable
-                            |> Dict.map (always keepValids)
-                            |> Dict.values
-                            |> List.concat
-
-                    Ok _ ->
-                        first
-            )
+merge : (( field, ValidationStatus ) -> comparable) -> ValidationErrors field -> ValidationErrors field -> ValidationErrors field
+merge toComparable first second =
+    (first ++ second)
+        |> Dict.Extra.groupBy toComparable
+        |> Dict.map (always keepValids)
+        |> Dict.values
+        |> List.concat
 
 
 keepValids : List ( field, ValidationStatus ) -> List ( field, ValidationStatus )
@@ -298,14 +277,24 @@ toSingleton validations =
 
 {-| Localize a field to a String
 -}
-localize : String -> String
+localize : field -> String
 localize field =
-    field ++ ".Required"
+    Debug.toString field ++ ".Required"
 
 
 
--- updateValidations : field -> ValidationResult field -> ValidationResult field -> ValidationResult field
+-- updateValidations : field -> ValidationErrors field -> ValidationErrors field -> ValidationErrors field
 -- updateValidations field validations currentValidations =
 --     currentValidations
 --         |> List.filter (\( valField, _ ) -> field /= valField)
 --         |> (++) validations
+
+
+getErrorsFromResult : Result (List ( field, ValidationStatus )) (Validate.Valid subject) -> ValidationErrors field
+getErrorsFromResult validations =
+    case validations of
+        Err errors ->
+            errors
+
+        Ok _ ->
+            []

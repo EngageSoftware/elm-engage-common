@@ -3,26 +3,26 @@ module Engage.Custom.Field.Validation exposing (errorMessage, validateAllFieldGr
 import Dict
 import Engage.Custom.Field.Helpers as Helpers
 import Engage.Custom.Types exposing (..)
-import Engage.Validation as Validation exposing (ValidationResult)
+import Engage.Validation as Validation exposing (ValidationErrors)
 import Set exposing (Set)
 import String
 
 
-validateFieldGroup : { a | fieldId : Int } -> FieldGroup -> ValidationResult { fieldId : Int }
+validateFieldGroup : { a | fieldId : Int } -> FieldGroup -> ValidationErrors { fieldId : Int }
 validateFieldGroup fieldId fieldSet =
     fieldSet.fields
         |> Dict.values
         |> List.concatMap (validateField fieldId)
 
 
-validateAllFieldGroup : FieldGroup -> ValidationResult { fieldId : Int }
+validateAllFieldGroup : FieldGroup -> ValidationErrors { fieldId : Int }
 validateAllFieldGroup fieldSet =
     fieldSet.fields
         |> Dict.values
         |> List.concatMap (\fieldData -> validateField { fieldId = fieldData.fieldId } fieldData)
 
 
-validateField : { a | fieldId : Int } -> Field -> ValidationResult { fieldId : Int }
+validateField : { a | fieldId : Int } -> Field -> ValidationErrors { fieldId : Int }
 validateField { fieldId } field =
     if field.fieldId == fieldId then
         case field.fieldType of
@@ -84,7 +84,7 @@ validateField { fieldId } field =
         []
 
 
-validateCheckBoxList : Field -> ValidationResult { fieldId : Int }
+validateCheckBoxList : Field -> ValidationErrors { fieldId : Int }
 validateCheckBoxList field =
     case field.required of
         True ->
@@ -100,7 +100,7 @@ validateCheckBoxList field =
             []
 
 
-validateText : Field -> ValidationResult { fieldId : Int }
+validateText : Field -> ValidationErrors { fieldId : Int }
 validateText field =
     case field.required of
         True ->
@@ -124,7 +124,7 @@ errorMessage field =
         field.errorMessage
 
 
-validateFile : Field -> ValidationResult { fieldId : Int }
+validateFile : Field -> ValidationErrors { fieldId : Int }
 validateFile field =
     case field.required of
         True ->
@@ -142,7 +142,7 @@ validateFile field =
             []
 
 
-validateCheckBox : Field -> ValidationResult { fieldId : Int }
+validateCheckBox : Field -> ValidationErrors { fieldId : Int }
 validateCheckBox field =
     case field.required of
         True ->
@@ -156,17 +156,17 @@ validateCheckBox field =
             []
 
 
-validateDropDown : Field -> ValidationResult { fieldId : Int }
+validateDropDown : Field -> ValidationErrors { fieldId : Int }
 validateDropDown =
     validateText
 
 
-validateRadioList : Field -> ValidationResult { fieldId : Int }
+validateRadioList : Field -> ValidationErrors { fieldId : Int }
 validateRadioList =
     validateText
 
 
-validateQuantity : Field -> ValidationResult { fieldId : Int }
+validateQuantity : Field -> ValidationErrors { fieldId : Int }
 validateQuantity field =
     let
         textValidation =
@@ -179,7 +179,7 @@ validateQuantity field =
         textValidation
 
 
-validateNumber : Field -> ValidationResult { fieldId : Int }
+validateNumber : Field -> ValidationErrors { fieldId : Int }
 validateNumber field =
     let
         maybeIntValue =
@@ -193,26 +193,26 @@ validateNumber field =
     Validation.validateMaybeField errorMessage { fieldId = field.fieldId } (always maybeIntValue) ()
 
 
-validateDate : Field -> ValidationResult { fieldId : Int }
+validateDate : Field -> ValidationErrors { fieldId : Int }
 validateDate =
     validateText
 
 
-validateEmail : Field -> ValidationResult { fieldId : Int }
+validateEmail : Field -> ValidationErrors { fieldId : Int }
 validateEmail =
     validateText
 
 
-validatePhone : Field -> ValidationResult { fieldId : Int }
+validatePhone : Field -> ValidationErrors { fieldId : Int }
 validatePhone =
     validateText
 
 
-validateZipCode : Field -> ValidationResult { fieldId : Int }
+validateZipCode : Field -> ValidationErrors { fieldId : Int }
 validateZipCode =
     validateText
 
 
-validateUSState : Field -> ValidationResult { fieldId : Int }
+validateUSState : Field -> ValidationErrors { fieldId : Int }
 validateUSState =
     validateText

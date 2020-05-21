@@ -19,7 +19,7 @@ import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Error as Error
 import Engage.UI.Info as Info
 import Engage.UI.Input as Input
-import Engage.Validation exposing (ValidationResult)
+import Engage.Validation exposing (ValidationErrors)
 import Html exposing (Html)
 import Markdown
 import Set exposing (Set)
@@ -259,7 +259,7 @@ text field =
 type alias Args a msg =
     { a
         | config : Config msg
-        , validations : ValidationResult { fieldId : Int }
+        , validations : ValidationErrors { fieldId : Int }
     }
 
 
@@ -595,7 +595,7 @@ dropdownWithItems { config, validations } state ( form, section, fieldGroup, fie
         (FieldHelpers.getValue fieldData |> Maybe.andThen List.head)
 
 
-viewEntry : { a | config : Config msg, validations : ValidationResult { fieldId : Int } } -> Field -> Html msg
+viewEntry : { a | config : Config msg, validations : ValidationErrors { fieldId : Int } } -> Field -> Html msg
 viewEntry { config, validations } field =
     field
         |> FieldHelpers.getValue
@@ -618,7 +618,7 @@ view config { fields } =
             )
 
 
-viewCompletedEntries : { a | config : Config msg, validations : ValidationResult { fieldId : Int } } -> FieldGroup -> List (Html msg)
+viewCompletedEntries : { a | config : Config msg, validations : ValidationErrors { fieldId : Int } } -> FieldGroup -> List (Html msg)
 viewCompletedEntries { config, validations } { fields } =
     if Dict.values fields |> List.any FieldHelpers.isFileField then
         fields

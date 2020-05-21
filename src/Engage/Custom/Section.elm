@@ -21,7 +21,7 @@ import Engage.Custom.Field.View as Field
 import Engage.Custom.Types exposing (..)
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace
-import Engage.Validation exposing (ValidationResult)
+import Engage.Validation exposing (ValidationErrors)
 import Html exposing (Html)
 import Json.Decode as Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
@@ -48,7 +48,7 @@ view config section =
         )
 
 
-form : { a | config : Config msg, validations : ValidationResult { fieldId : Int }, showSectionName : Bool } -> Form -> Section -> Html msg
+form : { a | config : Config msg, validations : ValidationErrors { fieldId : Int }, showSectionName : Bool } -> Form -> Section -> Html msg
 form args form section =
     let
         legend =
@@ -68,7 +68,7 @@ form args form section =
         )
 
 
-completedView : { config : Config msg, validations : ValidationResult { fieldId : Int }, showName : Bool } -> Section -> Html msg
+completedView : { config : Config msg, validations : ValidationErrors { fieldId : Int }, showName : Bool } -> Section -> Html msg
 completedView args section =
     Html.ul []
         (nameView args section
@@ -95,14 +95,14 @@ update query updater form section =
     { section | fieldGroups = Dict.update query.fieldGroupId (Maybe.map <| Field.update query updater form section) section.fieldGroups }
 
 
-validate : { a | fieldId : Int } -> Section -> ValidationResult { fieldId : Int }
+validate : { a | fieldId : Int } -> Section -> ValidationErrors { fieldId : Int }
 validate fieldId section =
     section.fieldGroups
         |> Dict.values
         |> List.concatMap (Field.validateFieldGroup fieldId)
 
 
-validateAll : Section -> ValidationResult { fieldId : Int }
+validateAll : Section -> ValidationErrors { fieldId : Int }
 validateAll section =
     section.fieldGroups
         |> Dict.values

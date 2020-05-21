@@ -19,7 +19,7 @@ import Engage.UI.Accordion as Accordion
 import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Input as Input
-import Engage.Validation as Validation exposing (ValidationResult)
+import Engage.Validation as Validation exposing (ValidationErrors)
 import Set exposing (Set)
 import Time
 import Time.Format
@@ -35,7 +35,7 @@ type alias Form =
     , sections : Dict Int Section
     , formLevel : Level
     , relativeOrder : Int
-    , validations : ValidationResult { fieldId : Int }
+    , validations : ValidationErrors { fieldId : Int }
     }
 
 

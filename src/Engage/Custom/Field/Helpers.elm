@@ -487,7 +487,7 @@ getFileInfo field =
             Nothing
 
 
-toError : ValidationResult { fieldId : Int } -> Field -> Status
+toError : ValidationErrors { fieldId : Int } -> Field -> Status
 toError validationErrors field =
     case Validation.findErrorMessage { fieldId = field.fieldId } validationErrors of
         Nothing ->

@@ -23,7 +23,7 @@ import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.RemoteData exposing (WebData)
 import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Input as Input
-import Engage.Validation as Validation exposing (ValidationResult)
+import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (..)
 import String
 
@@ -40,7 +40,7 @@ type alias CompanyState =
     , startDate : Datepicker.State
     , endDate : Datepicker.State
     , address : Address.State ValidationField
-    , validations : ValidationResult ValidationField
+    , validations : ValidationErrors ValidationField
     }
 
 
@@ -102,12 +102,12 @@ type Msg
 
 
 type CompanyMsg
-    = CompanyNameUpdated (ValidationResult ValidationField) { onlyStateChange : Bool } Input.State String
-    | PositionUpdated (ValidationResult ValidationField) { onlyStateChange : Bool } Input.State String
-    | StartDateStateUpdated (ValidationResult ValidationField) Datepicker.State
-    | EndDateStateUpdated (ValidationResult ValidationField) Datepicker.State
-    | StartDateUpdated (ValidationResult ValidationField) Datepicker.State (Maybe Date)
-    | EndDateUpdated (ValidationResult ValidationField) Datepicker.State (Maybe Date)
+    = CompanyNameUpdated (ValidationErrors ValidationField) { onlyStateChange : Bool } Input.State String
+    | PositionUpdated (ValidationErrors ValidationField) { onlyStateChange : Bool } Input.State String
+    | StartDateStateUpdated (ValidationErrors ValidationField) Datepicker.State
+    | EndDateStateUpdated (ValidationErrors ValidationField) Datepicker.State
+    | StartDateUpdated (ValidationErrors ValidationField) Datepicker.State (Maybe Date)
+    | EndDateUpdated (ValidationErrors ValidationField) Datepicker.State (Maybe Date)
     | AddressMsg (Address.Msg ValidationField)
 
 

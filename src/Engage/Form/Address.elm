@@ -26,7 +26,7 @@ import Engage.String exposing (comma, space)
 import Engage.UI.Attribute as Attribute
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Input as Input
-import Engage.Validation as Validation exposing (ValidationResult)
+import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import String exposing (..)
@@ -35,20 +35,20 @@ import String exposing (..)
 {-| The Msg type
 -}
 type Msg field
-    = NameUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
-    | AddressUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
-    | UnitUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
-    | CountryUpdated (ValidationResult field) Dropdown.State (Maybe ( String, String ))
-    | RegionUpdated (ValidationResult field) Dropdown.State (Maybe ( String, String ))
-    | CityUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
-    | ZipCodeUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
-    | AddressTypeUpdated (ValidationResult field) Dropdown.State (Maybe AddressType)
-    | PhoneUpdated (ValidationResult field) { onlyStateChange : Bool } Input.PhoneState PhoneNumber (Cmd (Msg field))
-    | FaxUpdated (ValidationResult field) { onlyStateChange : Bool } Input.PhoneState PhoneNumber (Cmd (Msg field))
-    | WebsiteUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State String
-    | IsPrimaryAddressUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State Bool
-    | IncludeInInternalDirectoryUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State Bool
-    | IncludeInExternalDirectoryUpdated (ValidationResult field) { onlyStateChange : Bool } Input.State Bool
+    = NameUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
+    | AddressUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
+    | UnitUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
+    | CountryUpdated (ValidationErrors field) Dropdown.State (Maybe ( String, String ))
+    | RegionUpdated (ValidationErrors field) Dropdown.State (Maybe ( String, String ))
+    | CityUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
+    | ZipCodeUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
+    | AddressTypeUpdated (ValidationErrors field) Dropdown.State (Maybe AddressType)
+    | PhoneUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.PhoneState PhoneNumber (Cmd (Msg field))
+    | FaxUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.PhoneState PhoneNumber (Cmd (Msg field))
+    | WebsiteUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State String
+    | IsPrimaryAddressUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State Bool
+    | IncludeInInternalDirectoryUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State Bool
+    | IncludeInExternalDirectoryUpdated (ValidationErrors field) { onlyStateChange : Bool } Input.State Bool
 
 
 {-| The State type
@@ -62,7 +62,7 @@ type State parentField
         , region : Dropdown.State
         , city : Input.State
         , postalCode : Input.State
-        , validations : ValidationResult parentField
+        , validations : ValidationErrors parentField
         , addressType : Dropdown.State
         , phone : Input.PhoneState
         , fax : Input.PhoneState
@@ -349,7 +349,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
         namespace =
             Namespace.namespace <| Namespace.toString originalNamespace ++ "Address"
 
-        onAddressTypeChangeHandler : ValidationResult field -> Dropdown.State -> Maybe ( String, String ) -> Msg field
+        onAddressTypeChangeHandler : ValidationErrors field -> Dropdown.State -> Maybe ( String, String ) -> Msg field
         onAddressTypeChangeHandler validations state value =
             value
                 |> Maybe.map Tuple.first
@@ -861,7 +861,7 @@ validateAll =
 
 {-| Validate all fields with a function
 -}
-validateAllWith : List (Address -> ValidationResult parentField) -> (ValidationField -> parentField) -> State parentField -> RegionsCountry -> Address -> State parentField
+validateAllWith : List (Address -> ValidationErrors parentField) -> (ValidationField -> parentField) -> State parentField -> RegionsCountry -> Address -> State parentField
 validateAllWith additionalValidations parentField (State state) regions data =
     State
         { state
@@ -871,7 +871,7 @@ validateAllWith additionalValidations parentField (State state) regions data =
 
 {-| Validate a field with a function
 -}
-validateFieldWith : List (Address -> ValidationResult parentField) -> (ValidationField -> parentField) -> RegionsCountry -> Address -> ValidationResult parentField
+validateFieldWith : List (Address -> ValidationErrors parentField) -> (ValidationField -> parentField) -> RegionsCountry -> Address -> ValidationErrors parentField
 validateFieldWith additionalValidations parentField regions data =
     let
         availableRegions =

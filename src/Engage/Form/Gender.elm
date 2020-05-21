@@ -21,14 +21,14 @@ import Engage.UI.Attribute as Attribute
 import Engage.UI.Input as Input
 import Engage.UI.Message as Message
 import Engage.UI.MessageType as MessageType
-import Engage.Validation as Validation exposing (ValidationResult)
+import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (Html)
 
 
 type InternalAttribute field msg
     = InternalAttribute
         { namespace : Namespace
-        , onChange : Maybe (ValidationResult field -> { onlyStateChange : Bool } -> Input.State -> Gender -> msg)
+        , onChange : Maybe (ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> Gender -> msg)
         , localization : Localization
         , required : Bool
         , field : Maybe field
@@ -61,7 +61,7 @@ field value =
 
 {-| Get the onChange Attribute
 -}
-onChange : (ValidationResult field -> { onlyStateChange : Bool } -> Input.State -> Gender -> msg) -> Attribute field msg
+onChange : (ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> Gender -> msg) -> Attribute field msg
 onChange value =
     \(InternalAttribute attribute) -> InternalAttribute { attribute | onChange = Just value }
 
@@ -80,7 +80,7 @@ missingText =
 
 {-| Get the form view
 -}
-form : List (Attribute field msg) -> ValidationResult field -> Input.State -> Gender -> Html msg
+form : List (Attribute field msg) -> ValidationErrors field -> Input.State -> Gender -> Html msg
 form attributes validations state gender =
     let
         (InternalAttribute attribute) =
@@ -111,9 +111,9 @@ error namespace value =
 
 internalForm :
     InternalAttribute field msg
-    -> (ValidationResult field -> { onlyStateChange : Bool } -> Input.State -> Gender -> msg)
+    -> (ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> Gender -> msg)
     -> field
-    -> ValidationResult field
+    -> ValidationErrors field
     -> Input.State
     -> Gender
     -> Html msg
