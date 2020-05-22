@@ -115,7 +115,9 @@ custom : { namespace : Namespace, class : String, attributes : List (Attribute m
 custom { namespace, class, attributes, contents } =
     let
         namespacedClass =
-            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
+            namespace
+                |> Namespace.toString
+                |> Engage.CssHelpers.withNamespace
     in
     button
         (namespacedClass [ "BaseButton", class ] :: attributes)

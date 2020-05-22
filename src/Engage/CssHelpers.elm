@@ -20,6 +20,6 @@ withNamespace name =
 namespacedClass : String -> List String -> Attribute msg
 namespacedClass name list =
     list
-        |> List.map (\_ -> name)
+        |> List.map (\class -> name ++ class)
         |> String.join " "
         |> Html.Attributes.class
