@@ -96,13 +96,13 @@ toValidationResult validationErrors =
 
 {-| Convert a Http.Error to a Status
 -}
-httpErrorToValidationResult : Http.Error -> Status
+httpErrorToValidationResult : Engage.Http.Error -> Status
 httpErrorToValidationResult error =
     case error of
-        Http.BadUrl errorValue ->
+        Engage.Http.BadUrl errorValue ->
             Error.Error { reasons = [ errorValue ] }
 
-        Http.BadBody response ->
+        Engage.Http.BadBody response ->
             Error.Error
                 { reasons =
                     response
@@ -112,16 +112,20 @@ httpErrorToValidationResult error =
                         |> Maybe.withDefault [ response ]
                 }
 
-        Http.BadStatus statusCode ->
+        Engage.Http.BadStatus _ response ->
             Error.Error
                 { reasons =
-                    [ "Bad Status: " ++ String.fromInt statusCode ]
+                    response
+                        |> Decode.decodeString serverErrorDecoder
+                        |> Result.toMaybe
+                        |> Maybe.map serverErrorToErrors
+                        |> Maybe.withDefault [ response ]
                 }
 
-        Http.Timeout ->
+        Engage.Http.Timeout ->
             Error.Error { reasons = [ "Timeout" ] }
 
-        Http.NetworkError ->
+        Engage.Http.NetworkError ->
             Error.Error { reasons = [ "NetworkError" ] }
 
 

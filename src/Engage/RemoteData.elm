@@ -11,7 +11,7 @@ module Engage.RemoteData exposing
 
 -}
 
-import Http
+import Engage.Http
 import RemoteData
 
 
@@ -29,7 +29,7 @@ type RemoteData e a
 {-| The WebData type
 -}
 type alias WebData a =
-    RemoteData Http.Error a
+    RemoteData Engage.Http.Error a
 
 
 {-| Get a loading RemoteData
