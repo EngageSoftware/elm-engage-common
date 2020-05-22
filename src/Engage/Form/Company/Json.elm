@@ -7,6 +7,7 @@ module Engage.Form.Company.Json exposing (decoder, emptyCompanies, emptyCompany,
 -}
 
 import Date exposing (Date)
+import Engage.Decode exposing (isoDateDecoder)
 import Engage.Entity.Address as Address
 import Engage.Form.Company.Types exposing (CompaniesData, CompanyData)
 import Json.Decode as Decode exposing (Decoder, succeed)
@@ -135,17 +136,3 @@ emptyCompany =
     , endDate = Nothing
     , address = Address.empty
     }
-
-
-isoDateDecoder : Decoder Date
-isoDateDecoder =
-    Decode.string
-        |> Decode.andThen
-            (\str ->
-                case Date.fromIsoString str of
-                    Ok date ->
-                        Decode.succeed date
-
-                    Err error ->
-                        Decode.fail error
-            )
