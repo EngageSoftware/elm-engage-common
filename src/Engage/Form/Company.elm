@@ -374,11 +374,11 @@ updateCompany msg companyState companyData =
 updateAddress : Address.Msg ValidationField -> CompanyState -> CompanyData -> ( CompanyState, CompanyData, Cmd CompanyMsg )
 updateAddress addressMsg companyState companyData =
     let
-        ( addressState, addressData, cmd ) =
+        { state, data, cmd } =
             Address.update addressMsg companyState.address companyData.address
     in
-    ( { companyState | address = addressState }
-    , { companyData | address = addressData }
+    ( { companyState | address = state }
+    , { companyData | address = data }
     , Cmd.map AddressMsg cmd
     )
 

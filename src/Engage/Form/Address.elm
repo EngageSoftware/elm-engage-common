@@ -612,7 +612,7 @@ primaryAddressCheckbox originalNamespace localization field (State state) addres
 
 {-| Update the address
 -}
-update : Msg parentField -> State parentField -> Address -> ( State parentField, Address, Cmd (Msg parentField) )
+update : Msg parentField -> State parentField -> Address -> { state : State parentField, data : Address, cmd : Cmd (Msg parentField) }
 update msg (State oldState) data =
     let
         state =
@@ -625,201 +625,223 @@ update msg (State oldState) data =
     in
     case msg of
         NameUpdated validations _ inputState value ->
-            ( State
-                { state
-                    | validations = validations
-                    , name = inputState
-                }
-            , { data
-                | name =
-                    if String.length value > 120 then
-                        data.name
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , name = inputState
+                    }
+            , data =
+                { data
+                    | name =
+                        if String.length value > 120 then
+                            data.name
 
-                    else
-                        value
-              }
-            , Cmd.none
-            )
+                        else
+                            value
+                }
+            , cmd = Cmd.none
+            }
 
         AddressUpdated validations _ inputState value ->
-            ( State
-                { state
-                    | validations = validations
-                    , address1 = inputState
-                }
-            , { data
-                | address1 =
-                    if String.length value > 120 then
-                        data.address1
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , address1 = inputState
+                    }
+            , data =
+                { data
+                    | address1 =
+                        if String.length value > 120 then
+                            data.address1
 
-                    else
-                        value
-              }
-            , Cmd.none
-            )
+                        else
+                            value
+                }
+            , cmd = Cmd.none
+            }
 
         UnitUpdated validations _ inputState value ->
-            ( State
-                { state
-                    | validations = validations
-                    , address2 = inputState
-                }
-            , { data
-                | address2 =
-                    if String.length value > 120 then
-                        data.address2
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , address2 = inputState
+                    }
+            , data =
+                { data
+                    | address2 =
+                        if String.length value > 120 then
+                            data.address2
 
-                    else
-                        value
-              }
-            , Cmd.none
-            )
+                        else
+                            value
+                }
+            , cmd = Cmd.none
+            }
 
         CountryUpdated validations dropdownState value ->
-            ( State
-                { state
-                    | validations = validations
-                    , country = dropdownState
-                    , region = Dropdown.initialState
-                }
-            , { data | country = value |> Maybe.andThen ListItem.fromDropdownItem, region = Nothing }
-            , Cmd.none
-            )
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , country = dropdownState
+                        , region = Dropdown.initialState
+                    }
+            , data = { data | country = value |> Maybe.andThen ListItem.fromDropdownItem, region = Nothing }
+            , cmd = Cmd.none
+            }
 
         RegionUpdated validations dropdownState value ->
-            ( State
-                { state
-                    | validations = validations
-                    , region = dropdownState
-                }
-            , { data | region = value |> Maybe.andThen ListItem.fromDropdownItem }
-            , Cmd.none
-            )
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , region = dropdownState
+                    }
+            , data = { data | region = value |> Maybe.andThen ListItem.fromDropdownItem }
+            , cmd = Cmd.none
+            }
 
         CityUpdated validations _ inputState value ->
-            ( State
-                { state
-                    | validations = validations
-                    , city = inputState
-                }
-            , { data
-                | city =
-                    if String.length value > 150 then
-                        data.city
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , city = inputState
+                    }
+            , data =
+                { data
+                    | city =
+                        if String.length value > 150 then
+                            data.city
 
-                    else
-                        value
-              }
-            , Cmd.none
-            )
+                        else
+                            value
+                }
+            , cmd = Cmd.none
+            }
 
         ZipCodeUpdated validations _ inputState value ->
-            ( State
-                { state
-                    | validations = validations
-                    , postalCode = inputState
-                }
-            , { data
-                | postalCode =
-                    if String.length value > 20 then
-                        data.postalCode
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , postalCode = inputState
+                    }
+            , data =
+                { data
+                    | postalCode =
+                        if String.length value > 20 then
+                            data.postalCode
 
-                    else
-                        value
-              }
-            , Cmd.none
-            )
+                        else
+                            value
+                }
+            , cmd = Cmd.none
+            }
 
         AddressTypeUpdated validations dropdownState value ->
-            ( State
-                { state
-                    | validations = validations
-                    , addressType = dropdownState
-                }
-            , { data | addressType = value }
-            , Cmd.none
-            )
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , addressType = dropdownState
+                    }
+            , data = { data | addressType = value }
+            , cmd = Cmd.none
+            }
 
         PhoneUpdated validations _ inputState value cmd ->
-            ( State
-                { state
-                    | validations = validations
-                    , phone = inputState
-                }
-            , { data
-                | phone =
-                    if String.length value.phoneNumber > 30 then
-                        data.phone
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , phone = inputState
+                    }
+            , data =
+                { data
+                    | phone =
+                        if String.length value.phoneNumber > 30 then
+                            data.phone
 
-                    else
-                        value
-              }
-            , cmd
-            )
+                        else
+                            value
+                }
+            , cmd = cmd
+            }
 
         FaxUpdated validations _ inputState value cmd ->
-            ( State
-                { state
-                    | validations = validations
-                    , fax = inputState
-                }
-            , { data
-                | fax =
-                    if String.length value.phoneNumber > 30 then
-                        data.fax
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , fax = inputState
+                    }
+            , data =
+                { data
+                    | fax =
+                        if String.length value.phoneNumber > 30 then
+                            data.fax
 
-                    else
-                        value
-              }
-            , cmd
-            )
+                        else
+                            value
+                }
+            , cmd = cmd
+            }
 
         WebsiteUpdated validations _ inputState value ->
-            ( State
-                { state
-                    | validations = validations
-                    , website = inputState
-                }
-            , { data
-                | website =
-                    if String.length value > 1000 then
-                        data.website
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , website = inputState
+                    }
+            , data =
+                { data
+                    | website =
+                        if String.length value > 1000 then
+                            data.website
 
-                    else
-                        value
-              }
-            , Cmd.none
-            )
+                        else
+                            value
+                }
+            , cmd = Cmd.none
+            }
 
         IsPrimaryAddressUpdated validations _ inputState value ->
-            ( State
-                { state
-                    | validations = validations
-                    , isPrimaryAddress = inputState
-                }
-            , { data | isPrimaryAddress = value }
-            , Cmd.none
-            )
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , isPrimaryAddress = inputState
+                    }
+            , data = { data | isPrimaryAddress = value }
+            , cmd = Cmd.none
+            }
 
         IncludeInInternalDirectoryUpdated validations _ inputState value ->
-            ( State
-                { state
-                    | validations = validations
-                    , includeInInternalDirectory = inputState
-                }
-            , { data | includeInInternalDirectory = value }
-            , Cmd.none
-            )
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , includeInInternalDirectory = inputState
+                    }
+            , data = { data | includeInInternalDirectory = value }
+            , cmd = Cmd.none
+            }
 
         IncludeInExternalDirectoryUpdated validations _ inputState value ->
-            ( State
-                { state
-                    | validations = validations
-                    , includeInExternalDirectory = inputState
-                }
-            , { data | includeInExternalDirectory = value }
-            , Cmd.none
-            )
+            { state =
+                State
+                    { state
+                        | validations = validations
+                        , includeInExternalDirectory = inputState
+                    }
+            , data = { data | includeInExternalDirectory = value }
+            , cmd = Cmd.none
+            }
 
 
 addressTypesToItems : AddressTypes -> Dict String Dropdown.Item
