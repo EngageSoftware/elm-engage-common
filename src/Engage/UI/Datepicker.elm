@@ -11,6 +11,7 @@ module Engage.UI.Datepicker exposing
 
 -}
 
+import Array
 import Date exposing (Date)
 import DateTimePicker exposing (DateTime)
 import DateTimePicker.Config
@@ -214,7 +215,7 @@ toDateTime oldDate =
     case oldDate of
         Just dateValue ->
             dateValue
-                |> Date.toIsoString
+                |> Date.format "M/d/Y"
                 |> DateTimePicker.Config.defaultDateFromInput
 
         Nothing ->
@@ -225,8 +226,32 @@ fromDateTime : Maybe DateTime -> Maybe Date
 fromDateTime oldDateTime =
     case oldDateTime of
         Just dateTimeValue ->
-            dateTimeValue
-                |> DateTimePicker.Config.defaultDateToInput
+            let
+                dateParts =
+                    dateTimeValue
+                        |> DateTimePicker.Config.defaultDateToInput
+                        |> String.split "/"
+                        |> Array.fromList
+
+                month =
+                    dateParts
+                        |> Array.get 0
+                        |> Maybe.withDefault ""
+
+                day =
+                    dateParts
+                        |> Array.get 1
+                        |> Maybe.withDefault ""
+
+                year =
+                    dateParts
+                        |> Array.get 2
+                        |> Maybe.withDefault ""
+
+                isoString =
+                    year ++ "-" ++ month ++ "-" ++ day
+            in
+            isoString
                 |> Date.fromIsoString
                 |> Result.toMaybe
 
