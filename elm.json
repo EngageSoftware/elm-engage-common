@@ -20,6 +20,7 @@
         "Engage.Validation",
         "Engage.RemoteValidation",
         "Engage.CssHelpers",
+        "Engage.Decode",
         "Engage.UI.Input",
         "Engage.UI.Button",
         "Engage.UI.Loading",

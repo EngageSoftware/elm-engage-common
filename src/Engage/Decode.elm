@@ -1,4 +1,4 @@
-module Engage.Decode exposing (..)
+module Engage.Decode exposing (isoDateDecoder)
 
 {-| Engage.Decode
 
