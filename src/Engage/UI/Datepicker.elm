@@ -1,13 +1,13 @@
 module Engage.UI.Datepicker exposing
     ( State
-    , date, datepicker, initialState, toDateTime
+    , date, datepicker, initialState, toDateTime, fromDateTime
     )
 
 {-| UI.Datepicker
 
 @docs State
 
-@docs date, datepicker, initialState, toDateTime
+@docs date, datepicker, initialState, toDateTime, fromDateTime
 
 -}
 
@@ -222,6 +222,8 @@ toDateTime oldDate =
             Nothing
 
 
+{-| Convert a DateTime to a Date
+-}
 fromDateTime : Maybe DateTime -> Maybe Date
 fromDateTime oldDateTime =
     case oldDateTime of
