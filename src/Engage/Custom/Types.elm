@@ -246,7 +246,7 @@ defaultConfig :
 defaultConfig { onChange, onEnter, onGotoPage, localization } =
     { onChange = onChange
     , onEnter = onEnter
-    , dateFormatter = Date.format "%m/%d/%Y"
+    , dateFormatter = Date.format "M/d/Y"
     , onGotoPage = onGotoPage
     , localization = localization
     , countries = Dict.empty

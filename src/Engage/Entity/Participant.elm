@@ -12,6 +12,7 @@ module Engage.Entity.Participant exposing
 -}
 
 import Date exposing (Date)
+import Engage.Decode exposing (isoDateDecoder)
 import Engage.Entity.Account as Account exposing (Account)
 import Engage.Entity.Address as Address exposing (Address)
 import Engage.Entity.Gender as Gender exposing (Gender)
@@ -119,7 +120,7 @@ decoder =
         |> JDP.required "mobilePhone" PhoneNumber.decoder
         |> JDP.required "profilePicture" (JD.oneOf [ JD.null "", JD.string ])
         |> JDP.required "gender" Gender.decoder
-        |> JDP.required "birthDatePosix" (JD.nullable (JD.int |> JD.map ((*) 1000 >> Time.millisToPosix >> Date.fromPosix Time.utc)))
+        |> JDP.required "birthDatePosix" (JD.nullable isoDateDecoder)
         |> JDP.required "birthDateYear" (JD.maybe (JD.int |> JD.map (\val -> ( val, "" ))))
         |> JDP.required "birthDateMonth" (JD.maybe (JD.int |> JD.map (\val -> ( val, "" ))))
         |> JDP.required "account" (JD.maybe Account.decoder)
@@ -147,7 +148,7 @@ encoderWith fields participantData =
                , ( "mobilePhone", PhoneNumber.encoder participantData.mobilePhone )
                , ( "profilePicture", JE.string participantData.profilePicture )
                , ( "gender", Gender.encoder participantData.gender )
-               , ( "birthDatePosix", Maybe.map (Tuple.first >> JE.int) participantData.birthDateYear |> Maybe.withDefault JE.null )
+               , ( "birthDatePosix", Maybe.map (Date.toIsoString >> JE.string) participantData.birthDate |> Maybe.withDefault JE.null )
                , ( "birthDateYear", Maybe.map (Tuple.first >> JE.int) participantData.birthDateYear |> Maybe.withDefault JE.null )
                , ( "birthDateMonth", Maybe.map (Tuple.first >> JE.int) participantData.birthDateMonth |> Maybe.withDefault JE.null )
                , ( "account", Maybe.map Account.encoder participantData.account |> Maybe.withDefault JE.null )

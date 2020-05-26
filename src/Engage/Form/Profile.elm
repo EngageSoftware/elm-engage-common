@@ -253,7 +253,7 @@ birthDateView namespace localization attribute =
                 |> Engage.CssHelpers.withNamespace
 
         dateFormat =
-            Localization.localizeStringWithDefault "%B %e, %Y" "BirthDateFormat" { localization = localization }
+            Localization.localizeStringWithDefault "MMMM d, Y" "BirthDateFormat" { localization = localization }
 
         do label maybeDate =
             case maybeDate of
