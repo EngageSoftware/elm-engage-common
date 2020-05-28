@@ -9,10 +9,10 @@ module Engage.Custom.Form.Json exposing (decoder, encoder)
 import Date exposing (Date)
 import Dict
 import Engage.Custom.Field.Json as CustomField
-import Engage.Custom.Section as CustomSection exposing (sectionTupleDecoder)
+import Engage.Custom.Section exposing (sectionTupleDecoder)
 import Engage.Custom.Types exposing (Form, Level)
 import Json.Decode as Decode exposing (..)
-import Json.Decode.Pipeline exposing (hardcoded, optional, required)
+import Json.Decode.Pipeline exposing (hardcoded, required)
 import Json.Encode as Encode
 
 

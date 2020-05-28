@@ -8,10 +8,10 @@ module Engage.Custom.Field exposing
     , update
     )
 
-import Dict exposing (Dict)
+import Dict
 import Engage.Custom.Types exposing (..)
 import Engage.Namespace as Namespace
-import Set exposing (Set)
+import Set
 
 
 engagecoreNamespace : String

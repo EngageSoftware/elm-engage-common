@@ -11,7 +11,7 @@ module Engage.UI.Wizard exposing
 
 -}
 
-import Dict exposing (Dict)
+import Dict
 import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
@@ -166,7 +166,7 @@ wizard :
     }
     -> SelectDict Int (Step model)
     -> Html msg
-wizard ({ namespace, config, state, shoppingCart, localize } as args) steps =
+wizard ({ namespace, state, shoppingCart } as args) steps =
     let
         class =
             namespace
@@ -176,11 +176,10 @@ wizard ({ namespace, config, state, shoppingCart, localize } as args) steps =
     section [ class [ "Wizard" ] ]
         ([ wizardHeader args state steps
          ]
-            ++ (viewStep args state steps
-                    :: [ errorMessage args steps
-                       , navigationControl args state steps
-                       ]
-               )
+            ++ [ viewStep args state steps
+               , errorMessage args steps
+               , navigationControl args state steps
+               ]
             ++ [ shoppingCart.content
                ]
         )
@@ -198,7 +197,7 @@ viewStep { namespace, config } state steps =
                 |> Engage.CssHelpers.withNamespace
     in
     case step of
-        ( stepId, Single { model } ) ->
+        ( _, Single { model } ) ->
             div [ class [ "WizardBody" ] ] (config.stepRenderer model)
 
         ( stepId, Multi { pages } ) ->
@@ -212,7 +211,7 @@ viewStep { namespace, config } state steps =
 
 
 viewMultiPages : { namespace : Namespace, config : Config msg model, state : State, stepId : Int } -> SelectDict Int (Page model) -> Html msg
-viewMultiPages { namespace, config, state, stepId } pages =
+viewMultiPages { namespace, config, state } pages =
     let
         ( before, selected, after ) =
             SelectDict.segments pages
@@ -255,7 +254,7 @@ renderBeforePage config state pageId page =
 
 
 wizardHeader : { a | namespace : Namespace, config : Config msg model } -> State -> SelectDict Int (Step model) -> Html msg
-wizardHeader ({ namespace, config } as args) state steps =
+wizardHeader ({ namespace } as args) state steps =
     let
         class =
             namespace
@@ -274,7 +273,7 @@ wizardHeader ({ namespace, config } as args) state steps =
 
 
 stepIndicator : { a | namespace : Namespace, config : Config msg model } -> SelectDict Int (Step model) -> Html msg
-stepIndicator ({ namespace, config } as args) steps =
+stepIndicator { namespace, config } steps =
     let
         class =
             namespace
@@ -287,7 +286,7 @@ stepIndicator ({ namespace, config } as args) steps =
 
 
 navigationArrow : { a | namespace : Namespace, config : Config msg model } -> State -> Html msg
-navigationArrow ({ namespace, config } as args) state =
+navigationArrow { namespace, config } state =
     let
         stateData =
             unwrap state
@@ -409,7 +408,7 @@ navigationStep { namespace, config, isBefore, isSelected, state } ( stepId, step
 
 
 navigationControl : { a | namespace : Namespace, config : Config msg model, isLoading : Bool } -> State -> SelectDict Int (Step model) -> Html msg
-navigationControl ({ namespace, config, isLoading } as args) ((State stateData) as state) steps =
+navigationControl ({ namespace } as args) ((State _) as state) steps =
     let
         class =
             namespace
@@ -423,7 +422,7 @@ navigationControl ({ namespace, config, isLoading } as args) ((State stateData) 
 
 
 previousButton : { a | namespace : Namespace, config : Config msg model, isLoading : Bool } -> State -> SelectDict Int (Step model) -> Html msg
-previousButton ({ namespace, config, isLoading } as args) ((State stateData) as state) steps =
+previousButton { namespace, config } (State stateData) steps =
     let
         prev =
             steps |> SelectDict.getBefore |> Dict.toList |> List.reverse |> List.head
@@ -449,7 +448,7 @@ previousButton ({ namespace, config, isLoading } as args) ((State stateData) as 
 
 
 nextButton : { a | namespace : Namespace, config : Config msg model, isLoading : Bool } -> State -> SelectDict Int (Step model) -> Html msg
-nextButton ({ namespace, config, isLoading } as args) ((State stateData) as state) steps =
+nextButton { namespace, config, isLoading } (State stateData) steps =
     let
         current =
             SelectDict.selectedValue steps
@@ -520,7 +519,7 @@ nextButton ({ namespace, config, isLoading } as args) ((State stateData) as stat
         NextPage ( pageId, _ ) ->
             nextPageButton pageId
 
-        NextStep ( nextStepId, nextStep ) ->
+        NextStep ( _, nextStep ) ->
             let
                 nextButtonForFormPage =
                     if shouldReview current config && not stateData.inReview then
@@ -571,7 +570,7 @@ renderTemplate config steps template =
 
 
 errorMessage : { a | namespace : Namespace, config : Config msg model, localize : String -> String } -> SelectDict Int (Step model) -> Html msg
-errorMessage { namespace, config, localize } steps =
+errorMessage { namespace, localize } steps =
     let
         step =
             SelectDict.selectedValue steps
@@ -610,7 +609,7 @@ getStepTitle step =
         Single { title } ->
             title
 
-        Multi { title, pages } ->
+        Multi { title } ->
             title
 
 
@@ -748,7 +747,7 @@ onMouseDownPreventDefault msg =
 shouldReview : Step model -> Config msg model -> Bool
 shouldReview step { showReview } =
     case step of
-        Single page ->
+        Single _ ->
             False
 
         Multi { pages } ->

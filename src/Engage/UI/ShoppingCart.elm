@@ -1,6 +1,5 @@
 module Engage.UI.ShoppingCart exposing (shoppingCart)
 
-import Css
 import Engage.CssHelpers
 import Engage.Namespace as Namespace
 import Engage.UI.Button as Button

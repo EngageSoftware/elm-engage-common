@@ -150,7 +150,7 @@ toSelectList selectDict =
 {-| Select something from the SelectDict
 -}
 select : comparable -> SelectDict comparable a -> SelectDict comparable a
-select id ((SelectDict { before, selected, after }) as original) =
+select id ((SelectDict { before, after }) as original) =
     case Dict.get id before of
         Just newSelectedValue ->
             selectFromBefore ( id, newSelectedValue ) original
@@ -165,7 +165,7 @@ select id ((SelectDict { before, selected, after }) as original) =
 
 
 selectFromBefore : ( comparable, a ) -> SelectDict comparable a -> SelectDict comparable a
-selectFromBefore (( id, value ) as newSelected) ((SelectDict { before, selected, after }) as original) =
+selectFromBefore (( id, _ ) as newSelected) (SelectDict { before, selected, after }) =
     let
         originalId =
             Tuple.first selected
@@ -183,7 +183,7 @@ selectFromBefore (( id, value ) as newSelected) ((SelectDict { before, selected,
 
 
 selectFromAfter : ( comparable, a ) -> SelectDict comparable a -> SelectDict comparable a
-selectFromAfter (( id, value ) as newSelected) ((SelectDict { before, selected, after }) as original) =
+selectFromAfter (( id, _ ) as newSelected) (SelectDict { before, selected, after }) =
     let
         originalId =
             Tuple.first selected
@@ -203,7 +203,7 @@ selectFromAfter (( id, value ) as newSelected) ((SelectDict { before, selected, 
 {-| Map a SelectDict
 -}
 map : (comparable -> a -> b) -> SelectDict comparable a -> SelectDict comparable b
-map func ((SelectDict { before, selected, after }) as origin) =
+map func (SelectDict { before, selected, after }) =
     fromDicts (Dict.map func before)
         ( Tuple.first selected, uncurry func selected )
         (Dict.map func after)
@@ -226,21 +226,21 @@ values =
 {-| Insert into the after Dict
 -}
 insertAfter : comparable -> a -> SelectDict comparable a -> SelectDict comparable a
-insertAfter key value ((SelectDict { before, selected, after }) as origin) =
+insertAfter key value (SelectDict { before, selected, after }) =
     fromDicts before selected (Dict.insert key value after)
 
 
 {-| Insert into the before Dict
 -}
 insertBefore : comparable -> a -> SelectDict comparable a -> SelectDict comparable a
-insertBefore key value ((SelectDict { before, selected, after }) as origin) =
+insertBefore key value (SelectDict { selected, after }) =
     fromDicts (Dict.insert key value after) selected after
 
 
 {-| Get the size of the SelectDict
 -}
 size : SelectDict comparable a -> Int
-size (SelectDict { before, selected, after }) =
+size (SelectDict { before, after }) =
     Dict.size before + Dict.size after + 1
 
 

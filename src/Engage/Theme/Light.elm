@@ -5,9 +5,9 @@ module Engage.Theme.Light exposing
     )
 
 import Css exposing (hex, rgba)
-import Engage.Theme as Theme exposing (..)
+import Engage.Theme exposing (..)
 import Engage.Theme.Base as Base
-import Engage.Unit.Color as Color exposing (color)
+import Engage.Unit.Color exposing (color)
 
 
 palette : Palette

@@ -18,7 +18,12 @@ import Set exposing (Set)
 
 
 type alias Query a =
-    { a | formId : Int, sectionId : Int, fieldGroupId : Int, fieldId : Int }
+    { a
+        | formId : Int
+        , sectionId : Int
+        , fieldGroupId : Int
+        , fieldId : Int
+    }
 
 
 {-| Update an Answer

@@ -31,7 +31,7 @@ import Input.Text
 import IntlPhoneInput
 import IntlPhoneInput.Config
 import Json.Decode exposing (succeed)
-import Json.Decode.Pipeline exposing (required, requiredAt)
+import Json.Decode.Pipeline exposing (requiredAt)
 import Set exposing (Set)
 
 
@@ -605,7 +605,7 @@ radioList :
     -> State
     -> String
     -> Html msg
-radioList ({ namespace, labelText, onChange, status, items } as args) state selectedValue =
+radioList ({ namespace, labelText, onChange, items } as args) state selectedValue =
     let
         class =
             namespace
@@ -661,7 +661,7 @@ checkBoxList :
     -> State
     -> Set String
     -> Html msg
-checkBoxList ({ namespace, labelText, onChange, status, items } as args) state selectedValues =
+checkBoxList ({ namespace, labelText, onChange, items } as args) state selectedValues =
     let
         class =
             namespace
@@ -705,7 +705,10 @@ checkBoxList ({ namespace, labelText, onChange, status, items } as args) state s
 {-| The FileInfo type
 -}
 type alias FileInfo =
-    { name : String, fileType : String, progressPercentage : Maybe Float }
+    { name : String
+    , fileType : String
+    , progressPercentage : Maybe Float
+    }
 
 
 {-| Get a file view

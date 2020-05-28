@@ -46,7 +46,10 @@ type alias Countries =
 {-| The CountryData type
 -}
 type alias CountryData =
-    { countryId : Int, countryName : String, countryIsoCode : String }
+    { countryId : Int
+    , countryName : String
+    , countryIsoCode : String
+    }
 
 
 {-| The RegionsCountry type
@@ -70,7 +73,9 @@ type alias AddressTypes =
 {-| The RegionData type
 -}
 type alias RegionData =
-    { regionId : Int, regionName : String }
+    { regionId : Int
+    , regionName : String
+    }
 
 
 {-| The AddressType type

@@ -23,7 +23,7 @@ import Engage.UI.Input as Input
 import Engage.Validation exposing (ValidationErrors)
 import Html exposing (Html)
 import Markdown
-import Set exposing (Set)
+import Set
 import String
 import Time
 
@@ -598,7 +598,7 @@ dropdownWithItems { config, validations } state { form, section, fieldGroup, fie
 
 
 viewEntry : { a | config : Config msg, validations : ValidationErrors { fieldId : Int } } -> Field -> Html msg
-viewEntry { config, validations } field =
+viewEntry _ field =
     field
         |> FieldHelpers.getValue
         |> Maybe.map (String.join ", " >> Html.text)
@@ -621,7 +621,7 @@ view config { fields } =
 
 
 viewCompletedEntries : { a | config : Config msg, validations : ValidationErrors { fieldId : Int } } -> FieldGroup -> List (Html msg)
-viewCompletedEntries { config, validations } { fields } =
+viewCompletedEntries { config } { fields } =
     if Dict.values fields |> List.any FieldHelpers.isFileField then
         fields
             |> Dict.values

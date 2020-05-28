@@ -1,6 +1,6 @@
 module Engage.RemoteData.View exposing (errorView)
 
-import Engage.Namespace as Namespace exposing (Namespace)
+import Engage.Namespace exposing (Namespace)
 import Engage.RemoteData as RemoteData exposing (WebData)
 import Engage.RemoteValidation exposing (httpErrorToValidationResult)
 import Engage.UI.Error

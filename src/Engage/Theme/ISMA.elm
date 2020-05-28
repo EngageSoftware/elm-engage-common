@@ -5,11 +5,11 @@ module Engage.Theme.ISMA exposing
     )
 
 import Css exposing (hex, rgba)
-import Engage.Theme as Theme exposing (..)
+import Engage.Theme exposing (..)
 import Engage.Theme.Base as Base
-import Engage.Unit.Color as Color exposing (color)
-import Engage.Unit.FontFamily as FontFamily exposing (..)
-import Engage.Unit.Size as Size exposing (em, px)
+import Engage.Unit.Color exposing (color)
+import Engage.Unit.FontFamily exposing (..)
+import Engage.Unit.Size exposing (px)
 
 
 palette : Palette

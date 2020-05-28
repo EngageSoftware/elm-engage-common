@@ -18,13 +18,13 @@ module Engage.Theme exposing
 -}
 
 import Dropdown
-import Engage.Unit.Border as Border exposing (Border)
+import Engage.Unit.Border exposing (Border)
 import Engage.Unit.Color as Color
-import Engage.Unit.FontFamily as FontFamily exposing (FontFamily)
-import Engage.Unit.Margin as Margin exposing (Margin)
-import Engage.Unit.Padding as Padding exposing (Padding)
-import Engage.Unit.Relative as Relative exposing (Relative)
-import Engage.Unit.Size as Size exposing (Size)
+import Engage.Unit.FontFamily exposing (FontFamily)
+import Engage.Unit.Margin exposing (Margin)
+import Engage.Unit.Padding exposing (Padding)
+import Engage.Unit.Relative exposing (Relative)
+import Engage.Unit.Size exposing (Size)
 
 
 {-| A theme
@@ -98,7 +98,10 @@ type alias Palette =
 {-| A color palette
 -}
 type alias ColorPalette =
-    { base : Color.Color, contrast : Color.Color, tertiary : Color.Color }
+    { base : Color.Color
+    , contrast : Color.Color
+    , tertiary : Color.Color
+    }
 
 
 {-| A spacing type

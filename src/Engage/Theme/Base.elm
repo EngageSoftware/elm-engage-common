@@ -4,13 +4,13 @@ module Engage.Theme.Base exposing
     , style
     )
 
-import Engage.Theme as Theme exposing (..)
+import Engage.Theme exposing (..)
 import Engage.Unit.Border as Border exposing (..)
 import Engage.Unit.FontFamily as FontFamily exposing (..)
-import Engage.Unit.Margin as Margin exposing (..)
+import Engage.Unit.Margin exposing (..)
 import Engage.Unit.Padding as Padding exposing (..)
 import Engage.Unit.Relative as Relative exposing (..)
-import Engage.Unit.Size as Size exposing (..)
+import Engage.Unit.Size exposing (..)
 
 
 spacing : Spacing

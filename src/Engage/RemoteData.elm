@@ -87,16 +87,16 @@ toError remoteData =
         Failure e ->
             Just e
 
-        FailureWithData e a ->
+        FailureWithData e _ ->
             Just e
 
         Loading ->
             Nothing
 
-        Reloading a ->
+        Reloading _ ->
             Nothing
 
-        Success a ->
+        Success _ ->
             Nothing
 
 
@@ -204,13 +204,13 @@ downgrade remoteData =
         Failure e ->
             RemoteData.Failure e
 
-        FailureWithData e a ->
+        FailureWithData e _ ->
             RemoteData.Failure e
 
         Loading ->
             RemoteData.Loading
 
-        Reloading a ->
+        Reloading _ ->
             RemoteData.Loading
 
         Success a ->

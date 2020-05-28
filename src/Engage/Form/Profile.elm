@@ -17,7 +17,7 @@ import Engage.Entity.Address exposing (Address, Countries, RegionsCountry)
 import Engage.Entity.Gender as Gender exposing (Gender)
 import Engage.Form.Address
 import Engage.Form.FormAction as FormAction
-import Engage.ListItem as ListItem exposing (ListItem)
+import Engage.ListItem exposing (ListItem)
 import Engage.Localization as Localization exposing (Localization)
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.Attribute as Attribute
@@ -227,11 +227,6 @@ view ({ namespace, localization } as args) attributes additionalContents =
 genderView : Namespace -> InternalAttribute msg -> Html msg
 genderView namespace attribute =
     let
-        class =
-            namespace
-                |> Namespace.toString
-                |> Engage.CssHelpers.withNamespace
-
         do label genderValue =
             if String.isEmpty genderValue then
                 text ""
@@ -247,11 +242,6 @@ genderView namespace attribute =
 birthDateView : Namespace -> Localization -> InternalAttribute msg -> Html msg
 birthDateView namespace localization attribute =
     let
-        class =
-            namespace
-                |> Namespace.toString
-                |> Engage.CssHelpers.withNamespace
-
         dateFormat =
             Localization.localizeStringWithDefault "MMMM d, Y" "BirthDateFormat" { localization = localization }
 
@@ -271,11 +261,6 @@ birthDateView namespace localization attribute =
 birthDateYearView : Namespace -> InternalAttribute msg -> Html msg
 birthDateYearView namespace attribute =
     let
-        class =
-            namespace
-                |> Namespace.toString
-                |> Engage.CssHelpers.withNamespace
-
         do label maybeItem =
             case maybeItem of
                 Nothing ->
@@ -292,11 +277,6 @@ birthDateYearView namespace attribute =
 birthDateMonthView : Namespace -> InternalAttribute msg -> Html msg
 birthDateMonthView namespace attribute =
     let
-        class =
-            namespace
-                |> Namespace.toString
-                |> Engage.CssHelpers.withNamespace
-
         do label maybeItem =
             case maybeItem of
                 Nothing ->
@@ -348,13 +328,8 @@ titleView namespace attribute =
 
 
 addressView : { args | namespace : Namespace, localization : Localization, countries : Countries, regions : RegionsCountry } -> InternalAttribute msg -> Html msg
-addressView ({ namespace, localization } as args) attribute =
+addressView ({ namespace } as args) attribute =
     let
-        class =
-            namespace
-                |> Namespace.toString
-                |> Engage.CssHelpers.withNamespace
-
         isEmpty =
             Engage.Form.Address.isEmpty
 

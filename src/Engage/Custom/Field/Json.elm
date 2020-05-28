@@ -11,14 +11,13 @@ import Dict
 import Engage.Custom.Types exposing (BoolEntryData, Disable(..), EntryData, Field, FieldChoice, FieldGroup, FieldType(..), FileEntryData, FileStatus(..), MultipleEntryData, StaticFormType(..), UpdateOptions(..))
 import Engage.Form.MembershipTypeList exposing (MembershipType)
 import Engage.UI.Accordion as Accordion
-import Engage.UI.Datepicker as Datepicker exposing (toDateTime)
+import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Input as Input
 import Json.Decode as Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 import Json.Encode as Encode
-import Set exposing (Set)
-import Time
+import Set
 
 
 {-| The FieldGroup decoder

@@ -11,11 +11,10 @@ module Engage.RemoteValidation exposing
 
 -}
 
-import Dict exposing (Dict)
+import Dict
 import Engage.Http
 import Engage.RemoteData exposing (WebData)
 import Engage.UI.Error as Error exposing (Status)
-import Http
 import Json.Decode as Decode exposing (Decoder)
 import String
 

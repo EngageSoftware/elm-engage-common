@@ -28,7 +28,7 @@ toEntryData entry =
         FileEntry _ ->
             Nothing
 
-        BoolEntry entryData ->
+        BoolEntry _ ->
             Nothing
 
 
@@ -185,13 +185,13 @@ getStaticFormTypeText config staticFormType =
 getBoolValue : Field -> Maybe Bool
 getBoolValue field =
     case field.fieldType of
-        TextBox fieldData ->
+        TextBox _ ->
             Nothing
 
-        LargeTextBox fieldData ->
+        LargeTextBox _ ->
             Nothing
 
-        TextArea fieldData ->
+        TextArea _ ->
             Nothing
 
         CheckBox fieldData ->
@@ -376,22 +376,22 @@ getValues field =
         CheckBoxList fieldData ->
             Just fieldData.entry.values
 
-        File fieldData ->
+        File _ ->
             Nothing
 
-        TextBox fieldData ->
+        TextBox _ ->
             Nothing
 
-        LargeTextBox fieldData ->
+        LargeTextBox _ ->
             Nothing
 
-        TextArea fieldData ->
+        TextArea _ ->
             Nothing
 
         CheckBox _ ->
             Nothing
 
-        DropDown fieldData ->
+        DropDown _ ->
             Nothing
 
         RadioList _ ->
@@ -400,7 +400,7 @@ getValues field =
         Quantity _ ->
             Nothing
 
-        Date fieldData ->
+        Date _ ->
             Nothing
 
         Email ->
@@ -415,10 +415,10 @@ getValues field =
         USState ->
             Nothing
 
-        Region fieldData ->
+        Region _ ->
             Nothing
 
-        Country fieldData ->
+        Country _ ->
             Nothing
 
         Text ->
@@ -438,19 +438,19 @@ getFileInfo field =
                 , progressPercentage = getProgressPercentage fieldData.entry.status
                 }
 
-        TextBox fieldData ->
+        TextBox _ ->
             Nothing
 
-        LargeTextBox fieldData ->
+        LargeTextBox _ ->
             Nothing
 
-        TextArea fieldData ->
+        TextArea _ ->
             Nothing
 
         CheckBox _ ->
             Nothing
 
-        DropDown fieldData ->
+        DropDown _ ->
             Nothing
 
         RadioList _ ->
@@ -462,7 +462,7 @@ getFileInfo field =
         Quantity _ ->
             Nothing
 
-        Date fieldData ->
+        Date _ ->
             Nothing
 
         Email ->
@@ -477,10 +477,10 @@ getFileInfo field =
         USState ->
             Nothing
 
-        Region fieldData ->
+        Region _ ->
             Nothing
 
-        Country fieldData ->
+        Country _ ->
             Nothing
 
         Text ->
@@ -905,31 +905,31 @@ updateFieldTypeState { old, new } =
 updateDropdownState : Dropdown.State -> FieldType -> FieldType
 updateDropdownState dropdownState fieldType =
     case fieldType of
-        TextBox data ->
+        TextBox _ ->
             fieldType
 
-        LargeTextBox data ->
+        LargeTextBox _ ->
             fieldType
 
-        TextArea data ->
+        TextArea _ ->
             fieldType
 
         DropDown data ->
             DropDown { data | state = dropdownState }
 
-        Date data ->
+        Date _ ->
             fieldType
 
-        CheckBox data ->
+        CheckBox _ ->
             fieldType
 
-        RadioList data ->
+        RadioList _ ->
             fieldType
 
-        CheckBoxList data ->
+        CheckBoxList _ ->
             fieldType
 
-        Quantity data ->
+        Quantity _ ->
             fieldType
 
         Email ->
@@ -944,7 +944,7 @@ updateDropdownState dropdownState fieldType =
         USState ->
             fieldType
 
-        File data ->
+        File _ ->
             fieldType
 
         Country data ->
@@ -963,31 +963,31 @@ updateDropdownState dropdownState fieldType =
 updateDateState : Datepicker.State -> FieldType -> FieldType
 updateDateState datepickerState fieldType =
     case fieldType of
-        TextBox data ->
+        TextBox _ ->
             fieldType
 
-        LargeTextBox data ->
+        LargeTextBox _ ->
             fieldType
 
-        TextArea data ->
+        TextArea _ ->
             fieldType
 
-        DropDown data ->
+        DropDown _ ->
             fieldType
 
         Date data ->
             Date { data | state = datepickerState }
 
-        CheckBox data ->
+        CheckBox _ ->
             fieldType
 
-        RadioList data ->
+        RadioList _ ->
             fieldType
 
-        CheckBoxList data ->
+        CheckBoxList _ ->
             fieldType
 
-        Quantity data ->
+        Quantity _ ->
             fieldType
 
         Email ->
@@ -1002,13 +1002,13 @@ updateDateState datepickerState fieldType =
         USState ->
             fieldType
 
-        File data ->
+        File _ ->
             fieldType
 
-        Country data ->
+        Country _ ->
             fieldType
 
-        Region data ->
+        Region _ ->
             fieldType
 
         Text ->

@@ -16,7 +16,7 @@ import Engage.Entity.Address exposing (Address, Countries, RegionsCountry)
 import Engage.Form.Address
 import Engage.Form.FormAction as FormAction
 import Engage.Html.Extra as HtmlExtra
-import Engage.Localization as Localization exposing (Localization)
+import Engage.Localization exposing (Localization)
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.Attribute as Attribute
 import Engage.UI.Button as Button
@@ -87,7 +87,7 @@ edit text msg =
 {-| Get the view
 -}
 view : { args | namespace : Namespace, localization : Localization, countries : Countries, regions : RegionsCountry } -> List (Attribute msg) -> List (Html msg) -> Html msg
-view ({ namespace, localization } as args) attributes additionalContents =
+view ({ namespace } as args) attributes additionalContents =
     let
         class =
             namespace
@@ -128,7 +128,7 @@ nameView namespace attribute =
 
 
 addressView : { args | namespace : Namespace, localization : Localization, countries : Countries, regions : RegionsCountry } -> InternalAttribute msg -> Html msg
-addressView ({ namespace, localization } as args) attribute =
+addressView ({ namespace } as args) attribute =
     let
         class =
             namespace

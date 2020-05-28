@@ -18,7 +18,7 @@ import Engage.Form.Address as Address
 import Engage.Form.Company.Json exposing (emptyCompanies)
 import Engage.Form.Company.Types exposing (CompaniesData, CompanyData)
 import Engage.Form.Field as Field
-import Engage.Form.HideOrShow exposing (HideOrShow, showAll)
+import Engage.Form.HideOrShow exposing (showAll)
 import Engage.Localization as Localization exposing (Localization)
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.RemoteData exposing (WebData)

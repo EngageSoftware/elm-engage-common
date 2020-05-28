@@ -19,7 +19,7 @@ import Engage.Entity.PhoneNumber exposing (PhoneNumber)
 import Engage.Form.Field as Field
 import Engage.Form.HideOrShow exposing (HideOrShow, Visibility(..))
 import Engage.Html.Extra as HtmlExtra
-import Engage.ListItem as ListItem exposing (ListItem)
+import Engage.ListItem as ListItem
 import Engage.Localization as Localization exposing (Localization)
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.String exposing (comma, space)

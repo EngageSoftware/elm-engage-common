@@ -13,7 +13,6 @@ module Engage.UI.Message exposing
 
 import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
-import Engage.Styles.Class
 import Engage.UI.MessageType exposing (MessageType(..))
 import Engage.UI.Svg as Svg
 import Engage.UI.Tooltip as Tooltip

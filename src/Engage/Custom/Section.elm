@@ -35,7 +35,11 @@ class =
 
 
 type alias Query a =
-    { a | sectionId : Int, fieldId : Int, fieldGroupId : Int }
+    { a
+        | sectionId : Int
+        , fieldId : Int
+        , fieldGroupId : Int
+    }
 
 
 view : Config msg -> Section -> Html msg

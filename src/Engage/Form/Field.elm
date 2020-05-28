@@ -155,7 +155,11 @@ type alias RadioListFieldArgs field msg =
     , onChange : ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> String -> msg
     , localization : Localization
     , required : Bool
-    , items : List { id : String, text : String }
+    , items :
+        List
+            { id : String
+            , text : String
+            }
     }
 
 
@@ -249,7 +253,7 @@ dropdownFieldWithAttributesValueSort args validations attributes state value rev
                 |> Maybe.andThen (\key -> Dict.get key args.items)
                 |> Maybe.map2 (\key item -> ( key, item.text )) updatedValue
 
-        onChange { onlyStateChange } stateValue updatedValue =
+        onChange _ stateValue updatedValue =
             args.onChange (updatedValidations updatedValue) stateValue (toKeyValue updatedValue)
 
         requiredText =
@@ -302,7 +306,7 @@ dropdownFieldWithAttributes args validations attributes state value =
                 |> Maybe.andThen (\key -> Dict.get key args.items)
                 |> Maybe.map2 (\key item -> ( key, item.text )) updatedValue
 
-        onChange { onlyStateChange } stateValue updatedValue =
+        onChange _ stateValue updatedValue =
             args.onChange (updatedValidations updatedValue) stateValue (toKeyValue updatedValue)
 
         requiredText =

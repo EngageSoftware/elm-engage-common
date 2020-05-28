@@ -105,7 +105,7 @@ view sorter toKey viewer (ListData dict edit) =
 {-| Get a new list data from new data
 -}
 newData : state -> a -> ListData state a comparable -> ListData state a comparable
-newData state a (ListData dict edit) =
+newData state a (ListData dict _) =
     ListData dict (Edit state a)
 
 
@@ -124,7 +124,7 @@ setEdit state key (ListData dict edit) =
 {-| Get the edit of the ListData
 -}
 getEdit : ListData state a comparable -> Maybe ( state, a )
-getEdit (ListData dict edit) =
+getEdit (ListData _ edit) =
     case edit of
         NoEdit ->
             Nothing
@@ -136,19 +136,19 @@ getEdit (ListData dict edit) =
 {-| Check if the ListData is editing
 -}
 isEditing : ListData state a comparable -> Bool
-isEditing (ListData dict edit) =
+isEditing (ListData _ edit) =
     case edit of
         NoEdit ->
             False
 
-        Edit state a ->
+        Edit _ _ ->
             True
 
 
 {-| Edit view helper
 -}
 editView : (state -> a -> Html msg) -> ListData state a comparable -> Html msg
-editView viewer (ListData dict edit) =
+editView viewer (ListData _ edit) =
     case edit of
         NoEdit ->
             Html.text ""
@@ -176,7 +176,7 @@ mapEdit update (ListData dict edit) =
 {-| Cancel an edit
 -}
 cancelEdit : ListData state a comparable -> ListData state a comparable
-cancelEdit (ListData dict edit) =
+cancelEdit (ListData dict _) =
     ListData dict NoEdit
 
 

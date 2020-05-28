@@ -9,7 +9,7 @@ import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Class(..), Importance(..), Size(..))
 import Engage.UI.Button as Button
-import Engage.UI.Error as Error exposing (Status)
+import Engage.UI.Error exposing (Status)
 import Engage.UI.FormControl as FormControl
 import Engage.UI.Message as Message
 import Html exposing (..)
@@ -65,7 +65,7 @@ accordionRadioList :
     -> State
     -> String
     -> Html msg
-accordionRadioList ({ namespace, labelText, onChange, status, items, accordionExpandButtonText } as args) state selectedValue =
+accordionRadioList ({ namespace, labelText, onChange, items, accordionExpandButtonText } as args) state selectedValue =
     let
         class =
             namespace

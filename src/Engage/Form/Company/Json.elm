@@ -6,7 +6,7 @@ module Engage.Form.Company.Json exposing (decoder, emptyCompanies, emptyCompany,
 
 -}
 
-import Date exposing (Date)
+import Date
 import Engage.Decode exposing (isoDateDecoder)
 import Engage.Entity.Address as Address
 import Engage.Form.Company.Types exposing (CompaniesData, CompanyData)

@@ -127,7 +127,7 @@ getFields =
 -}
 isValid : ValidationErrors field -> Bool
 isValid =
-    List.filter (\( field, value ) -> isInvalidStatus value)
+    List.filter (\( _, value ) -> isInvalidStatus value)
         >> List.isEmpty
 
 
@@ -135,7 +135,7 @@ isValid =
 -}
 isInvalid : ValidationErrors field -> Bool
 isInvalid =
-    List.filter (\( field, value ) -> isInvalidStatus value) >> List.isEmpty >> not
+    List.filter (\( _, value ) -> isInvalidStatus value) >> List.isEmpty >> not
 
 
 {-| Check if a ValidationErrors field is valid
@@ -158,7 +158,7 @@ isInvalidField fieldToCheck errors =
 findErrorMessage : field -> ValidationErrors field -> Maybe String
 findErrorMessage field errors =
     errors
-        |> List.filter (\( f, msg ) -> f == field)
+        |> List.filter (\( f, _ ) -> f == field)
         |> List.head
         |> Maybe.map Tuple.second
         |> Maybe.andThen getErrorMessage
@@ -168,7 +168,7 @@ findErrorMessage field errors =
 -}
 filter : List field -> ValidationErrors field -> ValidationErrors field
 filter fields validations =
-    List.filter (\( f, msg ) -> not <| List.any ((==) f) fields) validations
+    List.filter (\( f, _ ) -> not <| List.any ((==) f) fields) validations
 
 
 {-| Validate a dependent String field

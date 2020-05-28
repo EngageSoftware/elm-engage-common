@@ -17,11 +17,10 @@ import Engage.Entity.Account as Account exposing (Account)
 import Engage.Entity.Address as Address exposing (Address)
 import Engage.Entity.Gender as Gender exposing (Gender)
 import Engage.Entity.PhoneNumber as PhoneNumber exposing (PhoneNumber)
-import Engage.ListItem as ListItem exposing (ListItem)
+import Engage.ListItem exposing (ListItem)
 import Json.Decode as JD exposing (Decoder)
 import Json.Decode.Pipeline as JDP
 import Json.Encode as JE
-import Time
 
 
 {-| The Participant type

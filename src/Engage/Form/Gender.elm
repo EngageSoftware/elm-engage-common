@@ -21,7 +21,7 @@ import Engage.UI.Attribute as Attribute
 import Engage.UI.Input as Input
 import Engage.UI.Message as Message
 import Engage.UI.MessageType as MessageType
-import Engage.Validation as Validation exposing (ValidationErrors)
+import Engage.Validation exposing (ValidationErrors)
 import Html exposing (Html)
 
 

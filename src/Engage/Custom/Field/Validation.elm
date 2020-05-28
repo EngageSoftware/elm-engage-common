@@ -4,7 +4,7 @@ import Dict
 import Engage.Custom.Field.Helpers as Helpers
 import Engage.Custom.Types exposing (..)
 import Engage.Validation as Validation exposing (ValidationErrors)
-import Set exposing (Set)
+import Set
 import String
 
 
@@ -77,7 +77,7 @@ validateField { fieldId } field =
             Text ->
                 []
 
-            StaticForm staticFormType ->
+            StaticForm _ ->
                 []
 
     else

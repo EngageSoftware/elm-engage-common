@@ -6,10 +6,10 @@ module Engage.Custom.Form exposing (allFields, completedView, findField, formVie
 
 -}
 
-import Dict exposing (Dict)
+import Dict
 import Engage.CssHelpers
 import Engage.Custom.Field exposing (FieldData)
-import Engage.Custom.Section as Section exposing (sectionTupleDecoder)
+import Engage.Custom.Section as Section
 import Engage.Custom.Types exposing (..)
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace
@@ -83,7 +83,12 @@ completedView config formValue =
 
 
 type alias Query a =
-    { a | formId : Int, sectionId : Int, fieldGroupId : Int, fieldId : Int }
+    { a
+        | formId : Int
+        , sectionId : Int
+        , fieldGroupId : Int
+        , fieldId : Int
+    }
 
 
 {-| Update a Form field
@@ -118,7 +123,7 @@ validate fieldId form =
             form.sections
                 |> Dict.values
                 |> List.concatMap (Section.validate fieldId)
-                |> Validation.merge (\( fields, status ) -> fields.fieldId) (cleanValidations fieldId form.validations)
+                |> Validation.merge (\( fields, _ ) -> fields.fieldId) (cleanValidations fieldId form.validations)
     }
 
 

@@ -54,7 +54,11 @@ fileDecoder =
 
 
 type alias InternalAttribute msg =
-    { browseButton : Maybe { text : String, msg : msg }
+    { browseButton :
+        Maybe
+            { text : String
+            , msg : msg
+            }
     , dropZoneText : String
     , onLoad : Maybe (String -> msg)
     , onFiles : Maybe (List File -> msg)
