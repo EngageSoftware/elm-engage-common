@@ -146,7 +146,7 @@ getText config field =
                 |> Maybe.andThen String.toInt
                 |> Maybe.map Time.millisToPosix
                 |> Maybe.map (Date.fromPosix Time.utc)
-                |> Maybe.map (Date.format "%B %e, %Y")
+                |> Maybe.map (Date.format "MMMM d, y")
                 |> Maybe.map List.singleton
 
         Email ->
