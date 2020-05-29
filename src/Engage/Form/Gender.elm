@@ -32,6 +32,7 @@ type InternalAttribute field msg
         , localization : Localization
         , required : Bool
         , field : Maybe field
+        , fieldKey : String
         }
 
 
@@ -43,6 +44,7 @@ emptyAttribute =
         , localization = Dict.empty
         , required = False
         , field = Nothing
+        , fieldKey = ""
         }
 
 
@@ -96,7 +98,7 @@ form attributes validations state gender =
                     error attribute.namespace "field"
 
                 Just fieldValue ->
-                    internalForm (InternalAttribute attribute) onChangeValue fieldValue validations state gender
+                    internalForm (InternalAttribute attribute) onChangeValue fieldValue attribute.fieldKey validations state gender
 
 
 error : Namespace -> String -> Html msg
@@ -113,11 +115,12 @@ internalForm :
     InternalAttribute field msg
     -> (ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> Gender -> msg)
     -> field
+    -> String
     -> ValidationErrors field
     -> Input.State
     -> Gender
     -> Html msg
-internalForm (InternalAttribute attribute) onChangeValue fieldValue validations state gender =
+internalForm (InternalAttribute attribute) onChangeValue fieldValue fieldKey validations state gender =
     let
         radioListOnChange newValidations onlyStateChange stateValue genderString =
             onChangeValue newValidations onlyStateChange stateValue (Gender.fromString genderString)
@@ -127,6 +130,7 @@ internalForm (InternalAttribute attribute) onChangeValue fieldValue validations 
         , onChange = radioListOnChange
         , localization = attribute.localization
         , field = fieldValue
+        , fieldKey = fieldKey
         , required = attribute.required
         , items =
             [ Male, Female, Other, Unspecified ]

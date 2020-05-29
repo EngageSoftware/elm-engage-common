@@ -22,6 +22,7 @@ import Html exposing (Html)
 type alias InputFieldArgs field msg =
     { namespace : Namespace
     , field : field
+    , fieldKey : String
     , onChange : ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> String -> msg
     , localization : Localization
     , required : Bool
@@ -31,7 +32,9 @@ type alias InputFieldArgs field msg =
 type alias PhoneFieldArgs field msg =
     { namespace : Namespace
     , isoCodeField : field
+    , isoCodeFieldKey : String
     , field : field
+    , fieldKey : String
     , onChange : ValidationErrors field -> { onlyStateChange : Bool } -> Input.PhoneState -> PhoneNumber -> Cmd msg -> msg
     , localization : Localization
     , required : Bool
@@ -45,14 +48,14 @@ phoneField args validations state phoneNumber =
     let
         dialCodeValidations updatedPhoneNumber newValidations =
             if args.required then
-                validate args.isoCodeField updatedPhoneNumber.isoCode newValidations
+                validate args.isoCodeField args.isoCodeFieldKey updatedPhoneNumber.isoCode newValidations
 
             else
                 newValidations
 
         phoneNumberValidations updatedPhoneNumber newValidations =
             if args.required then
-                validate args.field updatedPhoneNumber.phoneNumber newValidations
+                validate args.field args.fieldKey updatedPhoneNumber.phoneNumber newValidations
 
             else
                 newValidations
@@ -80,7 +83,7 @@ phoneField args validations state phoneNumber =
     in
     Input.phone
         { namespace = Namespace.engagecore
-        , id = fieldId args.namespace args.field
+        , id = fieldId args.namespace args.fieldKey
         , labelText = localizeLabel args
         , helpText = localizeHelp args
         , requiredText = requiredText
@@ -108,7 +111,7 @@ inputFieldWithAttributes args validations attributes state value =
     let
         updatedValidations updatedValue =
             if args.required then
-                validate args.field updatedValue validations
+                validate args.field args.fieldKey updatedValue validations
 
             else
                 validations
@@ -134,7 +137,7 @@ inputFieldWithAttributes args validations attributes state value =
     in
     Input.textWithAttributes
         { namespace = Namespace.engagecore
-        , id = fieldId args.namespace args.field
+        , id = fieldId args.namespace args.fieldKey
         , labelText = localizeLabel args
         , helpText = localizeHelp args
         , requiredText = requiredText
@@ -149,6 +152,7 @@ inputFieldWithAttributes args validations attributes state value =
 type alias RadioListFieldArgs field msg =
     { namespace : Namespace
     , field : field
+    , fieldKey : String
     , onChange : ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> String -> msg
     , localization : Localization
     , required : Bool
@@ -167,7 +171,7 @@ radioListField args validations state value =
     let
         updatedValidations updatedValue =
             if args.required then
-                validate args.field updatedValue validations
+                validate args.field args.fieldKey updatedValue validations
 
             else
                 validations
@@ -193,7 +197,7 @@ radioListField args validations state value =
     in
     Input.radioList
         { namespace = Namespace.engagecore
-        , id = fieldId args.namespace args.field
+        , id = fieldId args.namespace args.fieldKey
         , labelText = localizeLabel args
         , helpText = localizeHelp args
         , requiredText = requiredText
@@ -210,6 +214,7 @@ type alias DropdownFieldArgs field msg =
     , onChange : ValidationErrors field -> Dropdown.State -> Maybe ( String, String ) -> msg
     , localization : Localization
     , field : field
+    , fieldKey : String
     , required : Bool
     , items : Dict String Dropdown.Item
     }
@@ -239,7 +244,7 @@ dropdownFieldWithAttributesValueSort args validations attributes state value rev
 
         updatedValidations updatedValue =
             if required then
-                validateMaybe args.field updatedValue validations
+                validateMaybe args.field args.fieldKey updatedValue validations
 
             else
                 validations
@@ -260,7 +265,7 @@ dropdownFieldWithAttributesValueSort args validations attributes state value rev
                 Nothing
     in
     Dropdown.dropdownWithAttributes
-        { id = fieldId args.namespace args.field
+        { id = fieldId args.namespace args.fieldKey
         , labelText = localizeLabel args
         , requiredText = requiredText
         , items =
@@ -292,7 +297,7 @@ dropdownFieldWithAttributes args validations attributes state value =
 
         updatedValidations updatedValue =
             if required then
-                validateMaybe args.field updatedValue validations
+                validateMaybe args.field args.fieldKey updatedValue validations
 
             else
                 validations
@@ -313,7 +318,7 @@ dropdownFieldWithAttributes args validations attributes state value =
                 Nothing
     in
     Dropdown.dropdownWithAttributes
-        { id = fieldId args.namespace args.field
+        { id = fieldId args.namespace args.fieldKey
         , labelText = localizeLabel args
         , requiredText = requiredText
         , items = args.items |> Dict.values |> List.sortBy .text
@@ -332,6 +337,7 @@ type alias DatepickerFieldArgs field msg =
     , onStateChange : ValidationErrors field -> Datepicker.State -> msg
     , localization : Localization
     , field : field
+    , fieldKey : String
     , required : Bool
     , now : Date
     }
@@ -344,7 +350,7 @@ datepickerField args validations state value =
     let
         updatedValidations updatedValue =
             if args.required then
-                validateMaybe args.field updatedValue validations
+                validateMaybe args.field args.fieldKey updatedValue validations
 
             else
                 validations
@@ -363,7 +369,7 @@ datepickerField args validations state value =
                 Nothing
     in
     Datepicker.datepicker
-        { id = fieldId args.namespace args.field
+        { id = fieldId args.namespace args.fieldKey
         , onChange = onChange
         , onStateChange = onStateChange
         , labelText = localizeLabel args
@@ -380,6 +386,7 @@ type alias DateInputFieldArgs field msg =
     , onChange : ValidationErrors field -> Input.State -> Maybe Date -> msg
     , localization : Localization
     , field : field
+    , fieldKey : String
     , required : Bool
     }
 
@@ -421,7 +428,7 @@ dateInputField args validations state value =
                 Nothing
     in
     Input.date
-        { id = fieldId args.namespace args.field
+        { id = fieldId args.namespace args.fieldKey
         , onChange = onChange
         , onFocusChange = onFocusChange
         , labelText = localizeLabel args
@@ -441,7 +448,7 @@ dateField args validations state value =
     let
         updatedValidations updatedValue =
             if args.required then
-                validateMaybe args.field updatedValue validations
+                validateMaybe args.field args.fieldKey updatedValue validations
 
             else
                 validations
@@ -460,7 +467,7 @@ dateField args validations state value =
                 Nothing
     in
     Datepicker.date
-        { id = fieldId args.namespace args.field
+        { id = fieldId args.namespace args.fieldKey
         , onChange = onChange
         , onStateChange = onStateChange
         , labelText = localizeLabel args
@@ -475,6 +482,7 @@ dateField args validations state value =
 type alias CheckboxFieldArgs field msg =
     { namespace : Namespace
     , field : field
+    , fieldKey : String
     , onCheck : ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> Bool -> msg
     , localization : Localization
     , required : Bool
@@ -495,7 +503,7 @@ checkboxWithAttributes args validations attributes state value =
     let
         updatedValidations updatedValue =
             if args.required then
-                validateBool args.field updatedValue validations
+                validateBool args.field args.fieldKey updatedValue validations
 
             else
                 validations
@@ -538,59 +546,59 @@ checkboxWithAttributes args validations attributes state value =
 
 {-| Get the fieldId
 -}
-fieldId : Namespace -> field -> String
+fieldId : Namespace -> String -> String
 fieldId namespace field =
-    Namespace.toString namespace ++ Debug.toString field
+    Namespace.toString namespace ++ field
 
 
-validateBool : field -> Bool -> ValidationErrors field -> ValidationErrors field
-validateBool field value validations =
+validateBool : field -> String -> Bool -> ValidationErrors field -> ValidationErrors field
+validateBool field fieldKey value validations =
     let
         cleanValidations =
             validations |> Validation.filter [ field ]
     in
     cleanValidations
-        ++ Validation.validateField [ Validation.validateBoolField (Validation.localize field) field (always value) ] ()
+        ++ Validation.validateField [ Validation.validateBoolField (Validation.localizeRequired fieldKey) field (always value) ] ()
 
 
 {-| Validate a field
 -}
-validate : field -> String -> ValidationErrors field -> ValidationErrors field
-validate field value validations =
+validate : field -> String -> String -> ValidationErrors field -> ValidationErrors field
+validate field fieldKey value validations =
     let
         cleanValidations =
             validations |> Validation.filter [ field ]
     in
     cleanValidations
-        ++ Validation.validateField [ Validation.validateStringField (Validation.localize field) field (always value) ] ()
+        ++ Validation.validateField [ Validation.validateStringField (Validation.localizeRequired fieldKey) field (always value) ] ()
 
 
-validateMaybe : field -> Maybe a -> ValidationErrors field -> ValidationErrors field
-validateMaybe field value validations =
+validateMaybe : field -> String -> Maybe a -> ValidationErrors field -> ValidationErrors field
+validateMaybe field fieldKey value validations =
     let
         cleanValidations =
             validations |> Validation.filter [ field ]
     in
     cleanValidations
-        ++ Validation.validateField [ Validation.validateMaybeField (Validation.localize field) field (always value) ] ()
+        ++ Validation.validateField [ Validation.validateMaybeField (Validation.localizeRequired fieldKey) field (always value) ] ()
 
 
 {-| Localize a label String
 -}
-localizeLabel : { a | field : field, localization : Localization } -> String
-localizeLabel ({ field } as args) =
-    Localization.localizeString (Debug.toString field ++ ".label") args
+localizeLabel : { a | fieldKey : String, localization : Localization } -> String
+localizeLabel ({ fieldKey } as args) =
+    Localization.localizeString (fieldKey ++ ".label") args
 
 
 {-| Localize a help String
 -}
-localizeHelp : { a | field : field, localization : Localization } -> String
-localizeHelp ({ field } as args) =
-    Localization.localizeStringWithDefault "" (Debug.toString field ++ ".help") args
+localizeHelp : { a | fieldKey : String, localization : Localization } -> String
+localizeHelp ({ fieldKey } as args) =
+    Localization.localizeStringWithDefault "" (fieldKey ++ ".help") args
 
 
 {-| Localize a invalid String
 -}
-localizeInvalid : { a | field : field, localization : Localization } -> String
-localizeInvalid ({ field } as args) =
-    Localization.localizeStringWithDefault "" (Debug.toString field ++ ".invalid") args
+localizeInvalid : { a | fieldKey : String, localization : Localization } -> String
+localizeInvalid ({ fieldKey } as args) =
+    Localization.localizeStringWithDefault "" (fieldKey ++ ".invalid") args

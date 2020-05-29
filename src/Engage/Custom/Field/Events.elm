@@ -53,7 +53,6 @@ onIntInputHandler config args =
 
 onDateChangeHandler : Config msg -> ChangeArgs -> (Datepicker.State -> Maybe Date -> msg)
 onDateChangeHandler config args =
-    -- Debug.crash "onDateChangeHandler"
     let
         toMaybeDateMsg maybeAnswerFunc dateFormatter =
             \datePickerState maybeDate ->

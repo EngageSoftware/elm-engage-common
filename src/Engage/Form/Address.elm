@@ -322,8 +322,8 @@ isEmpty data =
 
 {-| Get the form view
 -}
-form : Namespace -> Localization -> (ValidationField -> parentField) -> List Attribute -> State parentField -> HideOrShow -> Address -> Html (Msg parentField)
-form originalNamespace localization field attributes (State state) hideOrShow addressData =
+form : Namespace -> Localization -> (ValidationField -> parentField) -> (String -> String) -> List Attribute -> State parentField -> HideOrShow -> Address -> Html (Msg parentField)
+form originalNamespace localization field fieldKey attributes (State state) hideOrShow addressData =
     let
         attributeShow : InternalAttribute
         attributeShow =
@@ -391,6 +391,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                             , onChange = onAddressTypeChangeHandler
                             , localization = localization
                             , field = field AddressType
+                            , fieldKey = fieldKey "AddressType"
                             , required = True
                             , items = newAddressTypes |> addressTypesToItems
                             }
@@ -408,6 +409,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 , localization = localization
                 , required = False
                 , field = field Name
+                , fieldKey = fieldKey "Name"
                 }
                 state.validations
                 [ Html.Attributes.name "address-name", Html.Attributes.attribute "autocomplete" "address-name" ]
@@ -421,6 +423,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 , localization = localization
                 , required = attribute.required && True
                 , field = field Address
+                , fieldKey = fieldKey "Address"
                 }
                 state.validations
                 [ Html.Attributes.name "address-line1", Html.Attributes.attribute "autocomplete" "address-line1" ]
@@ -433,6 +436,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 , onChange = UnitUpdated
                 , localization = localization
                 , field = field Unit
+                , fieldKey = fieldKey "Unit"
                 , required = False
                 }
                 state.validations
@@ -446,6 +450,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 , onChange = CountryUpdated
                 , localization = localization
                 , field = field Country
+                , fieldKey = fieldKey "Country"
                 , required = attribute.required
                 , items = attribute.countries |> countriesToItems
                 }
@@ -458,6 +463,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 , onChange = RegionUpdated
                 , localization = localization
                 , field = field Region
+                , fieldKey = fieldKey "Region"
                 , required = attribute.required
                 , items = regionsForCountry |> regionsToItems
                 }
@@ -472,6 +478,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 , onChange = CityUpdated
                 , localization = localization
                 , field = field City
+                , fieldKey = fieldKey "City"
                 , required = attribute.required && True
                 }
                 state.validations
@@ -483,6 +490,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                 , onChange = ZipCodeUpdated
                 , localization = localization
                 , field = field ZipCode
+                , fieldKey = fieldKey "ZipCode"
                 , required = attribute.required && True
                 }
                 state.validations
@@ -499,7 +507,9 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                         , onChange = PhoneUpdated
                         , localization = localization
                         , isoCodeField = field PhoneIsoCode
+                        , isoCodeFieldKey = "PhoneIsoCode"
                         , field = field Phone
+                        , fieldKey = fieldKey "Phone"
                         , required = False
                         }
                         state.validations
@@ -514,7 +524,9 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                         , onChange = FaxUpdated
                         , localization = localization
                         , isoCodeField = field FaxIsoCode
+                        , isoCodeFieldKey = "FaxIsoCode"
                         , field = field Fax
+                        , fieldKey = fieldKey "Fax"
                         , required = False
                         }
                         state.validations
@@ -529,6 +541,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                         , onChange = WebsiteUpdated
                         , localization = localization
                         , field = field Website
+                        , fieldKey = fieldKey "Website"
                         , required = False
                         }
                         state.validations
@@ -540,7 +553,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
             |> Engage.Bool.true HtmlExtra.none
             |> Engage.Bool.false
                 (div [ class [ "FieldGroup" ] ]
-                    [ primaryAddressCheckbox namespace localization field (State state) addressData ]
+                    [ primaryAddressCheckbox namespace localization field fieldKey (State state) addressData ]
                 )
         , attribute.showIncludeInInternalDirectory
             |> Engage.Bool.true
@@ -550,6 +563,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                         , localization = localization
                         , onCheck = IncludeInInternalDirectoryUpdated
                         , field = field IncludeInInternalDirectory
+                        , fieldKey = fieldKey "IncludeInInternalDirectory"
                         , required = False
                         }
                         state.validations
@@ -566,6 +580,7 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
                         , localization = localization
                         , onCheck = IncludeInExternalDirectoryUpdated
                         , field = field IncludeInExternalDirectory
+                        , fieldKey = fieldKey "IncludeInExternalDirectory"
                         , required = False
                         }
                         state.validations
@@ -577,8 +592,8 @@ form originalNamespace localization field attributes (State state) hideOrShow ad
         ]
 
 
-primaryAddressCheckbox : Namespace -> Localization -> (ValidationField -> parentField) -> State parentField -> Address -> Html (Msg parentField)
-primaryAddressCheckbox originalNamespace localization field (State state) addressData =
+primaryAddressCheckbox : Namespace -> Localization -> (ValidationField -> parentField) -> (String -> String) -> State parentField -> Address -> Html (Msg parentField)
+primaryAddressCheckbox originalNamespace localization field fieldKey (State state) addressData =
     let
         namespace =
             Namespace.namespace <| Namespace.toString originalNamespace ++ "Address"
@@ -590,6 +605,7 @@ primaryAddressCheckbox originalNamespace localization field (State state) addres
                 , onCheck = IsPrimaryAddressUpdated
                 , localization = localization
                 , field = field IsPrimaryAddress
+                , fieldKey = fieldKey "IsPrimaryAddress"
                 , required = False
                 }
                 state.validations
@@ -602,6 +618,7 @@ primaryAddressCheckbox originalNamespace localization field (State state) addres
                 , onCheck = IsPrimaryAddressUpdated
                 , localization = localization
                 , field = field IsPrimaryAddress
+                , fieldKey = fieldKey "IsPrimaryAddress"
                 , required = False
                 }
                 state.validations
@@ -907,14 +924,14 @@ validateFieldWith additionalValidations parentField regionsData data =
                 []
 
             else
-                [ Validation.validateMaybeField (Validation.localize (parentField Region)) (parentField Region) .region ]
+                [ Validation.validateMaybeField (Validation.localizeRequired "Region") (parentField Region) .region ]
     in
     Validation.validateField
-        ([ Validation.validateStringField (Validation.localize (parentField Address)) (parentField Address) .address1
-         , Validation.validateMaybeField (Validation.localize (parentField Country)) (parentField Country) .country
-         , Validation.validateStringField (Validation.localize (parentField City)) (parentField City) .city
-         , Validation.validateStringField (Validation.localize (parentField ZipCode)) (parentField ZipCode) .postalCode
-         , Validation.validateMaybeField (Validation.localize (parentField AddressType)) (parentField AddressType) .addressType
+        ([ Validation.validateStringField (Validation.localizeRequired "Address") (parentField Address) .address1
+         , Validation.validateMaybeField (Validation.localizeRequired "Country") (parentField Country) .country
+         , Validation.validateStringField (Validation.localizeRequired "City") (parentField City) .city
+         , Validation.validateStringField (Validation.localizeRequired "ZipCode") (parentField ZipCode) .postalCode
+         , Validation.validateMaybeField (Validation.localizeRequired "AddressType") (parentField AddressType) .addressType
          ]
             ++ regionValidation
             ++ additionalValidations

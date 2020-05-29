@@ -899,7 +899,7 @@ updateFieldTypeState { old, new } =
                     old
 
         StaticForm ParticipantForm ->
-            Debug.todo "Not Implemented"
+            old
 
 
 updateDropdownState : Dropdown.State -> FieldType -> FieldType

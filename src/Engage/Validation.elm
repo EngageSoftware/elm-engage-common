@@ -1,13 +1,13 @@
 module Engage.Validation exposing
     ( RemoteValidationErrors, ValidationErrors, ValidationStatus(..)
-    , getErrors, fieldError, getFields, filter, findErrorMessage, isInvalid, isInvalidField, isValid, isValidField, localize, merge, toError, validateBoolField, validateDependentMaybeField, validateDependentStringField, validateField, validateListNotEmptyField, validateMaybeField, validateMaybeStringField, validateStringField
+    , getErrors, fieldError, getFields, filter, findErrorMessage, isInvalid, isInvalidField, isValid, isValidField, localizeRequired, merge, toError, validateBoolField, validateDependentMaybeField, validateDependentStringField, validateField, validateListNotEmptyField, validateMaybeField, validateMaybeStringField, validateStringField
     )
 
 {-| Validation
 
 @docs RemoteValidationErrors, ValidationErrors, ValidationStatus
 
-@docs getErrors, fieldError, getFields, filter, findErrorMessage, isInvalid, isInvalidField, isValid, isValidField, localize, merge, toError, validateBoolField, validateDependentMaybeField, validateDependentStringField, validateField, validateListNotEmptyField, validateMaybeField, validateMaybeStringField, validateStringField
+@docs getErrors, fieldError, getFields, filter, findErrorMessage, isInvalid, isInvalidField, isValid, isValidField, localizeRequired, merge, toError, validateBoolField, validateDependentMaybeField, validateDependentStringField, validateField, validateListNotEmptyField, validateMaybeField, validateMaybeStringField, validateStringField
 
 -}
 
@@ -277,9 +277,9 @@ toSingleton validations =
 
 {-| Localize a field to a String
 -}
-localize : field -> String
-localize field =
-    Debug.toString field ++ ".Required"
+localizeRequired : String -> String
+localizeRequired field =
+    field ++ ".Required"
 
 
 

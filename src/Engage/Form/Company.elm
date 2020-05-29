@@ -147,6 +147,7 @@ currentCompany args state data =
                 , onChange = CompanyNameUpdated
                 , localization = args.localization
                 , field = CurrentCompanyField CompanyName
+                , fieldKey = "CurrentCompanyField CompanyName"
                 , required = True
                 }
                 state.currentCompany.validations
@@ -157,6 +158,7 @@ currentCompany args state data =
                 , onChange = PositionUpdated
                 , localization = args.localization
                 , field = CurrentCompanyField Position
+                , fieldKey = "CurrentCompanyField Position"
                 , required = True
                 }
                 state.currentCompany.validations
@@ -168,6 +170,7 @@ currentCompany args state data =
                 args.namespace
                 args.localization
                 CurrentCompanyAddress
+                (\fieldKey -> "CurrentCompanyAddress " ++ fieldKey)
                 [ Address.countries args.countries
                 , Address.regions args.regions
                 , Address.required True
@@ -182,6 +185,7 @@ currentCompany args state data =
                 , onStateChange = StartDateStateUpdated
                 , localization = args.localization
                 , field = CurrentCompanyField StartDate
+                , fieldKey = "CurrentCompanyField StartDate"
                 , required = True
                 , now = args.now
                 }
@@ -207,6 +211,7 @@ previousCompany args state data =
                 , onChange = CompanyNameUpdated
                 , localization = args.localization
                 , field = PreviousCompanyField CompanyName
+                , fieldKey = "PreviousCompanyField CompanyName"
                 , required = True
                 }
                 state.previousCompany.validations
@@ -217,6 +222,7 @@ previousCompany args state data =
                 , onChange = PositionUpdated
                 , localization = args.localization
                 , field = PreviousCompanyField Position
+                , fieldKey = "PreviousCompanyField Position"
                 , required = True
                 }
                 state.previousCompany.validations
@@ -228,6 +234,7 @@ previousCompany args state data =
                 args.namespace
                 args.localization
                 PreviousCompanyAddress
+                (\fieldKey -> "PreviousCompanyAddress " ++ fieldKey)
                 [ Address.countries args.countries
                 , Address.regions args.regions
                 , Address.required <| not <| String.isEmpty data.previousCompany.name
@@ -242,6 +249,7 @@ previousCompany args state data =
                 , onStateChange = StartDateStateUpdated
                 , localization = args.localization
                 , field = PreviousCompanyField StartDate
+                , fieldKey = "PreviousCompanyField StartDate"
                 , required = True
                 , now = args.now
                 }
@@ -254,6 +262,7 @@ previousCompany args state data =
                 , onStateChange = EndDateStateUpdated
                 , localization = args.localization
                 , field = PreviousCompanyField EndDate
+                , fieldKey = "PreviousCompanyField EndDate"
                 , required = True
                 , now = args.now
                 }
@@ -401,8 +410,8 @@ validateAll (State state) regions data =
                     | address = Address.validateAll CurrentCompanyAddress state.currentCompany.address regions data.currentCompany.address
                     , validations =
                         Validation.validateField
-                            [ Validation.validateStringField (Validation.localize (CurrentCompanyField CompanyName)) (CurrentCompanyField CompanyName) (.currentCompany >> .name)
-                            , Validation.validateMaybeField (Validation.localize (CurrentCompanyField StartDate)) (CurrentCompanyField StartDate) (.currentCompany >> .startDate)
+                            [ Validation.validateStringField (Validation.localizeRequired "CurrentCompanyField CompanyName") (CurrentCompanyField CompanyName) (.currentCompany >> .name)
+                            , Validation.validateMaybeField (Validation.localizeRequired "CurrentCompanyField StartDate") (CurrentCompanyField StartDate) (.currentCompany >> .startDate)
                             ]
                             data
                 }
