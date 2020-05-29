@@ -5,7 +5,6 @@ import Dict
 import Engage.Custom.Types exposing (..)
 import Engage.Form.Address as Address
 import Engage.UI.Accordion as Accordion
-import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Error as Error exposing (Status)
 import Engage.UI.Input as Input
@@ -960,7 +959,7 @@ updateDropdownState dropdownState fieldType =
             fieldType
 
 
-updateDateState : Datepicker.State -> FieldType -> FieldType
+updateDateState : Input.State -> FieldType -> FieldType
 updateDateState datepickerState fieldType =
     case fieldType of
         TextBox _ ->

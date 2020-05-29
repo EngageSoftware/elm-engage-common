@@ -15,7 +15,6 @@ import Engage.Localization as Localization
 import Engage.Namespace as Namespace
 import Engage.String
 import Engage.UI.Accordion as Accordion
-import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Error as Error
 import Engage.UI.Info as Info
@@ -697,7 +696,7 @@ file { config, validations } state { form, section, fieldGroup, field } =
         ]
 
 
-datepicker : Args a msg -> Datepicker.State -> FieldData -> Html msg
+datepicker : Args a msg -> Input.State -> FieldData -> Html msg
 datepicker { config, validations } state { form, section, fieldGroup, field } =
     let
         domId =
@@ -715,18 +714,6 @@ datepicker { config, validations } state { form, section, fieldGroup, field } =
                 }
                 (value |> Maybe.map Date.toIsoString |> Maybe.withDefault "")
 
-        onStateChange dateState =
-            Events.onChangeHandler config
-                { fieldId = field.fieldId
-                , formId = form.formId
-                , sectionId = section.sectionId
-                , fieldGroupId = fieldGroup.fieldGroupId
-                , fieldType = FieldHelpers.updateDateState dateState field.fieldType
-                , domId = domId
-                , onlyStateChange = True
-                }
-                (FieldHelpers.getValue field |> Maybe.andThen List.head |> Maybe.withDefault "")
-
         labelKey =
             section.name ++ "." ++ field.label
 
@@ -737,12 +724,13 @@ datepicker { config, validations } state { form, section, fieldGroup, field } =
             else
                 Nothing
     in
-    Datepicker.datepicker
+    Input.date
         { id = domId
         , labelText = Localization.localizeStringWithDefault field.label labelKey config
-        , requiredText = requiredText
+        , helpText = field.description
         , onChange = onChange
-        , onStateChange = onStateChange
+        , onFocusChange = Nothing
+        , requiredText = requiredText
         , status = FieldHelpers.toError validations field
         , namespace = Namespace.engagecore
         }

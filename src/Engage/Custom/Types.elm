@@ -17,7 +17,6 @@ import Engage.Entity.Address as Address
 import Engage.Form.MembershipTypeList as MembershipTypeList exposing (MembershipType)
 import Engage.Localization as Localization
 import Engage.UI.Accordion as Accordion
-import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Input as Input
 import Engage.Validation exposing (ValidationErrors)
@@ -206,7 +205,7 @@ type FieldType
     | RadioList { entry : EntryData, state : Input.State, fieldChoices : List FieldChoice }
     | CheckBoxList { entry : MultipleEntryData, state : Input.State, fieldChoices : List FieldChoice }
     | Quantity { entry : EntryData, state : Input.State }
-    | Date { entry : EntryData, state : Datepicker.State }
+    | Date { entry : EntryData, state : Input.State }
     | Email
     | Phone
     | ZipCode

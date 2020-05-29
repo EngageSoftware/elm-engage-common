@@ -3,8 +3,7 @@ module Engage.Custom.Field.Events exposing (onChangeHandler, onCheckHandler, onD
 import Date exposing (Date)
 import Engage.Custom.Types exposing (..)
 import Engage.Form.MembershipTypeList as MembershipTypeList
-import Engage.UI.Datepicker as Datepicker
-import Engage.UI.Input exposing (FileInfo)
+import Engage.UI.Input as Input exposing (FileInfo)
 import Set exposing (Set)
 
 
@@ -51,7 +50,7 @@ onIntInputHandler config args =
     toMaybeIntMsg (config.onChange args)
 
 
-onDateChangeHandler : Config msg -> ChangeArgs -> (Datepicker.State -> Maybe Date -> msg)
+onDateChangeHandler : Config msg -> ChangeArgs -> (Input.State -> Maybe Date -> msg)
 onDateChangeHandler config args =
     let
         toMaybeDateMsg maybeAnswerFunc dateFormatter =

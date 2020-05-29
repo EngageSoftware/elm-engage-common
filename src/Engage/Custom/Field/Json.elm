@@ -11,7 +11,6 @@ import Dict
 import Engage.Custom.Types exposing (BoolEntryData, Disable(..), EntryData, Field, FieldChoice, FieldGroup, FieldType(..), FileEntryData, FileStatus(..), MultipleEntryData, StaticFormType(..), UpdateOptions(..))
 import Engage.Form.MembershipTypeList exposing (MembershipType)
 import Engage.UI.Accordion as Accordion
-import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Input as Input
 import Json.Decode as Decode exposing (..)
@@ -182,7 +181,7 @@ entryDatafieldTypeDecoder now entryData fieldType =
         "Date" ->
             Date
                 { entry = entryData
-                , state = Datepicker.initialState now
+                , state = Input.initialState
                 }
                 |> Decode.succeed
 

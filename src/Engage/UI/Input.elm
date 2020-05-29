@@ -176,7 +176,7 @@ date :
     , labelText : String
     , helpText : String
     , onChange : State -> Maybe Date -> msg
-    , onFocusChange : Bool -> msg
+    , onFocusChange : Maybe (Bool -> msg)
     , status : Status
     , requiredText : Maybe String
     }
@@ -196,7 +196,7 @@ date { namespace, id, labelText, helpText, onChange, status, requiredText, onFoc
         options =
             { onInput = \dateString -> onChange state (dateString |> Date.fromIsoString |> Result.toMaybe)
             , type_ = "date"
-            , hasFocus = Just onFocusChange
+            , hasFocus = onFocusChange
             , maxLength = Nothing
             }
 

@@ -22,7 +22,6 @@ import Engage.Form.HideOrShow exposing (showAll)
 import Engage.Localization as Localization exposing (Localization)
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.RemoteData exposing (WebData)
-import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Input as Input
 import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (..)
@@ -38,8 +37,8 @@ class =
 type alias CompanyState =
     { name : Input.State
     , position : Input.State
-    , startDate : Datepicker.State
-    , endDate : Datepicker.State
+    , startDate : Input.State
+    , endDate : Input.State
     , address : Address.State ValidationField
     , validations : ValidationErrors ValidationField
     }
@@ -59,22 +58,22 @@ type alias StateData =
 
 {-| Get the initial state
 -}
-initialState : Date -> State
-initialState now =
+initialState : State
+initialState =
     State
         { currentCompany =
             { name = Input.initialState
             , position = Input.initialState
-            , startDate = Datepicker.initialState now
-            , endDate = Datepicker.initialState now
+            , startDate = Input.initialState
+            , endDate = Input.initialState
             , address = Address.initialState
             , validations = []
             }
         , previousCompany =
             { name = Input.initialState
             , position = Input.initialState
-            , startDate = Datepicker.initialState now
-            , endDate = Datepicker.initialState now
+            , startDate = Input.initialState
+            , endDate = Input.initialState
             , address = Address.initialState
             , validations = []
             }
@@ -105,10 +104,10 @@ type Msg
 type CompanyMsg
     = CompanyNameUpdated (ValidationErrors ValidationField) { onlyStateChange : Bool } Input.State String
     | PositionUpdated (ValidationErrors ValidationField) { onlyStateChange : Bool } Input.State String
-    | StartDateStateUpdated (ValidationErrors ValidationField) Datepicker.State
-    | EndDateStateUpdated (ValidationErrors ValidationField) Datepicker.State
-    | StartDateUpdated (ValidationErrors ValidationField) Datepicker.State (Maybe Date)
-    | EndDateUpdated (ValidationErrors ValidationField) Datepicker.State (Maybe Date)
+    | StartDateStateUpdated (ValidationErrors ValidationField) Input.State
+    | EndDateStateUpdated (ValidationErrors ValidationField) Input.State
+    | StartDateUpdated (ValidationErrors ValidationField) Input.State (Maybe Date)
+    | EndDateUpdated (ValidationErrors ValidationField) Input.State (Maybe Date)
     | AddressMsg (Address.Msg ValidationField)
 
 
@@ -179,15 +178,13 @@ currentCompany args state data =
                 showAll
                 data.currentCompany.address
         , div [ class [ "FieldGroup" ] ]
-            [ Field.dateField
+            [ Field.dateInputField
                 { namespace = args.namespace
                 , onChange = StartDateUpdated
-                , onStateChange = StartDateStateUpdated
                 , localization = args.localization
                 , field = CurrentCompanyField StartDate
                 , fieldKey = "CurrentCompanyField StartDate"
                 , required = True
-                , now = args.now
                 }
                 state.currentCompany.validations
                 state.currentCompany.startDate
@@ -243,28 +240,24 @@ previousCompany args state data =
                 showAll
                 data.previousCompany.address
         , div [ class [ "FieldGroup" ] ]
-            [ Field.dateField
+            [ Field.dateInputField
                 { namespace = args.namespace
                 , onChange = StartDateUpdated
-                , onStateChange = StartDateStateUpdated
                 , localization = args.localization
                 , field = PreviousCompanyField StartDate
                 , fieldKey = "PreviousCompanyField StartDate"
                 , required = True
-                , now = args.now
                 }
                 state.previousCompany.validations
                 state.previousCompany.startDate
                 data.previousCompany.startDate
-            , Field.dateField
+            , Field.dateInputField
                 { namespace = args.namespace
                 , onChange = EndDateUpdated
-                , onStateChange = EndDateStateUpdated
                 , localization = args.localization
                 , field = PreviousCompanyField EndDate
                 , fieldKey = "PreviousCompanyField EndDate"
                 , required = True
-                , now = args.now
                 }
                 state.previousCompany.validations
                 state.previousCompany.endDate
@@ -454,7 +447,6 @@ cast companies =
 -}
 emptyForm :
     Int
-    -> Date
     -> String
     ->
         { id : Int
@@ -463,7 +455,7 @@ emptyForm :
         , companies : CompaniesData {}
         , state : State
         }
-emptyForm id now name =
+emptyForm id name =
     let
         correctName =
             if String.isEmpty name then
@@ -475,6 +467,6 @@ emptyForm id now name =
     { id = id
     , name = correctName
     , companies = emptyCompanies
-    , state = initialState now
+    , state = initialState
     , stepResponse = Engage.RemoteData.NotAsked
     }

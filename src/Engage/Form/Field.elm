@@ -1,8 +1,8 @@
-module Engage.Form.Field exposing (checkbox, checkboxWithAttributes, dateField, datepickerField, dateInputField, dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes, fieldId, inputField, inputFieldWithAttributes, localizeHelp, localizeLabel, localizeInvalid, phoneField, radioListField, validate)
+module Engage.Form.Field exposing (checkbox, checkboxWithAttributes, dateInputField, dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes, fieldId, inputField, inputFieldWithAttributes, localizeHelp, localizeLabel, localizeInvalid, phoneField, radioListField, validate)
 
 {-| Form.Field
 
-@docs checkbox, checkboxWithAttributes, dateField, datepickerField, dateInputField, dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes, fieldId, inputField, inputFieldWithAttributes, localizeHelp, localizeLabel, localizeInvalid, phoneField, radioListField, validate
+@docs checkbox, checkboxWithAttributes, dateInputField, dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes, fieldId, inputField, inputFieldWithAttributes, localizeHelp, localizeLabel, localizeInvalid, phoneField, radioListField, validate
 
 -}
 
@@ -11,7 +11,6 @@ import Dict exposing (Dict)
 import Engage.Entity.PhoneNumber exposing (PhoneNumber)
 import Engage.Localization as Localization exposing (Localization)
 import Engage.Namespace as Namespace exposing (Namespace)
-import Engage.UI.Datepicker as Datepicker
 import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Error as Error
 import Engage.UI.Input as Input
@@ -331,56 +330,6 @@ dropdownFieldWithAttributes args validations attributes state value =
         value
 
 
-type alias DatepickerFieldArgs field msg =
-    { namespace : Namespace
-    , onChange : ValidationErrors field -> Datepicker.State -> Maybe Date -> msg
-    , onStateChange : ValidationErrors field -> Datepicker.State -> msg
-    , localization : Localization
-    , field : field
-    , fieldKey : String
-    , required : Bool
-    , now : Date
-    }
-
-
-{-| Get the datepicker field view
--}
-datepickerField : DatepickerFieldArgs field msg -> ValidationErrors field -> Datepicker.State -> Maybe Date -> Html msg
-datepickerField args validations state value =
-    let
-        updatedValidations updatedValue =
-            if args.required then
-                validateMaybe args.field args.fieldKey updatedValue validations
-
-            else
-                validations
-
-        onStateChange stateValue =
-            args.onStateChange (updatedValidations value) stateValue
-
-        onChange stateValue updatedValue =
-            args.onChange (updatedValidations updatedValue) stateValue updatedValue
-
-        requiredText =
-            if args.required then
-                Just (Localization.localizeStringWithDefault "Required" "Required" args)
-
-            else
-                Nothing
-    in
-    Datepicker.datepicker
-        { id = fieldId args.namespace args.fieldKey
-        , onChange = onChange
-        , onStateChange = onStateChange
-        , labelText = localizeLabel args
-        , requiredText = requiredText
-        , namespace = Namespace.engagecore
-        , status = Validation.fieldError args.localization args.field validations
-        }
-        state
-        value
-
-
 type alias DateInputFieldArgs field msg =
     { namespace : Namespace
     , onChange : ValidationErrors field -> Input.State -> Maybe Date -> msg
@@ -430,47 +379,9 @@ dateInputField args validations state value =
     Input.date
         { id = fieldId args.namespace args.fieldKey
         , onChange = onChange
-        , onFocusChange = onFocusChange
+        , onFocusChange = Just onFocusChange
         , labelText = localizeLabel args
         , helpText = localizeHelp args
-        , requiredText = requiredText
-        , namespace = Namespace.engagecore
-        , status = Validation.fieldError args.localization args.field validations
-        }
-        state
-        value
-
-
-{-| Get the date field view
--}
-dateField : DatepickerFieldArgs field msg -> ValidationErrors field -> Datepicker.State -> Maybe Date -> Html msg
-dateField args validations state value =
-    let
-        updatedValidations updatedValue =
-            if args.required then
-                validateMaybe args.field args.fieldKey updatedValue validations
-
-            else
-                validations
-
-        onStateChange stateValue =
-            args.onStateChange (updatedValidations value) stateValue
-
-        onChange stateValue updatedValue =
-            args.onChange (updatedValidations updatedValue) stateValue updatedValue
-
-        requiredText =
-            if args.required then
-                Just (Localization.localizeStringWithDefault "Required" "Required" args)
-
-            else
-                Nothing
-    in
-    Datepicker.date
-        { id = fieldId args.namespace args.fieldKey
-        , onChange = onChange
-        , onStateChange = onStateChange
-        , labelText = localizeLabel args
         , requiredText = requiredText
         , namespace = Namespace.engagecore
         , status = Validation.fieldError args.localization args.field validations
