@@ -1,8 +1,8 @@
-module Engage.Form.Field exposing (checkbox, checkboxWithAttributes, dateField, datepickerField, dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes, fieldId, inputField, inputFieldWithAttributes, localizeHelp, localizeLabel, phoneField, radioListField, validate)
+module Engage.Form.Field exposing (checkbox, checkboxWithAttributes, dateField, datepickerField, dateInputField, dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes, fieldId, inputField, inputFieldWithAttributes, localizeHelp, localizeLabel, localizeInvalid, phoneField, radioListField, validate)
 
 {-| Form.Field
 
-@docs checkbox, checkboxWithAttributes, dateField, datepickerField, dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes, fieldId, inputField, inputFieldWithAttributes, localizeHelp, localizeLabel, phoneField, radioListField, validate
+@docs checkbox, checkboxWithAttributes, dateField, datepickerField, dateInputField, dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes, fieldId, inputField, inputFieldWithAttributes, localizeHelp, localizeLabel, localizeInvalid, phoneField, radioListField, validate
 
 -}
 
@@ -44,20 +44,18 @@ phoneField : PhoneFieldArgs field msg -> ValidationErrors field -> Input.PhoneSt
 phoneField args validations state phoneNumber =
     let
         dialCodeValidations updatedPhoneNumber newValidations =
-            case args.required of
-                True ->
-                    validate args.isoCodeField updatedPhoneNumber.isoCode newValidations
+            if args.required then
+                validate args.isoCodeField updatedPhoneNumber.isoCode newValidations
 
-                False ->
-                    newValidations
+            else
+                newValidations
 
         phoneNumberValidations updatedPhoneNumber newValidations =
-            case args.required of
-                True ->
-                    validate args.field updatedPhoneNumber.phoneNumber newValidations
+            if args.required then
+                validate args.field updatedPhoneNumber.phoneNumber newValidations
 
-                False ->
-                    newValidations
+            else
+                newValidations
 
         onChange { onlyStateChange } updatedState updatedPhoneNumber =
             args.onChange
@@ -109,12 +107,11 @@ inputFieldWithAttributes : InputFieldArgs field msg -> ValidationErrors field ->
 inputFieldWithAttributes args validations attributes state value =
     let
         updatedValidations updatedValue =
-            case args.required of
-                True ->
-                    validate args.field updatedValue validations
+            if args.required then
+                validate args.field updatedValue validations
 
-                False ->
-                    validations
+            else
+                validations
 
         onChange { onlyStateChange } updatedState updatedValue =
             args.onChange
@@ -169,12 +166,11 @@ radioListField : RadioListFieldArgs field msg -> ValidationErrors field -> Input
 radioListField args validations state value =
     let
         updatedValidations updatedValue =
-            case args.required of
-                True ->
-                    validate args.field updatedValue validations
+            if args.required then
+                validate args.field updatedValue validations
 
-                False ->
-                    validations
+            else
+                validations
 
         onChange { onlyStateChange } updatedState updatedValue =
             args.onChange
@@ -379,6 +375,65 @@ datepickerField args validations state value =
         value
 
 
+type alias DateInputFieldArgs field msg =
+    { namespace : Namespace
+    , onChange : ValidationErrors field -> Input.State -> Maybe Date -> msg
+    , localization : Localization
+    , field : field
+    , required : Bool
+    }
+
+
+{-| Get the date input field view
+-}
+dateInputField : DateInputFieldArgs field msg -> ValidationErrors field -> Input.State -> Maybe Date -> Html msg
+dateInputField args validations state value =
+    let
+        updatedValidations updatedValue =
+            Validation.validateField [ Validation.validateMaybeField (localizeInvalid args) args.field (always updatedValue) ] ()
+
+        noValidationErrors newValue =
+            List.isEmpty (updatedValidations newValue)
+
+        onChange updatedState newDate =
+            args.onChange
+                (if noValidationErrors newDate then
+                    updatedValidations newDate
+
+                 else
+                    validations
+                )
+                updatedState
+                newDate
+
+        onFocusChange hasFocus =
+            if hasFocus then
+                args.onChange validations state value
+
+            else
+                args.onChange (updatedValidations value) state value
+
+        requiredText =
+            if args.required then
+                Just (Localization.localizeStringWithDefault "Required" "Required" args)
+
+            else
+                Nothing
+    in
+    Input.date
+        { id = fieldId args.namespace args.field
+        , onChange = onChange
+        , onFocusChange = onFocusChange
+        , labelText = localizeLabel args
+        , helpText = localizeHelp args
+        , requiredText = requiredText
+        , namespace = Namespace.engagecore
+        , status = Validation.fieldError args.localization args.field validations
+        }
+        state
+        value
+
+
 {-| Get the date field view
 -}
 dateField : DatepickerFieldArgs field msg -> ValidationErrors field -> Datepicker.State -> Maybe Date -> Html msg
@@ -439,12 +494,11 @@ checkboxWithAttributes : CheckboxFieldArgs field msg -> ValidationErrors field -
 checkboxWithAttributes args validations attributes state value =
     let
         updatedValidations updatedValue =
-            case args.required of
-                True ->
-                    validateBool args.field updatedValue validations
+            if args.required then
+                validateBool args.field updatedValue validations
 
-                False ->
-                    validations
+            else
+                validations
 
         onCheck { onlyStateChange } updatedState updatedValue =
             args.onCheck
@@ -533,3 +587,10 @@ localizeLabel ({ field } as args) =
 localizeHelp : { a | field : field, localization : Localization } -> String
 localizeHelp ({ field } as args) =
     Localization.localizeStringWithDefault "" (Debug.toString field ++ ".help") args
+
+
+{-| Localize a invalid String
+-}
+localizeInvalid : { a | field : field, localization : Localization } -> String
+localizeInvalid ({ field } as args) =
+    Localization.localizeStringWithDefault "" (Debug.toString field ++ ".invalid") args

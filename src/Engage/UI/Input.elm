@@ -1,16 +1,20 @@
 module Engage.UI.Input exposing
     ( FileInfo, PhoneState, State
-    , bigNumber, checkBoxList, checkbox, checkboxWithAttributes, file, initialPhoneState, initialState, number, phone, radioList, reset, smallNumber, text, textArea, textWithAttributes
+    , initialState, initialPhoneState
+    , bigNumber, checkBoxList, checkbox, checkboxWithAttributes, file, number, phone, radioList, reset, smallNumber, text, textArea, textWithAttributes, date
     )
 
 {-| UI.Input
 
 @docs FileInfo, PhoneState, State
 
-@docs bigNumber, checkBoxList, checkbox, checkboxWithAttributes, file, initialPhoneState, initialState, number, phone, radioList, reset, smallNumber, text, textArea, textWithAttributes
+@docs initialState, initialPhoneState
+
+@docs bigNumber, checkBoxList, checkbox, checkboxWithAttributes, file, number, phone, radioList, reset, smallNumber, text, textArea, textWithAttributes, date
 
 -}
 
+import Date exposing (Date)
 import Engage.CssHelpers
 import Engage.Entity.PhoneNumber exposing (PhoneNumber)
 import Engage.Html.Extra as HtmlExtra
@@ -32,6 +36,7 @@ import IntlPhoneInput
 import IntlPhoneInput.Config
 import Json.Decode exposing (succeed)
 import Json.Decode.Pipeline exposing (requiredAt)
+import MaskedInput.Text as MaskedInput
 import Set exposing (Set)
 
 
@@ -160,6 +165,62 @@ phoneWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, statu
             config
             state.phoneInput
             phoneNumber
+        )
+
+
+{-| Get the date input view
+-}
+date :
+    { namespace : Namespace
+    , id : String
+    , labelText : String
+    , helpText : String
+    , onChange : State -> Maybe Date -> msg
+    , onFocusChange : Bool -> msg
+    , status : Status
+    , requiredText : Maybe String
+    }
+    -> State
+    -> Maybe Date
+    -> Html msg
+date { namespace, id, labelText, helpText, onChange, status, requiredText, onFocusChange } state dateValue =
+    let
+        class =
+            namespace
+                |> Namespace.toString
+                |> Engage.CssHelpers.withNamespace
+
+        safeId =
+            Engage.String.toSafeId id
+
+        options =
+            { onInput = \dateString -> onChange state (dateString |> Date.fromIsoString |> Result.toMaybe)
+            , type_ = "date"
+            , hasFocus = Just onFocusChange
+            , maxLength = Nothing
+            }
+
+        stateData =
+            unwrap state
+
+        onValidationStateChange validationState =
+            onChange (State validationState) dateValue
+    in
+    FormControl.formControl
+        { namespace = namespace
+        , size = Large
+        , id = safeId
+        , labelText = labelText
+        , helpText = helpText
+        , status = status
+        , onValidationStateChange = onValidationStateChange
+        , requiredText = requiredText
+        }
+        stateData
+        (Input.Text.input
+            options
+            [ Html.Attributes.id id, class [ "Input-Large" ] ]
+            (dateValue |> Maybe.map Date.toIsoString |> Maybe.withDefault "")
         )
 
 
