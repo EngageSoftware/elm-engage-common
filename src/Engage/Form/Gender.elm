@@ -1,13 +1,13 @@
 module Engage.Form.Gender exposing
     ( Attribute
-    , field, form, localization, onChange
+    , field, fieldKey, form, localization, onChange
     )
 
 {-| Form.Gender
 
 @docs Attribute
 
-@docs field, form, localization, onChange
+@docs field, fieldKey, form, localization, onChange
 
 -}
 
@@ -61,6 +61,13 @@ field value =
     \(InternalAttribute attribute) -> InternalAttribute { attribute | field = Just value }
 
 
+{-| Get the fieldKey Attribute
+-}
+fieldKey : String -> Attribute field msg
+fieldKey value =
+    \(InternalAttribute attribute) -> InternalAttribute { attribute | fieldKey = value }
+
+
 {-| Get the onChange Attribute
 -}
 onChange : (ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> Gender -> msg) -> Attribute field msg
@@ -98,7 +105,7 @@ form attributes validations state gender =
                     error attribute.namespace "field"
 
                 Just fieldValue ->
-                    internalForm (InternalAttribute attribute) onChangeValue fieldValue attribute.fieldKey validations state gender
+                    internalForm (InternalAttribute attribute) onChangeValue fieldValue validations state gender
 
 
 error : Namespace -> String -> Html msg
@@ -115,12 +122,11 @@ internalForm :
     InternalAttribute field msg
     -> (ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> Gender -> msg)
     -> field
-    -> String
     -> ValidationErrors field
     -> Input.State
     -> Gender
     -> Html msg
-internalForm (InternalAttribute attribute) onChangeValue fieldValue fieldKey validations state gender =
+internalForm (InternalAttribute attribute) onChangeValue fieldValue validations state gender =
     let
         radioListOnChange newValidations onlyStateChange stateValue genderString =
             onChangeValue newValidations onlyStateChange stateValue (Gender.fromString genderString)
@@ -130,7 +136,7 @@ internalForm (InternalAttribute attribute) onChangeValue fieldValue fieldKey val
         , onChange = radioListOnChange
         , localization = attribute.localization
         , field = fieldValue
-        , fieldKey = fieldKey
+        , fieldKey = attribute.fieldKey
         , required = attribute.required
         , items =
             [ Male, Female, Other, Unspecified ]
