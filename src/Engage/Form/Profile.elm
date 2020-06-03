@@ -42,6 +42,7 @@ type alias InternalAttribute msg =
     , address : Maybe ( String, Address )
     , gender : Maybe ( String, Gender )
     , birthDate : Maybe ( String, Maybe Date )
+    , isDayFirst : Maybe Bool
     , birthDateYear : Maybe ( String, Maybe ListItem )
     , birthDateMonth : Maybe ( String, Maybe ListItem )
     , editAccountLink : Maybe ( String, String )
@@ -62,6 +63,7 @@ emptyAttribute =
     , address = Nothing
     , gender = Nothing
     , birthDate = Nothing
+    , isDayFirst = Nothing
     , birthDateYear = Nothing
     , birthDateMonth = Nothing
     , editAccountLink = Nothing
@@ -153,9 +155,9 @@ gender label value =
 
 {-| Get the birth date Attribute
 -}
-birthDate : String -> Maybe Date -> Attribute msg
-birthDate label date =
-    \attribute -> { attribute | birthDate = Just ( label, date ) }
+birthDate : String -> Maybe Date -> Bool -> Attribute msg
+birthDate label date isDayFirst =
+    \attribute -> { attribute | birthDate = Just ( label, date ), isDayFirst = Just isDayFirst }
 
 
 {-| Get the birth date year Attribute
@@ -242,8 +244,20 @@ genderView namespace attribute =
 birthDateView : Namespace -> Localization -> InternalAttribute msg -> Html msg
 birthDateView namespace localization attribute =
     let
+        defaultDateFormat =
+            Localization.localizeStringWithDefault "MMMM d, yyyy" "BirthDateFormat" { localization = localization }
+
         dateFormat =
-            Localization.localizeStringWithDefault "MMMM d, Y" "BirthDateFormat" { localization = localization }
+            case attribute.isDayFirst of
+                Just isDayFirst ->
+                    if isDayFirst then
+                        "dd/MM/yyyy"
+
+                    else
+                        defaultDateFormat
+
+                _ ->
+                    defaultDateFormat
 
         do label maybeDate =
             case maybeDate of
