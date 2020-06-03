@@ -1,13 +1,24 @@
 module Engage.Form.Profile exposing
-    ( Attribute
-    , address, avatar, birthDate, birthDateMonth, birthDateYear, edit, editAccountLink, email, fax, firstName, gender, lastName, mobilePhone, none, phone, title, view
+    ( view
+    , address, avatar, birthDate, birthDateMonth, birthDateYear, none, phone, email, fax, firstName, gender, lastName, mobilePhone, edit, editAccountLink, title
+    , Attribute
     )
 
 {-| Form.Profile
 
-@docs Attribute
 
-@docs address, avatar, birthDate, birthDateMonth, birthDateYear, edit, editAccountLink, email, fax, firstName, gender, lastName, mobilePhone, none, phone, title, view
+# View
+
+@docs view
+
+
+# Attributes
+
+@docs address, avatar, birthDate, birthDateMonth, birthDateYear, none, phone, email, fax, firstName, gender, lastName, mobilePhone, edit, editAccountLink, title
+
+#Types
+
+@docs Attribute
 
 -}
 
