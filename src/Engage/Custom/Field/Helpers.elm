@@ -9,6 +9,7 @@ import Engage.UI.Dropdown as Dropdown
 import Engage.UI.Error as Error exposing (Status)
 import Engage.UI.Input as Input
 import Engage.Validation as Validation exposing (ValidationErrors)
+import Html exposing (Html)
 import Set exposing (Set)
 import String
 import Time
@@ -499,16 +500,16 @@ toError validationErrors field =
             Error.Error { reasons = [ reason ] }
 
 
-toRadioItems : List FieldChoice -> List { id : String, text : String }
+toRadioItems : List FieldChoice -> List { id : String, content : Html msg }
 toRadioItems fieldChoices =
     fieldChoices
         |> List.sortBy .relativeOrder
         |> List.map toRadioItem
 
 
-toRadioItem : FieldChoice -> { id : String, text : String }
+toRadioItem : FieldChoice -> { id : String, content : Html msg }
 toRadioItem fieldChoice =
-    { id = fieldChoice.value, text = fieldChoice.value }
+    { id = fieldChoice.value, content = Html.text fieldChoice.value }
 
 
 toDropdownItems : List FieldChoice -> List Dropdown.Item

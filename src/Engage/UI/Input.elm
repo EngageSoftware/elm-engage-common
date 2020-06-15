@@ -36,7 +36,6 @@ import IntlPhoneInput
 import IntlPhoneInput.Config
 import Json.Decode exposing (succeed)
 import Json.Decode.Pipeline exposing (requiredAt)
-import MaskedInput.Text as MaskedInput
 import Set exposing (Set)
 
 
@@ -660,7 +659,7 @@ radioList :
     , helpText : String
     , onChange : { onlyStateChange : Bool } -> State -> String -> msg
     , status : Status
-    , items : List { id : String, text : String }
+    , items : List { id : String, content : Html msg }
     , requiredText : Maybe String
     }
     -> State
@@ -716,7 +715,7 @@ checkBoxList :
     , helpText : String
     , onChange : { onlyStateChange : Bool } -> State -> Set String -> msg
     , status : Status
-    , items : List { id : String, text : String }
+    , items : List { id : String, content : Html msg }
     , requiredText : Maybe String
     }
     -> State
@@ -838,7 +837,7 @@ progressIndicator args fileInfo =
         |> Maybe.withDefault HtmlExtra.none
 
 
-toCheckBox : { namespace : Namespace, onChange : Set String -> msg, labelText : String } -> Set String -> { id : String, text : String } -> Html msg
+toCheckBox : { namespace : Namespace, onChange : Set String -> msg, labelText : String } -> Set String -> { id : String, content : Html msg } -> Html msg
 toCheckBox { namespace, onChange, labelText } selectedValues item =
     let
         class =
@@ -865,11 +864,11 @@ toCheckBox { namespace, onChange, labelText } selectedValues item =
             , checked (Set.member item.id selectedValues)
             ]
             []
-        , span [ class [ "RadioText" ] ] [ Html.text item.text ]
+        , span [ class [ "RadioText" ] ] [ item.content ]
         ]
 
 
-toRadio : { namespace : Namespace, onChange : String -> msg, labelText : String } -> String -> { id : String, text : String } -> Html msg
+toRadio : { namespace : Namespace, onChange : String -> msg, labelText : String } -> String -> { id : String, content : Html msg } -> Html msg
 toRadio { namespace, onChange, labelText } selectedValue item =
     let
         class =
@@ -887,7 +886,7 @@ toRadio { namespace, onChange, labelText } selectedValue item =
             , checked (selectedValue == item.id)
             ]
             []
-        , span [ class [ "RadioText" ] ] [ Html.text item.text ]
+        , span [ class [ "RadioText" ] ] [ item.content ]
         ]
 
 

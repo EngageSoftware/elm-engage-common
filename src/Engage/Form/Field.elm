@@ -202,7 +202,7 @@ radioListField args validations state value =
         , requiredText = requiredText
         , onChange = onChange
         , status = Validation.fieldError args.localization args.field validations
-        , items = args.items
+        , items = List.map (\item -> { id = item.id, content = Html.text item.text }) args.items
         }
         state
         value
