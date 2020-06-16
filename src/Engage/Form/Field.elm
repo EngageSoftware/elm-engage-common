@@ -280,6 +280,7 @@ dropdownFieldWithAttributesValueSort args validations attributes state value rev
         , onChange = onChange
         , status = Validation.fieldError args.localization args.field validations
         , namespace = Namespace.engagecore
+        , withEmptyItem = True
         }
         attributes
         state
@@ -324,6 +325,7 @@ dropdownFieldWithAttributes args validations attributes state value =
         , onChange = onChange
         , status = Validation.fieldError args.localization args.field validations
         , namespace = Namespace.engagecore
+        , withEmptyItem = True
         }
         attributes
         state

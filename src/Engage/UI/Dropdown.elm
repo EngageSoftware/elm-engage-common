@@ -61,6 +61,7 @@ dropdown :
     , onChange : { onlyStateChange : Bool } -> State -> Maybe String -> msg
     , status : Status
     , namespace : Namespace
+    , withEmptyItem : Bool
     }
     -> State
     -> Maybe String
@@ -79,12 +80,13 @@ dropdownWithAttributes :
     , onChange : { onlyStateChange : Bool } -> State -> Maybe String -> msg
     , status : Status
     , namespace : Namespace
+    , withEmptyItem : Bool
     }
     -> List (Html.Attribute msg)
     -> State
     -> Maybe String
     -> Html msg
-dropdownWithAttributes { id, labelText, requiredText, items, onChange, status, namespace } attributes state selectedItem =
+dropdownWithAttributes { id, labelText, requiredText, items, onChange, status, namespace, withEmptyItem } attributes state selectedItem =
     dropdownWithSizeAndAttributes
         { id = id
         , labelText = labelText
@@ -94,6 +96,7 @@ dropdownWithAttributes { id, labelText, requiredText, items, onChange, status, n
         , size = Large
         , status = status
         , namespace = namespace
+        , withEmptyItem = withEmptyItem
         }
         attributes
         state
@@ -109,12 +112,13 @@ dropdownWithSizeAndAttributes :
     , size : Size
     , namespace : Namespace
     , status : Status
+    , withEmptyItem : Bool
     }
     -> List (Html.Attribute msg)
     -> State
     -> Maybe String
     -> Html msg
-dropdownWithSizeAndAttributes { id, labelText, requiredText, items, onChange, size, status, namespace } attributes state selectedItem =
+dropdownWithSizeAndAttributes { id, labelText, requiredText, items, onChange, size, status, namespace, withEmptyItem } attributes state selectedItem =
     let
         class =
             namespace
@@ -142,7 +146,15 @@ dropdownWithSizeAndAttributes { id, labelText, requiredText, items, onChange, si
             ]
             [ text labelText, requiredIndicator ]
         , Dropdown.dropdown
-            { options | items = items, emptyItem = Just { value = "", text = "", enabled = True } }
+            { options
+                | items = items
+                , emptyItem =
+                    if withEmptyItem then
+                        Just { value = "", text = "", enabled = True }
+
+                    else
+                        Nothing
+            }
             (attributes
                 ++ [ Html.Attributes.id id
                    , class [ "Dropdown-" ++ getSizeString size ]

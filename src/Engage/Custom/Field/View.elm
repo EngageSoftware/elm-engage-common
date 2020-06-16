@@ -591,6 +591,7 @@ dropdownWithItems { config, validations } state { form, section, fieldGroup, fie
         , items = items
         , status = FieldHelpers.toError validations field
         , namespace = Namespace.engagecore
+        , withEmptyItem = True
         }
         state
         (FieldHelpers.getValue field |> Maybe.andThen List.head)
