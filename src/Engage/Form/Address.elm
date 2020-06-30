@@ -1,13 +1,19 @@
 module Engage.Form.Address exposing
     ( Attribute, Msg, State, ValidationField(..)
-    , addressTypes, completedView, completedViewWithAdditional, countries, countriesToItems, form, hideFax, hidePrimaryAddressCheckbox, hideWebsite, initialState, isEmpty, isValid, regions, regionsToItems, required, showIncludeInExternalDirectory, showIncludeInInternalDirectory, toAllRegions, update, validateAll, validateAllWith, validateFieldWith, view
+    , addressTypes, completedView, completedViewWithAdditional, countriesToItems, form, initialState, isEmpty, isValid, regionsToItems, toAllRegions, update, validateAll, validateAllWith, validateFieldWith, view
+    , countries, hideFax, hidePrimaryAddressCheckbox, hideWebsite, regions, required, showIncludeInExternalDirectory, showIncludeInInternalDirectory, phoneNumberRequired
     )
 
 {-| Form.Address
 
 @docs Attribute, Msg, State, ValidationField
 
-@docs addressTypes, completedView, completedViewWithAdditional, countries, countriesToItems, form, hideFax, hidePrimaryAddressCheckbox, hideWebsite, initialState, isEmpty, isValid, regions, regionsToItems, required, showIncludeInExternalDirectory, showIncludeInInternalDirectory, toAllRegions, update, validateAll, validateAllWith, validateFieldWith, view
+@docs addressTypes, completedView, completedViewWithAdditional, countriesToItems, form, initialState, isEmpty, isValid, regionsToItems, toAllRegions, update, validateAll, validateAllWith, validateFieldWith, view
+
+
+# Attributes
+
+@docs countries, hideFax, hidePrimaryAddressCheckbox, hideWebsite, regions, required, showIncludeInExternalDirectory, showIncludeInInternalDirectory, phoneNumberRequired
 
 -}
 
@@ -124,6 +130,7 @@ type alias InternalAttribute =
     { countries : Countries
     , regions : RegionsCountry
     , required : Bool
+    , phoneNumberRequired : Bool
     , addressTypes : Maybe AddressTypes
     , hideFax : Bool
     , hideWebsite : Bool
@@ -139,6 +146,7 @@ emptyAttribute =
     { countries = Dict.empty
     , regions = Dict.empty
     , required = False
+    , phoneNumberRequired = False
     , addressTypes = Nothing
     , hideFax = False
     , hideWebsite = False
@@ -174,6 +182,13 @@ regions value =
 required : Bool -> Attribute
 required value =
     \attribute -> { attribute | required = value }
+
+
+{-| Get the phone number required Attribute
+-}
+phoneNumberRequired : Bool -> Attribute
+phoneNumberRequired value =
+    \attribute -> { attribute | phoneNumberRequired = value }
 
 
 {-| Get the address types Attribute
@@ -330,6 +345,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
             { countries = Dict.empty
             , regions = Dict.empty
             , required = False
+            , phoneNumberRequired = False
             , addressTypes = Nothing
             , hideFax = hideOrShow.fax == Hide
             , hideWebsite = hideOrShow.website == Hide
@@ -510,7 +526,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                         , isoCodeFieldKey = "PhoneIsoCode"
                         , field = field Phone
                         , fieldKey = fieldKey "Phone"
-                        , required = False
+                        , required = attribute.phoneNumberRequired
                         }
                         state.validations
                         state.phone
