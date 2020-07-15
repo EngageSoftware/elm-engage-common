@@ -1,6 +1,6 @@
 module Engage.Custom.Field.View exposing (Args, checkBoxList, checkbox, class, countryDropdown, datepicker, dropdown, dropdownWithItems, fieldClass, fieldForm, fieldGroupClass, fieldGroupForm, fieldLabelClass, file, membershipTypeList, number, radioList, regionDropdown, staticForm, text, textArea, textBox, view, viewCompletedEntries, viewEntry)
 
-import Date
+import Date exposing (Date)
 import Dict
 import Engage.CssHelpers
 import Engage.Custom.Field as Field exposing (FieldData)
@@ -24,7 +24,6 @@ import Html exposing (Html)
 import Markdown
 import Set
 import String
-import Time
 
 
 class =
@@ -704,7 +703,7 @@ datepicker { config, validations } state { form, section, fieldGroup, field } =
             Field.namespacedId field
 
         onChange dateState value =
-            Events.onChangeHandler config
+            Events.onDateChangeHandler config
                 { fieldId = field.fieldId
                 , formId = form.formId
                 , sectionId = section.sectionId
@@ -713,7 +712,8 @@ datepicker { config, validations } state { form, section, fieldGroup, field } =
                 , domId = domId
                 , onlyStateChange = False
                 }
-                (value |> Maybe.map Date.toIsoString |> Maybe.withDefault "")
+                dateState
+                value
 
         labelKey =
             section.name ++ "." ++ field.label
@@ -724,6 +724,13 @@ datepicker { config, validations } state { form, section, fieldGroup, field } =
 
             else
                 Nothing
+
+        dateValue : Maybe Date
+        dateValue =
+            FieldHelpers.getValue field
+                |> Maybe.andThen List.head
+                |> Maybe.map Date.fromIsoString
+                |> Maybe.andThen Result.toMaybe
     in
     Input.date
         { id = domId
@@ -736,9 +743,4 @@ datepicker { config, validations } state { form, section, fieldGroup, field } =
         , namespace = Namespace.engagecore
         }
         state
-        (FieldHelpers.getValue field
-            |> Maybe.andThen List.head
-            |> Maybe.andThen String.toInt
-            |> Maybe.map Time.millisToPosix
-            |> Maybe.map (Date.fromPosix Time.utc)
-        )
+        dateValue
