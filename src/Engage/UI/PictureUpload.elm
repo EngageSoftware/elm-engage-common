@@ -181,11 +181,14 @@ dropZoneView namespace attribute domId =
                     |> Maybe.withDefault []
                )
         )
-        [ if String.isEmpty attribute.pictureData then
-            Svg.upload namespace "Upload" [ width 50, height 50 ]
+        [ div [ class [ "PictureUploadButton" ] ]
+            [ Html.input [ Html.Attributes.type_ "file", accept "image/*", multiple True, class [ "PictureUploadFileInput" ] ] []
+            , if String.isEmpty attribute.pictureData then
+                Svg.upload namespace "Upload" [ width 50, height 50 ]
 
-          else
-            text ""
+              else
+                text ""
+            ]
         , if String.isEmpty attribute.pictureData then
             text <| attribute.dropZoneText
 
