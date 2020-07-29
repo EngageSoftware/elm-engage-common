@@ -4185,15 +4185,6 @@
 	margin: 0;
 }
 
-.engagecore-PictureUpload {
-	box-sizing: border-box;
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
-	border: 3px solid rgba(0, 0, 0, 0.25);
-}
-
 .engagecore-PictureUpload * {
 	box-sizing: border-box;
 }
@@ -4206,31 +4197,46 @@
 	box-sizing: border-box;
 }
 
-.engagecore-PictureUploadDropZone {
+.engagecore-PictureUpload {
 	box-sizing: border-box;
-	height: 300px;
-	background-color: rgba(0, 0, 0, 0.125);
+	position: relative;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	background-size: contain;
-	background-position: center;
-	background-repeat: no-repeat;
+	justify-content: flex-end;
+	border: 3px solid rgba(0, 0, 0, 0.25);
+	height: 300px;
 
-	.engagecore-PictureUploadButton {
-		position: relative;
-		overflow: hidden;
+	.engagecore-PictureUploadDropZone {
+		box-sizing: border-box;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.125);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		background-size: contain;
+		background-position: center;
+		background-repeat: no-repeat;
 
-		.engagecore-PictureUploadFileInput {
-			position: absolute;
-			top: -100px;
-			bottom: -100px;
-			left: -100px;
-			right: -100px;
-			opacity: 0;
-			cursor: pointer;
-			min-height: 200px;
+		.engagecore-PictureUploadText {
+			width: 70%;
+			text-align: center;
+		}
+
+		.engagecore-PictureUploadButton {
+			position: relative;
+			overflow: hidden;
+
+			.engagecore-PictureUploadFileInput {
+				position: absolute;
+				top: -100px;
+				bottom: -100px;
+				left: -100px;
+				right: -100px;
+				opacity: 0;
+				cursor: pointer;
+				min-height: 200px;
+			}
 		}
 	}
 }
@@ -4292,6 +4298,7 @@
 	border: 0;
 	width: 24px;
 	height: 24px;
+	z-index: 100;
 }
 
 .engagecore-PictureUploadRemoveButton * {

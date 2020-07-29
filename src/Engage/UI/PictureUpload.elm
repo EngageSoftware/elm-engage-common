@@ -1,13 +1,13 @@
 module Engage.UI.PictureUpload exposing
     ( Attribute, File, PortOutKey(..)
-    , browse, dropZone, onFiles, onLoad, picture, pictureUpload, remove
+    , browse, dropZone, onFiles, onLoad, picture, hidePicture, pictureUpload, remove
     )
 
 {-| UI.PictureUpload
 
 @docs Attribute, File, PortOutKey
 
-@docs browse, dropZone, onFiles, onLoad, picture, pictureUpload, remove
+@docs browse, dropZone, onFiles, onLoad, picture, hidePicture, pictureUpload, remove
 
 -}
 
@@ -63,6 +63,7 @@ type alias InternalAttribute msg =
     , onLoad : Maybe (String -> msg)
     , onFiles : Maybe (List File -> msg)
     , pictureData : String
+    , hidePicture : Bool
     , onRemove : Maybe ( String, msg )
     }
 
@@ -74,6 +75,7 @@ emptyAttribute =
     , onLoad = Nothing
     , onFiles = Nothing
     , pictureData = ""
+    , hidePicture = False
     , onRemove = Nothing
     }
 
@@ -117,6 +119,13 @@ onFiles msg =
 picture : String -> Attribute msg
 picture pictureData =
     \attribute -> { attribute | pictureData = pictureData }
+
+
+{-| Get the hide picture Attribute
+-}
+hidePicture : Attribute msg
+hidePicture =
+    \attribute -> { attribute | hidePicture = True }
 
 
 {-| Get the remove Attribute
@@ -170,7 +179,7 @@ dropZoneView namespace attribute domId =
     div
         ([ class [ "PictureUploadDropZone" ]
          , id domId
-         , if String.isEmpty attribute.pictureData then
+         , if String.isEmpty attribute.pictureData || attribute.hidePicture then
             style "" ""
 
            else
@@ -190,7 +199,7 @@ dropZoneView namespace attribute domId =
                 text ""
             ]
         , if String.isEmpty attribute.pictureData then
-            text <| attribute.dropZoneText
+            span [ class [ "PictureUploadText" ] ] [ text <| attribute.dropZoneText ]
 
           else
             text ""
