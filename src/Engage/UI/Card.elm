@@ -1,8 +1,8 @@
-module Engage.UI.Card exposing (attributes, card, edit, none, subtitle, title)
+module Engage.UI.Card exposing (attributes, card, successCard, edit, none, subtitle, title)
 
 {-| UI.Card
 
-@docs attributes, card, edit, none, subtitle, title
+@docs attributes, card, successCard, edit, none, subtitle, title
 
 -}
 
@@ -52,6 +52,25 @@ card namespace attributesList content =
     in
     div (class [ "Card" ] :: (attribute.attributes |> Maybe.withDefault []))
         [ headerView namespace attribute
+        , editView namespace attribute
+        , div [ class [ "CardBody" ] ] content
+        ]
+
+
+{-| Get the success card view
+-}
+successCard : Namespace -> Html msg -> List (Attribute msg) -> List (Html msg) -> Html msg
+successCard namespace icon attrs content =
+    let
+        class =
+            Engage.CssHelpers.withNamespace <| Namespace.toString namespace
+
+        attribute =
+            processAttribute emptyAttribute attrs
+    in
+    div (class [ "Card" ] :: (attribute.attributes |> Maybe.withDefault []))
+        [ icon
+        , headerView namespace attribute
         , editView namespace attribute
         , div [ class [ "CardBody" ] ] content
         ]
