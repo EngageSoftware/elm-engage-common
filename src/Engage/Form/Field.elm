@@ -253,8 +253,16 @@ dropdownFieldWithAttributesValueSort args validations attributes state value rev
                 |> Maybe.andThen (\key -> Dict.get key args.items)
                 |> Maybe.map2 (\key item -> ( key, item.text )) updatedValue
 
-        onChange _ stateValue updatedValue =
-            args.onChange (updatedValidations updatedValue) stateValue (toKeyValue updatedValue)
+        onChange { onlyStateChange } updatedState updatedValue =
+            args.onChange
+                (if onlyStateChange then
+                    validations
+
+                 else
+                    updatedValidations updatedValue
+                )
+                updatedState
+                (toKeyValue updatedValue)
 
         requiredText =
             if required then
@@ -307,8 +315,16 @@ dropdownFieldWithAttributes args validations attributes state value =
                 |> Maybe.andThen (\key -> Dict.get key args.items)
                 |> Maybe.map2 (\key item -> ( key, item.text )) updatedValue
 
-        onChange _ stateValue updatedValue =
-            args.onChange (updatedValidations updatedValue) stateValue (toKeyValue updatedValue)
+        onChange { onlyStateChange } updatedState updatedValue =
+            args.onChange
+                (if onlyStateChange then
+                    validations
+
+                 else
+                    updatedValidations updatedValue
+                )
+                updatedState
+                (toKeyValue updatedValue)
 
         requiredText =
             if required then
