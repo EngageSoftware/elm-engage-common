@@ -36,6 +36,7 @@ import IntlPhoneInput
 import IntlPhoneInput.Config
 import Json.Decode exposing (succeed)
 import Json.Decode.Pipeline exposing (requiredAt)
+import List.Extra
 import Set exposing (Set)
 
 
@@ -314,6 +315,12 @@ textWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, status
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
 
+        inputType =
+            attributes
+                |> List.Extra.find (\attr -> attr == type_ "password")
+                |> Maybe.map (\_ -> "password")
+                |> Maybe.withDefault "text"
+
         options =
             Input.Text.defaultOptions (onChange { onlyStateChange = False } state)
 
@@ -335,7 +342,7 @@ textWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, status
         }
         stateData
         (Input.Text.input
-            options
+            { options | type_ = inputType }
             (attributes ++ [ Html.Attributes.id id, class [ "Input-" ++ getSizeString size ] ])
             value
         )

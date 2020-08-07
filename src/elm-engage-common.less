@@ -1834,70 +1834,60 @@
 	flex-wrap: wrap;
 	width: 100%;
 	margin: 0em;
-}
 
-.engagecore-FormControl-Small .engagecore-Label {
-	margin-right: 24px;
-	min-height: 24px;
-	line-height: 24px;
-	font-weight: bold;
-}
+	.engagecore-Label {
+		margin-right: 24px;
+		min-height: 24px;
+		line-height: 24px;
+		font-weight: bold;
+	}
 
-.engagecore-FormControl-Small .engagecore-Input-Small {
-	border: 1px solid rgba(221, 221, 221, 1);
-	box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
-	border-radius: 2px;
-	width: 100%;
-	box-sizing: border-box;
-	flex-grow: 1;
-	font-weight: normal;
-	padding: 0.75em;
-	-moz-appearance: textfield;
-}
+	.engagecore-Input-Small {
+		border: 1px solid rgba(221, 221, 221, 1);
+		box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
+		border-radius: 2px;
+		width: 100%;
+		box-sizing: border-box;
+		flex-grow: 1;
+		font-weight: normal;
+		padding: 0.75em;
+		-moz-appearance: textfield;
 
-.engagecore-FormControl-Small
-	.engagecore-Input-Small::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-}
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+		}
+	}
 
-.engagecore-FormControl-Small
-	.engagecore-Input-Small::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-}
+	.engagecore-TextArea-Small {
+		border: 1px solid rgba(221, 221, 221, 1);
+		box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
+		border-radius: 2px;
+		width: 100%;
+		box-sizing: border-box;
+		flex-grow: 1;
+		font-weight: normal;
+		padding: 0.75em;
+		-moz-appearance: textfield;
+		height: 5em;
 
-.engagecore-FormControl-Small .engagecore-TextArea-Small {
-	border: 1px solid rgba(221, 221, 221, 1);
-	box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
-	border-radius: 2px;
-	width: 100%;
-	box-sizing: border-box;
-	flex-grow: 1;
-	font-weight: normal;
-	padding: 0.75em;
-	-moz-appearance: textfield;
-	height: 5em;
-}
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+		}
+	}
 
-.engagecore-FormControl-Small
-	.engagecore-TextArea-Small::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-}
+	* {
+		box-sizing: border-box;
+	}
 
-.engagecore-FormControl-Small
-	.engagecore-TextArea-Small::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-}
+	*::before {
+		box-sizing: border-box;
+	}
 
-.engagecore-FormControl-Small * {
-	box-sizing: border-box;
-}
-
-.engagecore-FormControl-Small *::before {
-	box-sizing: border-box;
-}
-
-.engagecore-FormControl-Small *::after {
-	box-sizing: border-box;
+	*::after {
+		box-sizing: border-box;
+	}
 }
 
 .engagecore-FormControl-Large {
@@ -1907,262 +1897,209 @@
 	flex-direction: column;
 	flex-wrap: wrap;
 	width: 100%;
-}
 
-.engagecore-FormControl-Large .engagecore-Label {
-	margin-right: 24px;
-	min-height: 24px;
-	line-height: 24px;
-	font-weight: bold;
-}
+	.engagecore-Label {
+		margin-right: 24px;
+		min-height: 24px;
+		line-height: 24px;
+		font-weight: bold;
+	}
 
-.engagecore-FormControl-Large .engagecore-Input-Large {
-	border: 1px solid rgba(221, 221, 221, 1);
-	box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
-	border-radius: 2px;
-	width: 100%;
-	box-sizing: border-box;
-	font-weight: normal;
-	padding: 0.75em;
-	-moz-appearance: textfield;
-}
+	.engagecore-Input-Large {
+		border: 1px solid rgba(221, 221, 221, 1);
+		box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
+		border-radius: 2px;
+		width: 100%;
+		box-sizing: border-box;
+		font-weight: normal;
+		padding: 0.75em;
+		-moz-appearance: textfield;
 
-.engagecore-FormControl-Large
-	.engagecore-Input-Large::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-}
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+		}
+	}
 
-.engagecore-FormControl-Large
-	.engagecore-Input-Large::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-}
+	.engagecore-TextArea-Large {
+		border: 1px solid rgba(221, 221, 221, 1);
+		box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
+		border-radius: 2px;
+		width: 100%;
+		box-sizing: border-box;
+		flex-grow: 1;
+		font-weight: normal;
+		padding: 0.75em;
+		-moz-appearance: textfield;
+		height: 15em;
 
-.engagecore-FormControl-Large .engagecore-TextArea-Large {
-	border: 1px solid rgba(221, 221, 221, 1);
-	box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
-	border-radius: 2px;
-	width: 100%;
-	box-sizing: border-box;
-	flex-grow: 1;
-	font-weight: normal;
-	padding: 0.75em;
-	-moz-appearance: textfield;
-	height: 15em;
-}
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+		}
+	}
 
-.engagecore-FormControl-Large
-	.engagecore-TextArea-Large::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-}
+	* {
+		box-sizing: border-box;
+	}
 
-.engagecore-FormControl-Large
-	.engagecore-TextArea-Large::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-}
+	*::before {
+		box-sizing: border-box;
+	}
 
-.engagecore-FormControl-Large * {
-	box-sizing: border-box;
-}
-
-.engagecore-FormControl-Large *::before {
-	box-sizing: border-box;
-}
-
-.engagecore-FormControl-Large *::after {
-	box-sizing: border-box;
+	*::after {
+		box-sizing: border-box;
+	}
 }
 
 .engagecore-CheckBoxContainer {
 	box-sizing: border-box;
 	display: block;
-}
 
-.engagecore-CheckBoxContainer * {
-	box-sizing: border-box;
-}
+	* {
+		box-sizing: border-box;
+	}
 
-.engagecore-CheckBoxContainer *::before {
-	box-sizing: border-box;
-}
+	*::before {
+		box-sizing: border-box;
+	}
 
-.engagecore-CheckBoxContainer *::after {
-	box-sizing: border-box;
+	*::after {
+		box-sizing: border-box;
+	}
 }
 
 .engagecore-CheckBox-Small {
 	box-sizing: border-box;
 	font-weight: normal;
 	display: flex;
-}
 
-.engagecore-CheckBox-Small > .engagecore-Label {
-	display: inline;
-	margin-left: 1em;
-}
+	& > .engagecore-Label {
+		display: inline;
+		margin-left: 1em;
+	}
 
-.engagecore-CheckBox-Small * {
-	box-sizing: border-box;
-}
+	* {
+		box-sizing: border-box;
+	}
 
-.engagecore-CheckBox-Small *::before {
-	box-sizing: border-box;
-}
+	*::before {
+		box-sizing: border-box;
+	}
 
-.engagecore-CheckBox-Small *::after {
-	box-sizing: border-box;
+	*::after {
+		box-sizing: border-box;
+	}
 }
 
 .engagecore-CheckBox-Large {
 	box-sizing: border-box;
 	font-weight: normal;
 	display: flex;
+
+	& > .engagecore-Label {
+		display: inline;
+		margin-left: 1em;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+
+	*::before {
+		box-sizing: border-box;
+	}
+
+	*::after {
+		box-sizing: border-box;
+	}
 }
 
-.engagecore-CheckBox-Large > .engagecore-Label {
-	display: inline;
-	margin-left: 1em;
+.engagecore-File {
+	.engagecore-FormControl-Small,
+	.engagecore-FormControl-Large {
+		margin-bottom: 0px;
+	}
+
+	.engagecore-function {
+		margin-top: 0.5em;
+	}
 }
 
-.engagecore-CheckBox-Large * {
-	box-sizing: border-box;
+.engagecore-FormControl-Small {
+	.engagecore-FileButton-Small {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		grid-gap: 0.5em;
+		align-items: center;
+
+		input[type='file'] {
+			display: none;
+		}
+
+		.engagecore-Button-Primary-Small {
+			display: inline-block;
+			padding: 0.5em 1em;
+			margin: 0px;
+		}
+
+		.engagecore-FileName {
+			grid-column: 1;
+			width: auto;
+			min-height: 3em;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+
+		.engagecore-Progress-Info,
+		.engagecore-Progress-Error,
+		.engagecore-Progress-Warning,
+		.engagecore-Progress-Confirmation {
+			grid-column: 1/3;
+		}
+	}
+
+	.engagecore-LabelWrapped {
+		width: 100%;
+	}
 }
 
-.engagecore-CheckBox-Large *::before {
-	box-sizing: border-box;
-}
+.engagecore-FormControl-Large {
+	.engagecore-FileButton-Large {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		grid-gap: 0.5em;
+		align-items: center;
 
-.engagecore-CheckBox-Large *::after {
-	box-sizing: border-box;
-}
+		input[type='file'] {
+			display: none;
+		}
 
-.engagecore-File .engagecore-FormControl-Small {
-	margin-bottom: 0px;
-}
+		.engagecore-Button-Primary-Large {
+			display: inline-block;
+			padding: 0.5em 1em;
+			margin: 0px;
+		}
 
-.engagecore-File .engagecore-function {
-	margin-top: 0.5em;
-}
+		.engagecore-FileName {
+			grid-column: 1;
+			width: auto;
+			min-height: 3em;
+			overflow: hidden;
+			white-space: nowrap;
+		}
 
-.engagecore-FormControl-Small .engagecore-FileButton-Small {
-	display: grid;
-	grid-template-columns: 1fr auto;
-	grid-gap: 0.5em;
-	align-items: center;
-}
+		.engagecore-Progress-Info,
+		.engagecore-Progress-Error,
+		.engagecore-Progress-Warning,
+		.engagecore-Progress-Confirmation {
+			grid-column: 1/3;
+		}
+	}
 
-.engagecore-FormControl-Small .engagecore-FileButton-Small input[type='file'] {
-	display: none;
-}
-
-.engagecore-FormControl-Small
-	.engagecore-FileButton-Small
-	.engagecore-Button-Primary-Small {
-	display: inline-block;
-	padding: 0.5em 1em;
-	margin: 0px;
-}
-
-.engagecore-FormControl-Small
-	.engagecore-FileButton-Small
-	.engagecore-FileName {
-	grid-column: 1;
-	width: auto;
-	min-height: 3em;
-	overflow: hidden;
-	white-space: nowrap;
-}
-
-.engagecore-FormControl-Small
-	.engagecore-FileButton-Small
-	.engagecore-Progress-Info {
-	grid-column: 1/3;
-}
-
-.engagecore-FormControl-Small
-	.engagecore-FileButton-Small
-	.engagecore-Progress-Error {
-	grid-column: 1/3;
-}
-
-.engagecore-FormControl-Small
-	.engagecore-FileButton-Small
-	.engagecore-Progress-Warning {
-	grid-column: 1/3;
-}
-
-.engagecore-FormControl-Small
-	.engagecore-FileButton-Small
-	.engagecore-Progress-Confirmation {
-	grid-column: 1/3;
-}
-
-.engagecore-FormControl-Small .engagecore-LabelWrapped {
-	width: 100%;
-}
-
-.engagecore-File .engagecore-FormControl-Large {
-	margin-bottom: 0px;
-}
-
-.engagecore-File .engagecore-function {
-	margin-top: 0.5em;
-}
-
-.engagecore-FormControl-Large .engagecore-FileButton-Large {
-	display: grid;
-	grid-template-columns: 1fr auto;
-	grid-gap: 0.5em;
-	align-items: center;
-}
-
-.engagecore-FormControl-Large .engagecore-FileButton-Large input[type='file'] {
-	display: none;
-}
-
-.engagecore-FormControl-Large
-	.engagecore-FileButton-Large
-	.engagecore-Button-Primary-Large {
-	display: inline-block;
-	padding: 0.5em 1em;
-	margin: 0px;
-}
-
-.engagecore-FormControl-Large
-	.engagecore-FileButton-Large
-	.engagecore-FileName {
-	grid-column: 1;
-	width: auto;
-	min-height: 3em;
-	overflow: hidden;
-	white-space: nowrap;
-}
-
-.engagecore-FormControl-Large
-	.engagecore-FileButton-Large
-	.engagecore-Progress-Info {
-	grid-column: 1/3;
-}
-
-.engagecore-FormControl-Large
-	.engagecore-FileButton-Large
-	.engagecore-Progress-Error {
-	grid-column: 1/3;
-}
-
-.engagecore-FormControl-Large
-	.engagecore-FileButton-Large
-	.engagecore-Progress-Warning {
-	grid-column: 1/3;
-}
-
-.engagecore-FormControl-Large
-	.engagecore-FileButton-Large
-	.engagecore-Progress-Confirmation {
-	grid-column: 1/3;
-}
-
-.engagecore-FormControl-Large .engagecore-LabelWrapped {
-	width: 100%;
+	.engagecore-LabelWrapped {
+		width: 100%;
+	}
 }
 
 .engagecore-IntlPhoneInput {
@@ -2770,128 +2707,110 @@
 	box-sizing: border-box;
 }
 
-.engagecore-FormControl-Large > .engagecore-Label {
-	padding-right: 0.5rem;
-	display: block;
+.engagecore-FormControl-Large {
+	& > .engagecore-Label {
+		padding-right: 0.5rem;
+		display: block;
+	}
+
+	& > .engagecore-Dropdown-Large {
+		border: 1px solid rgba(221, 221, 221, 1);
+		box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
+		border-radius: 2px;
+		width: 100%;
+		box-sizing: border-box;
+		font-weight: normal;
+		padding: 0.75em;
+		-moz-appearance: textfield;
+
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+		}
+	}
 }
 
-.engagecore-FormControl-Large > .engagecore-Dropdown-Large {
-	border: 1px solid rgba(221, 221, 221, 1);
-	box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
-	border-radius: 2px;
-	width: 100%;
-	box-sizing: border-box;
-	flex-grow: 1;
-	font-weight: normal;
-	padding: 0.75em;
-	-moz-appearance: textfield;
+.engagecore-FormControl-Small {
+	& > .engagecore-Label {
+		padding-right: 0.5rem;
+		display: block;
+	}
+
+	& > .engagecore-Dropdown-Small {
+		border: 1px solid rgba(221, 221, 221, 1);
+		box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
+		border-radius: 2px;
+		width: 100%;
+		box-sizing: border-box;
+		flex-grow: 1;
+		font-weight: normal;
+		padding: 0.75em;
+		-moz-appearance: textfield;
+
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+		}
+	}
 }
 
-.engagecore-FormControl-Large
-	> .engagecore-Dropdown-Large::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-}
+.engagecore-FormControl-Large {
+	.engagecore-Label {
+		margin-right: 24px;
+		min-height: 24px;
+		line-height: 24px;
+		font-weight: bold;
+	}
 
-.engagecore-FormControl-Large
-	> .engagecore-Dropdown-Large::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-}
+	.engagecore-Date-Large {
+		border: 1px solid rgba(221, 221, 221, 1);
+		box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
+		border-radius: 2px;
+		width: 100%;
+		box-sizing: border-box;
+		flex-grow: 1;
+		font-weight: normal;
+		padding: 0.75em;
+		-moz-appearance: textfield;
 
-.engagecore-FormControl-Small > .engagecore-Label {
-	padding-right: 0.5rem;
-	display: block;
-}
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+		}
+	}
 
-.engagecore-FormControl-Small > .engagecore-Dropdown-Small {
-	border: 1px solid rgba(221, 221, 221, 1);
-	box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
-	border-radius: 2px;
-	width: 100%;
-	box-sizing: border-box;
-	flex-grow: 1;
-	font-weight: normal;
-	padding: 0.75em;
-	-moz-appearance: textfield;
-}
+	.engagecore-Datepicker-Large {
+		border: 1px solid rgba(221, 221, 221, 1);
+		box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
+		border-radius: 2px;
+		width: 100%;
+		box-sizing: border-box;
+		flex-grow: 1;
+		font-weight: normal;
+		padding: 0.75em;
+		-moz-appearance: textfield;
 
-.engagecore-FormControl-Small
-	> .engagecore-Dropdown-Small::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-}
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+		}
+	}
 
-.engagecore-FormControl-Small
-	> .engagecore-Dropdown-Small::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-}
+	.engagecore-Container {
+		width: 100%;
+	}
 
-.engagecore-FormControl-Large .engagecore-Label {
-	margin-right: 24px;
-	min-height: 24px;
-	line-height: 24px;
-	font-weight: bold;
-}
+	.engagecore-DatePicker {
+		width: 100%;
 
-.engagecore-FormControl-Large .engagecore-Date-Large {
-	border: 1px solid rgba(221, 221, 221, 1);
-	box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
-	border-radius: 2px;
-	width: 100%;
-	box-sizing: border-box;
-	flex-grow: 1;
-	font-weight: normal;
-	padding: 0.75em;
-	-moz-appearance: textfield;
-}
+		.engagecore-Dialog {
+			z-index: 10000;
 
-.engagecore-FormControl-Large
-	.engagecore-Date-Large::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-}
-
-.engagecore-FormControl-Large
-	.engagecore-Date-Large::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-}
-
-.engagecore-FormControl-Large .engagecore-Datepicker-Large {
-	border: 1px solid rgba(221, 221, 221, 1);
-	box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.15);
-	border-radius: 2px;
-	width: 100%;
-	box-sizing: border-box;
-	flex-grow: 1;
-	font-weight: normal;
-	padding: 0.75em;
-	-moz-appearance: textfield;
-}
-
-.engagecore-FormControl-Large
-	.engagecore-Datepicker-Large::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-}
-
-.engagecore-FormControl-Large
-	.engagecore-Datepicker-Large::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-}
-
-.engagecore-FormControl-Large .engagecore-Container {
-	width: 100%;
-}
-
-.engagecore-FormControl-Large .engagecore-DatePicker {
-	width: 100%;
-}
-
-.engagecore-FormControl-Large .engagecore-DatePicker .engagecore-Dialog {
-	z-index: 10000;
-}
-
-.engagecore-FormControl-Large
-	.engagecore-DatePicker
-	.engagecore-Dialog
-	.engagecore-Footer {
-	height: auto;
+			.engagecore-Footer {
+				height: auto;
+			}
+		}
+	}
 }
 
 .engagecore-FormControl-Small .engagecore-Label {
@@ -4614,6 +4533,10 @@
 	display: grid;
 	grid-gap: 1em;
 	margin-bottom: 1em;
+}
+
+.engagecore-ChangePasswordFieldGroup {
+	grid-template-columns: max-content;
 }
 
 .engagecore-File {

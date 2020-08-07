@@ -1,6 +1,6 @@
 module Engage.Form.Profile exposing
     ( view
-    , address, avatar, birthDate, birthDateMonth, birthDateYear, none, phone, email, fax, firstName, gender, lastName, mobilePhone, edit, editAccountLink, title
+    , address, avatar, birthDate, birthDateMonth, birthDateYear, none, phone, email, fax, firstName, gender, lastName, mobilePhone, edit, editAccountLink, title, changePassword
     , Attribute
     )
 
@@ -14,7 +14,7 @@ module Engage.Form.Profile exposing
 
 # Attributes
 
-@docs address, avatar, birthDate, birthDateMonth, birthDateYear, none, phone, email, fax, firstName, gender, lastName, mobilePhone, edit, editAccountLink, title
+@docs address, avatar, birthDate, birthDateMonth, birthDateYear, none, phone, email, fax, firstName, gender, lastName, mobilePhone, edit, editAccountLink, title, changePassword
 
 #Types
 
@@ -57,6 +57,7 @@ type alias InternalAttribute msg =
     , birthDateYear : Maybe ( String, Maybe ListItem )
     , birthDateMonth : Maybe ( String, Maybe ListItem )
     , editAccountLink : Maybe ( String, String )
+    , changePassword : Maybe ( String, msg )
     }
 
 
@@ -78,6 +79,7 @@ emptyAttribute =
     , birthDateYear = Nothing
     , birthDateMonth = Nothing
     , editAccountLink = Nothing
+    , changePassword = Nothing
     }
 
 
@@ -190,6 +192,13 @@ birthDateMonth label item =
 edit : String -> msg -> Attribute msg
 edit text msg =
     \attribute -> { attribute | edit = Just ( text, msg ) }
+
+
+{-| Get the change password Attribute
+-}
+changePassword : String -> msg -> Attribute msg
+changePassword text msg =
+    \attribute -> { attribute | changePassword = Just ( text, msg ) }
 
 
 {-| Get the edit account link Attribute
@@ -470,6 +479,18 @@ actionView namespace attribute =
             |> Maybe.map
                 (\( text, msg ) ->
                     div [ class [ "ProfileEditButton" ] ]
+                        [ Button.primarySmall
+                            { namespace = namespace
+                            , attributes = [ onClick msg ]
+                            , text = text
+                            }
+                        ]
+                )
+            |> Maybe.withDefault (text "")
+        , attribute.changePassword
+            |> Maybe.map
+                (\( text, msg ) ->
+                    div [ class [ "ProfileChangePasswordButton" ] ]
                         [ Button.primarySmall
                             { namespace = namespace
                             , attributes = [ onClick msg ]
