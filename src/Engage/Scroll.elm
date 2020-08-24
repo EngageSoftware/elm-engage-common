@@ -27,8 +27,16 @@ scrollToWithConfig : SmoothScroll.Config -> String -> msg -> Cmd msg
 scrollToWithConfig config id msg =
     (Browser.Dom.getElement id
         |> Task.andThen
-            (\{ element } ->
-                SmoothScroll.scrollTo config element.y
+            (\{ element, viewport, scene } ->
+                let
+                    yPos =
+                        if element.y + viewport.height > scene.height then
+                            scene.height - viewport.height
+
+                        else
+                            element.y
+                in
+                SmoothScroll.scrollTo config yPos
             )
     )
         |> Task.attempt (always msg)
