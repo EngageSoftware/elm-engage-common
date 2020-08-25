@@ -27,6 +27,8 @@ type alias HideOrShow =
     , addressTypeId : Maybe Int
     , addressPhone : Visibility
     , addressName : Visibility
+    , username : Visibility
+    , password : Visibility
     }
 
 
@@ -54,6 +56,8 @@ showAll =
     , addressTypeId = Nothing
     , addressPhone = Show
     , addressName = Show
+    , username = Show
+    , password = Show
     }
 
 

@@ -40,6 +40,8 @@ type alias Participant =
     , birthDateYear : Maybe ListItem
     , birthDateMonth : Maybe ListItem
     , account : Maybe Account
+    , username : Maybe String
+    , password : Maybe String
     }
 
 
@@ -61,6 +63,8 @@ empty =
     , birthDateYear = Nothing
     , birthDateMonth = Nothing
     , account = Nothing
+    , username = Nothing
+    , password = Nothing
     }
 
 
@@ -80,6 +84,8 @@ type alias ParticipantLike a =
         , birthDateYear : Maybe ListItem
         , birthDateMonth : Maybe ListItem
         , account : Maybe Account
+        , username : Maybe String
+        , password : Maybe String
     }
 
 
@@ -101,6 +107,8 @@ toParticipant data =
     , birthDateYear = data.birthDateYear
     , birthDateMonth = data.birthDateMonth
     , account = data.account
+    , username = data.username
+    , password = data.password
     }
 
 
@@ -123,6 +131,8 @@ decoder =
         |> JDP.required "birthDateYear" (JD.maybe (JD.int |> JD.map (\val -> ( val, "" ))))
         |> JDP.required "birthDateMonth" (JD.maybe (JD.int |> JD.map (\val -> ( val, "" ))))
         |> JDP.required "account" (JD.maybe Account.decoder)
+        |> JDP.required "username" (JD.string |> JD.map Just)
+        |> JDP.required "password" (JD.maybe JD.string)
 
 
 {-| A Participant encoder
@@ -152,5 +162,7 @@ encoderWith fields participantData =
                , ( "birthDateMonth", Maybe.map (Tuple.first >> JE.int) participantData.birthDateMonth |> Maybe.withDefault JE.null )
                , ( "account", Maybe.map Account.encoder participantData.account |> Maybe.withDefault JE.null )
                , ( "primaryAddress", Maybe.map Address.encoder participantData.primaryAddress |> Maybe.withDefault JE.null )
+               , ( "username", participantData.username |> Maybe.map JE.string |> Maybe.withDefault JE.null )
+               , ( "password", participantData.password |> Maybe.map JE.string |> Maybe.withDefault JE.null )
                ]
         )
