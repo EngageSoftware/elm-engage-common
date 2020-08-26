@@ -1,0 +1,17 @@
+name: Publish Elm Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Elm Publish
+      uses: dillonkearns/elm-publish-action@1.0.1
+      with:
+        github-token: ${{ GITHUB_TOKEN }}
