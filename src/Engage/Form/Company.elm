@@ -141,7 +141,7 @@ currentCompany args state data =
     fieldset [ class [ "FormSection" ] ]
         [ legend [] [ Localization.localizeText "CurrentCompany.Title" args ]
         , div [ class [ "FieldGroup" ] ]
-            [ Field.inputField
+            [ Field.textField
                 { namespace = namespace
                 , onChange = CompanyNameUpdated
                 , localization = args.localization
@@ -152,7 +152,7 @@ currentCompany args state data =
                 state.currentCompany.validations
                 state.currentCompany.name
                 data.currentCompany.name
-            , Field.inputField
+            , Field.textField
                 { namespace = namespace
                 , onChange = PositionUpdated
                 , localization = args.localization
@@ -203,7 +203,7 @@ previousCompany args state data =
     fieldset [ class [ "FormSection" ] ]
         [ legend [] [ Localization.localizeText "PreviousCompany.Title" args ]
         , div [ class [ "FieldGroup" ] ]
-            [ Field.inputField
+            [ Field.textField
                 { namespace = namespace
                 , onChange = CompanyNameUpdated
                 , localization = args.localization
@@ -214,7 +214,7 @@ previousCompany args state data =
                 state.previousCompany.validations
                 state.previousCompany.name
                 data.previousCompany.name
-            , Field.inputField
+            , Field.textField
                 { namespace = namespace
                 , onChange = PositionUpdated
                 , localization = args.localization

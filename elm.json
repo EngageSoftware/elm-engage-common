@@ -76,6 +76,7 @@
         "NoRedInk/datetimepicker-legacy": "1.0.4 <= v < 2.0.0",
         "NoRedInk/elm-json-decode-pipeline": "1.0.0 <= v < 2.0.0",
         "NoRedInk/elm-sortable-table": "1.0.0 <= v < 2.0.0",
+        "SiriusStarr/elm-password-strength": "1.0.1 <= v < 2.0.0",
         "Skinney/murmur3": "2.0.8 <= v < 3.0.0",
         "WhileTruu/elm-smooth-scroll": "1.0.1 <= v < 2.0.0",
         "abadi199/elm-creditcard": "10.0.1 <= v < 11.0.0",

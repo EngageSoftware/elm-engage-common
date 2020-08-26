@@ -1,13 +1,16 @@
 module Engage.Validation exposing
     ( RemoteValidationErrors, ValidationErrors, ValidationStatus(..)
-    , getErrors, fieldError, getFields, filter, findErrorMessage, isInvalid, isInvalidField, isValid, isValidField, localizeRequired, merge, toError, validateBoolField, validateDependentMaybeField, validateDependentStringField, validateField, validateListNotEmptyField, validateMaybeField, validateMaybeStringField, validateStringField
+    , validateBoolField, validateDependentMaybeField, validateDependentStringField, validateField, validateListNotEmptyField, validateMaybeField, validateMaybeStringField, validateStringField, validateEmailField
+    , getErrors, fieldError, getFields, filter, findErrorMessage, isInvalid, isInvalidField, isValid, isValidField, localizeRequired, merge, toError
     )
 
 {-| Validation
 
 @docs RemoteValidationErrors, ValidationErrors, ValidationStatus
 
-@docs getErrors, fieldError, getFields, filter, findErrorMessage, isInvalid, isInvalidField, isValid, isValidField, localizeRequired, merge, toError, validateBoolField, validateDependentMaybeField, validateDependentStringField, validateField, validateListNotEmptyField, validateMaybeField, validateMaybeStringField, validateStringField
+@docs validateBoolField, validateDependentMaybeField, validateDependentStringField, validateField, validateListNotEmptyField, validateMaybeField, validateMaybeStringField, validateStringField, validateEmailField
+
+@docs getErrors, fieldError, getFields, filter, findErrorMessage, isInvalid, isInvalidField, isValid, isValidField, localizeRequired, merge, toError
 
 -}
 
@@ -237,6 +240,13 @@ validateMaybeStringField error field getter =
 validateListNotEmptyField : String -> field -> (model -> List a) -> Validate.Validator ( field, ValidationStatus ) model
 validateListNotEmptyField error field getter =
     Validate.ifTrue (getter >> List.isEmpty) ( field, Invalid error )
+
+
+{-| Validate an email field
+-}
+validateEmailField : String -> field -> (model -> String) -> Validate.Validator ( field, ValidationStatus ) model
+validateEmailField error field getter =
+    Validate.ifInvalidEmail getter (\_ -> ( field, Invalid error ))
 
 
 {-| Validate a field

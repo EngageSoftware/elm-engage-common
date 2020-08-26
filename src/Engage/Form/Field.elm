@@ -1,8 +1,63 @@
-module Engage.Form.Field exposing (checkbox, checkboxWithAttributes, dateInputField, dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes, fieldId, inputField, inputFieldWithAttributes, localizeHelp, localizeLabel, localizeInvalid, phoneField, radioListField, validate)
+module Engage.Form.Field exposing
+    ( textField, textFieldWithAttributes
+    , passwordField, passwordFieldWithAttributes
+    , checkbox, checkboxWithAttributes
+    , dateInputField
+    , dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes
+    , phoneField
+    , radioListField
+    , localizeHelp, localizeLabel, localizeInvalid
+    , validate, fieldId
+    )
 
 {-| Form.Field
 
-@docs checkbox, checkboxWithAttributes, dateInputField, dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes, fieldId, inputField, inputFieldWithAttributes, localizeHelp, localizeLabel, localizeInvalid, phoneField, radioListField, validate
+Form fields with validation
+
+
+## Text
+
+@docs textField, textFieldWithAttributes
+
+
+## Password
+
+@docs passwordField, passwordFieldWithAttributes
+
+
+## Checkbox
+
+@docs checkbox, checkboxWithAttributes
+
+
+## Date
+
+@docs dateInputField
+
+
+## Dropdown
+
+@docs dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes
+
+
+## Phone number
+
+@docs phoneField
+
+
+## Radio list
+
+@docs radioListField
+
+
+## Localization helpers
+
+@docs localizeHelp, localizeLabel, localizeInvalid
+
+
+## Validation helpers
+
+@docs validate, fieldId
 
 -}
 
@@ -18,13 +73,34 @@ import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (Html)
 
 
-type alias InputFieldArgs field msg =
-    { namespace : Namespace
-    , field : field
-    , fieldKey : String
-    , onChange : ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> String -> msg
-    , localization : Localization
-    , required : Bool
+type InputField field msg
+    = TextField (InputFieldArgs field msg {})
+    | PasswordField (InputFieldArgs field msg PasswordFieldArgs)
+
+
+type alias InputFieldArgs field msg args =
+    { args
+        | namespace : Namespace
+        , field : field
+        , fieldKey : String
+        , onChange : ValidationErrors field -> { onlyStateChange : Bool } -> Input.State -> String -> msg
+        , localization : Localization
+        , required : Bool
+    }
+
+
+inputFieldArgs : InputField field msg -> InputFieldArgs field msg {}
+inputFieldArgs inputField =
+    case inputField of
+        TextField { namespace, field, fieldKey, onChange, localization, required } ->
+            { namespace = namespace, field = field, fieldKey = fieldKey, onChange = onChange, localization = localization, required = required }
+
+        PasswordField { namespace, field, fieldKey, onChange, localization, required } ->
+            { namespace = namespace, field = field, fieldKey = fieldKey, onChange = onChange, localization = localization, required = required }
+
+
+type alias PasswordFieldArgs =
+    { strengthMeter : Maybe (List String)
     }
 
 
@@ -96,18 +172,40 @@ phoneField args validations state phoneNumber =
         phoneNumber
 
 
-{-| Get the input field view
+{-| Get the text field view
 -}
-inputField : InputFieldArgs field msg -> ValidationErrors field -> Input.State -> String -> Html msg
-inputField args validations state value =
-    inputFieldWithAttributes args validations [] state value
+textField : InputFieldArgs field msg {} -> ValidationErrors field -> Input.State -> String -> Html msg
+textField args validations state value =
+    textFieldWithAttributes args validations [] state value
 
 
-{-| Get the input field with attributes view
+{-| Get the text field with attributes view
 -}
-inputFieldWithAttributes : InputFieldArgs field msg -> ValidationErrors field -> List (Html.Attribute msg) -> Input.State -> String -> Html msg
-inputFieldWithAttributes args validations attributes state value =
+textFieldWithAttributes : InputFieldArgs field msg {} -> ValidationErrors field -> List (Html.Attribute msg) -> Input.State -> String -> Html msg
+textFieldWithAttributes args validations attributes state value =
+    inputFieldWithAttributes (TextField args) validations attributes state value
+
+
+{-| Get the password field view
+-}
+passwordField : InputFieldArgs field msg PasswordFieldArgs -> ValidationErrors field -> Input.State -> String -> Html msg
+passwordField args validations state value =
+    passwordFieldWithAttributes args validations [] state value
+
+
+{-| Get the password field with attributes view
+-}
+passwordFieldWithAttributes : InputFieldArgs field msg PasswordFieldArgs -> ValidationErrors field -> List (Html.Attribute msg) -> Input.State -> String -> Html msg
+passwordFieldWithAttributes args validations attributes state value =
+    inputFieldWithAttributes (PasswordField args) validations attributes state value
+
+
+inputFieldWithAttributes : InputField field msg -> ValidationErrors field -> List (Html.Attribute msg) -> Input.State -> String -> Html msg
+inputFieldWithAttributes inputField validations attributes state value =
     let
+        args =
+            inputFieldArgs inputField
+
         updatedValidations updatedValue =
             if args.required then
                 validate args.field args.fieldKey updatedValue validations
@@ -134,18 +232,35 @@ inputFieldWithAttributes args validations attributes state value =
             else
                 Nothing
     in
-    Input.textWithAttributes
-        { namespace = Namespace.engagecore
-        , id = fieldId args.namespace args.fieldKey
-        , labelText = localizeLabel args
-        , helpText = localizeHelp args
-        , requiredText = requiredText
-        , onChange = onChange
-        , status = Validation.fieldError args.localization args.field validations
-        }
-        attributes
-        state
-        value
+    case inputField of
+        PasswordField passwordArgs ->
+            Input.passwordWithAttributes
+                { namespace = Namespace.engagecore
+                , id = fieldId args.namespace args.fieldKey
+                , labelText = localizeLabel args
+                , helpText = localizeHelp args
+                , requiredText = requiredText
+                , onChange = onChange
+                , status = Validation.fieldError args.localization args.field validations
+                , strengthMeter = passwordArgs.strengthMeter
+                }
+                attributes
+                state
+                value
+
+        TextField _ ->
+            Input.textWithAttributes
+                { namespace = Namespace.engagecore
+                , id = fieldId args.namespace args.fieldKey
+                , labelText = localizeLabel args
+                , helpText = localizeHelp args
+                , requiredText = requiredText
+                , onChange = onChange
+                , status = Validation.fieldError args.localization args.field validations
+                }
+                attributes
+                state
+                value
 
 
 type alias RadioListFieldArgs field msg =

@@ -1,16 +1,55 @@
 module Engage.UI.Input exposing
-    ( FileInfo, PhoneState, State
-    , initialState, initialPhoneState
-    , bigNumber, checkBoxList, checkbox, checkboxWithAttributes, file, number, phone, radioList, reset, smallNumber, text, textArea, textWithAttributes, date
+    ( text, textArea, textWithAttributes, textWithSize
+    , password, passwordWithAttributes
+    , number, smallNumber, bigNumber
+    , checkBoxList, checkbox, checkboxWithAttributes
+    , file, FileInfo
+    , phone, PhoneState, initialPhoneState
+    , radioList, reset, date
+    , State, initialState
     )
 
 {-| UI.Input
 
-@docs FileInfo, PhoneState, State
 
-@docs initialState, initialPhoneState
+## Text
 
-@docs bigNumber, checkBoxList, checkbox, checkboxWithAttributes, file, number, phone, radioList, reset, smallNumber, text, textArea, textWithAttributes, date
+@docs text, textArea, textWithAttributes, textWithSize
+
+
+## Password
+
+@docs password, passwordWithAttributes
+
+
+## Numbers
+
+@docs number, smallNumber, bigNumber
+
+
+## Checkboxes
+
+@docs checkBoxList, checkbox, checkboxWithAttributes
+
+
+## File
+
+@docs file, FileInfo
+
+
+## Phone
+
+@docs phone, PhoneState, initialPhoneState
+
+
+## Misc
+
+@docs radioList, reset, date
+
+
+## State
+
+@docs State, initialState
 
 -}
 
@@ -37,7 +76,9 @@ import IntlPhoneInput.Config
 import Json.Decode exposing (succeed)
 import Json.Decode.Pipeline exposing (requiredAt)
 import List.Extra
+import Maybe.Extra
 import Set exposing (Set)
+import Zxcvbn exposing (ZxcvbnResult)
 
 
 {-| A State type
@@ -258,7 +299,7 @@ textWithAttributes :
     -> String
     -> Html msg
 textWithAttributes { namespace, id, labelText, helpText, onChange, status, requiredText } attributes state value =
-    textWithSizeAndAttributes
+    inputWithSizeAndAttributes
         { id = id
         , labelText = labelText
         , helpText = helpText
@@ -267,6 +308,7 @@ textWithAttributes { namespace, id, labelText, helpText, onChange, status, requi
         , size = Large
         , namespace = namespace
         , requiredText = requiredText
+        , inputType = Nothing
         }
         attributes
         state
@@ -288,13 +330,26 @@ textWithSize :
     -> State
     -> String
     -> Html msg
-textWithSize args state value =
-    textWithSizeAndAttributes args [] state value
+textWithSize { namespace, id, labelText, helpText, onChange, status, size, requiredText } state value =
+    inputWithSizeAndAttributes
+        { id = id
+        , labelText = labelText
+        , helpText = helpText
+        , onChange = onChange
+        , status = status
+        , size = size
+        , namespace = namespace
+        , requiredText = requiredText
+        , inputType = Nothing
+        }
+        []
+        state
+        value
 
 
 {-| Get a text with size and attributes view
 -}
-textWithSizeAndAttributes :
+inputWithSizeAndAttributes :
     { namespace : Namespace
     , id : String
     , labelText : String
@@ -303,23 +358,18 @@ textWithSizeAndAttributes :
     , status : Status
     , size : Size
     , requiredText : Maybe String
+    , inputType : Maybe String
     }
     -> List (Html.Attribute msg)
     -> State
     -> String
     -> Html msg
-textWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, status, size, requiredText } attributes state value =
+inputWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, status, size, requiredText, inputType } attributes state value =
     let
         class =
             namespace
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
-
-        inputType =
-            attributes
-                |> List.Extra.find (\attr -> attr == type_ "password")
-                |> Maybe.map (\_ -> "password")
-                |> Maybe.withDefault "text"
 
         options =
             Input.Text.defaultOptions (onChange { onlyStateChange = False } state)
@@ -342,13 +392,98 @@ textWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, status
         }
         stateData
         (Input.Text.input
-            { options | type_ = inputType }
+            { options | type_ = inputType |> Maybe.withDefault "text" }
             (attributes ++ [ Html.Attributes.id id, class [ "Input-" ++ getSizeString size ] ])
             value
         )
 
 
-{-| Get a number view
+{-| Get a password input
+-}
+password :
+    { namespace : Namespace
+    , id : String
+    , labelText : String
+    , helpText : String
+    , onChange : { onlyStateChange : Bool } -> State -> String -> msg
+    , status : Status
+    , requiredText : Maybe String
+    , strengthMeter : Maybe (List String)
+    }
+    -> State
+    -> String
+    -> Html msg
+password args state value =
+    passwordWithAttributes args [] state value
+
+
+{-| Get a password with attributes input
+-}
+passwordWithAttributes :
+    { namespace : Namespace
+    , id : String
+    , labelText : String
+    , helpText : String
+    , onChange : { onlyStateChange : Bool } -> State -> String -> msg
+    , status : Status
+    , requiredText : Maybe String
+    , strengthMeter : Maybe (List String)
+    }
+    -> List (Html.Attribute msg)
+    -> State
+    -> String
+    -> Html msg
+passwordWithAttributes { namespace, id, labelText, helpText, onChange, status, requiredText, strengthMeter } attributes state value =
+    let
+        class =
+            namespace
+                |> Namespace.toString
+                |> Engage.CssHelpers.withNamespace
+
+        ( passwordScore, passwordFeedback ) =
+            case strengthMeter of
+                Just extraDict ->
+                    let
+                        { score, feedback } =
+                            Zxcvbn.zxcvbn extraDict value
+                    in
+                    ( score, feedback )
+
+                Nothing ->
+                    ( -1, { warning = "", suggestions = [] } )
+    in
+    div []
+        (inputWithSizeAndAttributes
+            { id = id
+            , labelText = labelText
+            , helpText = helpText
+            , onChange = onChange
+            , status = status
+            , size = Large
+            , namespace = namespace
+            , requiredText = requiredText
+            , inputType = Just "password"
+            }
+            attributes
+            state
+            value
+            :: (if Maybe.Extra.isJust strengthMeter then
+                    [ Html.meter
+                        [ Html.Attributes.max "4"
+                        , Html.Attributes.value (String.fromInt passwordScore)
+                        , class [ "PasswordFeedback-Meter" ]
+                        ]
+                        []
+                    , Html.span [ class [ "PasswordFeedback-Warning" ] ] [ Html.text passwordFeedback.warning ]
+                    ]
+
+                else
+                    []
+               )
+        )
+
+
+{-| Get a number input
 -}
 number :
     { namespace : Namespace

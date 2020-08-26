@@ -419,7 +419,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                 )
             |> Maybe.withDefault HtmlExtra.none
         , div [ class [ "FieldGroup" ], addressNameDisplayStyle ]
-            [ Field.inputFieldWithAttributes
+            [ Field.textFieldWithAttributes
                 { namespace = namespace
                 , onChange = NameUpdated
                 , localization = localization
@@ -433,7 +433,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                 addressData.name
             ]
         , div [ class [ "FieldGroup" ] ]
-            [ Field.inputFieldWithAttributes
+            [ Field.textFieldWithAttributes
                 { namespace = namespace
                 , onChange = AddressUpdated
                 , localization = localization
@@ -447,7 +447,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                 addressData.address1
             ]
         , div [ class [ "FieldGroup" ] ]
-            [ Field.inputFieldWithAttributes
+            [ Field.textFieldWithAttributes
                 { namespace = namespace
                 , onChange = UnitUpdated
                 , localization = localization
@@ -489,7 +489,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                 (Maybe.map (Tuple.first >> String.fromInt) addressData.region)
             ]
         , div [ class [ "FieldGroup" ] ]
-            [ Field.inputFieldWithAttributes
+            [ Field.textFieldWithAttributes
                 { namespace = namespace
                 , onChange = CityUpdated
                 , localization = localization
@@ -501,7 +501,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                 [ Html.Attributes.name "city", Html.Attributes.attribute "autocomplete" "address-level2" ]
                 state.city
                 addressData.city
-            , Field.inputFieldWithAttributes
+            , Field.textFieldWithAttributes
                 { namespace = namespace
                 , onChange = ZipCodeUpdated
                 , localization = localization
@@ -552,7 +552,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
             , attribute.hideWebsite
                 |> Engage.Bool.true HtmlExtra.none
                 |> Engage.Bool.false
-                    (Field.inputField
+                    (Field.textField
                         { namespace = namespace
                         , onChange = WebsiteUpdated
                         , localization = localization

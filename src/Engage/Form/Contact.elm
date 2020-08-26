@@ -342,7 +342,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 )
             |> Maybe.withDefault HtmlExtra.none
         , div [ class [ "FieldGroup" ] ]
-            [ Field.inputField
+            [ Field.textField
                 { namespace = namespace
                 , onChange = FirstNameUpdated
                 , localization = localization
@@ -353,7 +353,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 state.validations
                 state.firstName
                 contactData.firstName
-            , Field.inputField
+            , Field.textField
                 { namespace = namespace
                 , onChange = MiddleNameUpdated
                 , localization = localization
@@ -364,7 +364,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 state.validations
                 state.middleName
                 contactData.middleName
-            , Field.inputField
+            , Field.textField
                 { namespace = namespace
                 , onChange = LastNameUpdated
                 , localization = localization
@@ -377,7 +377,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 contactData.lastName
             ]
         , div [ class [ "FieldGroup" ] ]
-            [ Field.inputField
+            [ Field.textField
                 { namespace = namespace
                 , onChange = PrefixUpdated
                 , localization = localization
@@ -388,7 +388,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 state.validations
                 state.prefix
                 contactData.prefix
-            , Field.inputField
+            , Field.textField
                 { namespace = namespace
                 , onChange = SuffixUpdated
                 , localization = localization
@@ -399,7 +399,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 state.validations
                 state.suffix
                 contactData.suffix
-            , Field.inputField
+            , Field.textField
                 { namespace = namespace
                 , onChange = EmailUpdated
                 , localization = localization
@@ -412,7 +412,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 contactData.email
             ]
         , div [ class [ "FieldGroup" ] ]
-            [ Field.inputFieldWithAttributes
+            [ Field.textFieldWithAttributes
                 { namespace = namespace
                 , onChange = AddressNameUpdated
                 , localization = localization
@@ -426,7 +426,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 contactData.addressName
             ]
         , div [ class [ "FieldGroup" ] ]
-            [ Field.inputFieldWithAttributes
+            [ Field.textFieldWithAttributes
                 { namespace = namespace
                 , onChange = Address1Updated
                 , localization = localization
@@ -440,7 +440,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 contactData.address1
             ]
         , div [ class [ "FieldGroup" ] ]
-            [ Field.inputFieldWithAttributes
+            [ Field.textFieldWithAttributes
                 { namespace = namespace
                 , onChange = Address2Updated
                 , localization = localization
@@ -482,7 +482,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 (Maybe.map (Tuple.first >> String.fromInt) contactData.region)
             ]
         , div [ class [ "FieldGroup" ] ]
-            [ Field.inputFieldWithAttributes
+            [ Field.textFieldWithAttributes
                 { namespace = namespace
                 , onChange = CityUpdated
                 , localization = localization
@@ -494,7 +494,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 [ Html.Attributes.name "city", Html.Attributes.attribute "autocomplete" "address-level2" ]
                 state.city
                 contactData.city
-            , Field.inputFieldWithAttributes
+            , Field.textFieldWithAttributes
                 { namespace = namespace
                 , onChange = PostalCodeUpdated
                 , localization = localization
@@ -549,7 +549,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 contactData.fax
             ]
         , div [ class [ "FieldGroup" ] ]
-            [ Field.inputField
+            [ Field.textField
                 { namespace = namespace
                 , onChange = NotesUpdated
                 , localization = localization

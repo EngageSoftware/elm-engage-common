@@ -132,7 +132,7 @@ decoder =
         |> JDP.required "birthDateMonth" (JD.maybe (JD.int |> JD.map (\val -> ( val, "" ))))
         |> JDP.required "account" (JD.maybe Account.decoder)
         |> JDP.required "username" (JD.string |> JD.map Just)
-        |> JDP.required "password" (JD.maybe JD.string)
+        |> JDP.optional "password" (JD.maybe JD.string) Nothing
 
 
 {-| A Participant encoder
