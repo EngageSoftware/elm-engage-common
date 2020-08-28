@@ -130,11 +130,6 @@ nameView namespace attribute =
 addressView : { args | namespace : Namespace, localization : Localization, countries : Countries, regions : RegionsCountry } -> InternalAttribute msg -> Html msg
 addressView ({ namespace } as args) attribute =
     let
-        class =
-            namespace
-                |> Namespace.toString
-                |> Engage.CssHelpers.withNamespace
-
         isEmpty =
             Engage.Form.Address.isEmpty
 

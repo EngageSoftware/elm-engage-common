@@ -104,8 +104,6 @@ type Msg
 type CompanyMsg
     = CompanyNameUpdated (ValidationErrors ValidationField) { onlyStateChange : Bool } Input.State String
     | PositionUpdated (ValidationErrors ValidationField) { onlyStateChange : Bool } Input.State String
-    | StartDateStateUpdated (ValidationErrors ValidationField) Input.State
-    | EndDateStateUpdated (ValidationErrors ValidationField) Input.State
     | StartDateUpdated (ValidationErrors ValidationField) Input.State (Maybe Date)
     | EndDateUpdated (ValidationErrors ValidationField) Input.State (Maybe Date)
     | AddressMsg (Address.Msg ValidationField)
@@ -169,7 +167,7 @@ currentCompany args state data =
                 args.namespace
                 args.localization
                 CurrentCompanyAddress
-                (\fieldKey -> "CurrentCompanyAddress " ++ fieldKey)
+                "CurrentCompanyAddress"
                 [ Address.countries args.countries
                 , Address.regions args.regions
                 , Address.required True
@@ -231,7 +229,7 @@ previousCompany args state data =
                 args.namespace
                 args.localization
                 PreviousCompanyAddress
-                (\fieldKey -> "PreviousCompanyAddress " ++ fieldKey)
+                "PreviousCompanyAddress"
                 [ Address.countries args.countries
                 , Address.regions args.regions
                 , Address.required <| not <| String.isEmpty data.previousCompany.name
@@ -345,21 +343,9 @@ updateCompany msg companyState companyData =
             , Cmd.none
             )
 
-        StartDateStateUpdated validations datepickerState ->
-            ( { companyState | startDate = datepickerState, validations = validations }
-            , companyData
-            , Cmd.none
-            )
-
         StartDateUpdated validations datepickerState value ->
             ( { companyState | startDate = datepickerState, validations = validations }
             , { companyData | startDate = value }
-            , Cmd.none
-            )
-
-        EndDateStateUpdated validations datepickerState ->
-            ( { companyState | endDate = datepickerState, validations = validations }
-            , companyData
             , Cmd.none
             )
 
@@ -400,7 +386,7 @@ validateAll (State state) regions data =
         { state
             | currentCompany =
                 { newCurrentCompany
-                    | address = Address.validateAll CurrentCompanyAddress state.currentCompany.address regions data.currentCompany.address
+                    | address = Address.validateAll CurrentCompanyAddress "CurrentCompanyAddress" state.currentCompany.address regions data.currentCompany.address
                     , validations =
                         Validation.validateField
                             [ Validation.validateStringField (Validation.localizeRequired "CurrentCompanyField CompanyName") (CurrentCompanyField CompanyName) (.currentCompany >> .name)
@@ -415,7 +401,7 @@ validateAll (State state) regions data =
                             Address.initialState
 
                         else
-                            Address.validateAll PreviousCompanyAddress state.previousCompany.address regions data.previousCompany.address
+                            Address.validateAll PreviousCompanyAddress "PreviousCompanyAddress" state.previousCompany.address regions data.previousCompany.address
                     , validations =
                         Validation.validateField
                             []

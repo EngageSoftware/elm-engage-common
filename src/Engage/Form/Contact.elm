@@ -1,6 +1,6 @@
 module Engage.Form.Contact exposing
     ( Attribute, Msg, State, ValidationField(..)
-    , completedView, completedViewWithAdditional, contactTypes, countries, countriesToItems, form, initialState, isEmpty, isValid, regions, regionsToItems, required, toAllRegions, update, validateAll, validateAllWith, validateFieldWith, view
+    , completedView, completedViewWithAdditional, contactTypes, countries, countriesToItems, form, initialState, isEmpty, isValid, regions, regionsToItems, required, update, validateAll, validateAllWith, validateFieldWith, view
     )
 
 {-| Form.Contact
@@ -16,6 +16,7 @@ import Engage.CssHelpers
 import Engage.Entity.Address exposing (Countries, Regions, RegionsCountry)
 import Engage.Entity.Contact exposing (Contact, ContactType, ContactTypes)
 import Engage.Entity.PhoneNumber exposing (PhoneNumber)
+import Engage.Form.Address exposing (countryModifier)
 import Engage.Form.Field as Field
 import Engage.Html.Extra as HtmlExtra
 import Engage.ListItem as ListItem
@@ -296,8 +297,8 @@ isEmpty data =
 
 {-| Get the form view
 -}
-form : Namespace -> Localization -> (ValidationField -> parentField) -> (String -> String) -> List Attribute -> State parentField -> Contact -> Html (Msg parentField)
-form originalNamespace localization field fieldKey attributes (State state) contactData =
+form : Namespace -> Localization -> (ValidationField -> parentField) -> String -> List Attribute -> State parentField -> Contact -> Html (Msg parentField)
+form originalNamespace localization field parentKey attributes (State state) contactData =
     let
         attribute =
             Attribute.process emptyAttribute attributes
@@ -318,6 +319,9 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 |> Maybe.map2 (\a b -> ( a, b )) attribute.contactTypes
                 |> Maybe.andThen (\( newContactTypes, contactTypeId ) -> Dict.get contactTypeId newContactTypes)
                 |> ContactTypeUpdated validations stateValue
+
+        withParentFieldKey =
+            Field.withParentFieldKey parentKey
     in
     div
         []
@@ -330,7 +334,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                             , onChange = onContactTypeChangeHandler
                             , localization = localization
                             , field = field ContactType
-                            , fieldKey = fieldKey "ContactType"
+                            , fieldKey = withParentFieldKey "ContactType"
                             , required = True
                             , items = newContactTypes |> contactTypesToItems
                             }
@@ -347,7 +351,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , onChange = FirstNameUpdated
                 , localization = localization
                 , field = field FirstName
-                , fieldKey = fieldKey "FirstName"
+                , fieldKey = withParentFieldKey "FirstName"
                 , required = True
                 }
                 state.validations
@@ -358,7 +362,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , onChange = MiddleNameUpdated
                 , localization = localization
                 , field = field MiddleName
-                , fieldKey = fieldKey "MiddleName"
+                , fieldKey = withParentFieldKey "MiddleName"
                 , required = False
                 }
                 state.validations
@@ -369,7 +373,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , onChange = LastNameUpdated
                 , localization = localization
                 , field = field LastName
-                , fieldKey = fieldKey "LastName"
+                , fieldKey = withParentFieldKey "LastName"
                 , required = True
                 }
                 state.validations
@@ -382,7 +386,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , onChange = PrefixUpdated
                 , localization = localization
                 , field = field Prefix
-                , fieldKey = fieldKey "Prefix"
+                , fieldKey = withParentFieldKey "Prefix"
                 , required = False
                 }
                 state.validations
@@ -393,7 +397,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , onChange = SuffixUpdated
                 , localization = localization
                 , field = field Suffix
-                , fieldKey = fieldKey "Suffix"
+                , fieldKey = withParentFieldKey "Suffix"
                 , required = False
                 }
                 state.validations
@@ -404,7 +408,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , onChange = EmailUpdated
                 , localization = localization
                 , field = field Email
-                , fieldKey = fieldKey "Email"
+                , fieldKey = withParentFieldKey "Email"
                 , required = True
                 }
                 state.validations
@@ -418,7 +422,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , localization = localization
                 , required = False
                 , field = field AddressName
-                , fieldKey = fieldKey "AddressName"
+                , fieldKey = withParentFieldKey "AddressName"
                 }
                 state.validations
                 [ Html.Attributes.name "address-name", Html.Attributes.attribute "autocomplete" "address-name" ]
@@ -432,7 +436,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , localization = localization
                 , required = attribute.required && True
                 , field = field Address1
-                , fieldKey = fieldKey "Address1"
+                , fieldKey = withParentFieldKey "Address1"
                 }
                 state.validations
                 [ Html.Attributes.name "address-line1", Html.Attributes.attribute "autocomplete" "address-line1" ]
@@ -445,7 +449,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , onChange = Address2Updated
                 , localization = localization
                 , field = field Address2
-                , fieldKey = fieldKey "Address2"
+                , fieldKey = withParentFieldKey "Address2"
                 , required = False
                 }
                 state.validations
@@ -459,7 +463,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , onChange = CountryUpdated
                 , localization = localization
                 , field = field Country
-                , fieldKey = fieldKey "Country"
+                , fieldKey = withParentFieldKey "Country"
                 , required = attribute.required
                 , items = attribute.countries |> countriesToItems
                 }
@@ -472,7 +476,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , onChange = RegionUpdated
                 , localization = localization
                 , field = field Region
-                , fieldKey = fieldKey "Region"
+                , fieldKey = withParentFieldKey ("Region." ++ countryModifier contactData)
                 , required = attribute.required
                 , items = contactData.country |> Maybe.map Tuple.first |> Maybe.andThen (\country -> Dict.get country attribute.regions) |> Maybe.map regionsToItems |> Maybe.withDefault Dict.empty
                 }
@@ -487,7 +491,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , onChange = CityUpdated
                 , localization = localization
                 , field = field City
-                , fieldKey = fieldKey "City"
+                , fieldKey = withParentFieldKey "City"
                 , required = attribute.required && True
                 }
                 state.validations
@@ -499,7 +503,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , onChange = PostalCodeUpdated
                 , localization = localization
                 , field = field PostalCode
-                , fieldKey = fieldKey "PostalCode"
+                , fieldKey = withParentFieldKey ("ZipCode." ++ countryModifier contactData)
                 , required = attribute.required && True
                 }
                 state.validations
@@ -515,7 +519,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , isoCodeField = field PhoneIsoCode
                 , isoCodeFieldKey = "PhoneIsoCode"
                 , field = field Phone
-                , fieldKey = fieldKey "Phone"
+                , fieldKey = withParentFieldKey "Phone"
                 , required = True
                 }
                 state.validations
@@ -528,7 +532,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , isoCodeField = field MobilePhoneIsoCode
                 , isoCodeFieldKey = "MobilePhoneIsoCode"
                 , field = field MobilePhone
-                , fieldKey = fieldKey "MobilePhone"
+                , fieldKey = withParentFieldKey "MobilePhone"
                 , required = False
                 }
                 state.validations
@@ -541,7 +545,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , isoCodeField = field FaxIsoCode
                 , isoCodeFieldKey = "FaxIsoCode"
                 , field = field Fax
-                , fieldKey = fieldKey "Fax"
+                , fieldKey = withParentFieldKey "Fax"
                 , required = False
                 }
                 state.validations
@@ -554,7 +558,7 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 , onChange = NotesUpdated
                 , localization = localization
                 , field = field Notes
-                , fieldKey = fieldKey "Notes"
+                , fieldKey = withParentFieldKey "Notes"
                 , required = False
                 }
                 state.validations
@@ -562,17 +566,20 @@ form originalNamespace localization field fieldKey attributes (State state) cont
                 contactData.notes
             ]
         , div [ class [ "FieldGroup" ] ]
-            [ primaryContactCheckBox namespace localization field fieldKey (State state) contactData ]
+            [ primaryContactCheckBox namespace localization field parentKey (State state) contactData ]
         , div [ class [ "FieldGroup" ] ]
-            [ billingContactCheckBox namespace localization field fieldKey (State state) contactData ]
+            [ billingContactCheckBox namespace localization field parentKey (State state) contactData ]
         ]
 
 
-primaryContactCheckBox : Namespace -> Localization -> (ValidationField -> parentField) -> (String -> String) -> State parentField -> Contact -> Html (Msg parentField)
-primaryContactCheckBox originalNamespace localization field fieldKey (State state) contactData =
+primaryContactCheckBox : Namespace -> Localization -> (ValidationField -> parentField) -> String -> State parentField -> Contact -> Html (Msg parentField)
+primaryContactCheckBox originalNamespace localization field parentKey (State state) contactData =
     let
         namespace =
             Namespace.namespace <| Namespace.toString originalNamespace ++ "Address"
+
+        withParentFieldKey =
+            Field.withParentFieldKey parentKey
     in
     case contactData.contactId of
         Nothing ->
@@ -581,7 +588,7 @@ primaryContactCheckBox originalNamespace localization field fieldKey (State stat
                 , onCheck = IsPrimaryContactUpdated
                 , localization = localization
                 , field = field IsPrimaryContact
-                , fieldKey = fieldKey "IsPrimaryContact"
+                , fieldKey = withParentFieldKey "IsPrimaryContact"
                 , required = False
                 }
                 state.validations
@@ -594,7 +601,7 @@ primaryContactCheckBox originalNamespace localization field fieldKey (State stat
                 , onCheck = IsPrimaryContactUpdated
                 , localization = localization
                 , field = field IsPrimaryContact
-                , fieldKey = fieldKey "IsPrimaryContact"
+                , fieldKey = withParentFieldKey "IsPrimaryContact"
                 , required = False
                 }
                 state.validations
@@ -603,11 +610,14 @@ primaryContactCheckBox originalNamespace localization field fieldKey (State stat
                 contactData.isPrimaryContact
 
 
-billingContactCheckBox : Namespace -> Localization -> (ValidationField -> parentField) -> (String -> String) -> State parentField -> Contact -> Html (Msg parentField)
-billingContactCheckBox originalNamespace localization field fieldKey (State state) contactData =
+billingContactCheckBox : Namespace -> Localization -> (ValidationField -> parentField) -> String -> State parentField -> Contact -> Html (Msg parentField)
+billingContactCheckBox originalNamespace localization field parentKey (State state) contactData =
     let
         namespace =
             Namespace.namespace <| Namespace.toString originalNamespace ++ "Address"
+
+        withParentFieldKey =
+            Field.withParentFieldKey parentKey
     in
     case contactData.contactId of
         Nothing ->
@@ -616,7 +626,7 @@ billingContactCheckBox originalNamespace localization field fieldKey (State stat
                 , onCheck = IsBillingContactUpdated
                 , localization = localization
                 , field = field IsBillingContact
-                , fieldKey = fieldKey "IsBillingContact"
+                , fieldKey = withParentFieldKey "IsBillingContact"
                 , required = False
                 }
                 state.validations
@@ -629,7 +639,7 @@ billingContactCheckBox originalNamespace localization field fieldKey (State stat
                 , onCheck = IsBillingContactUpdated
                 , localization = localization
                 , field = field IsBillingContact
-                , fieldKey = fieldKey "IsBillingContact"
+                , fieldKey = withParentFieldKey "IsBillingContact"
                 , required = False
                 }
                 state.validations
@@ -887,36 +897,40 @@ regionsToItems newRegions =
 
 {-| Validate all of the fields
 -}
-validateAll : (ValidationField -> parentField) -> State parentField -> Contact -> State parentField
+validateAll : (ValidationField -> parentField) -> String -> State parentField -> Contact -> State parentField
 validateAll =
     validateAllWith []
 
 
 {-| Validate all of the fields with a function
 -}
-validateAllWith : List (Validate.Validator ( parentField, Validation.ValidationStatus ) Contact) -> (ValidationField -> parentField) -> State parentField -> Contact -> State parentField
-validateAllWith additionalValidations parentField (State state) data =
+validateAllWith : List (Validate.Validator ( parentField, Validation.ValidationStatus ) Contact) -> (ValidationField -> parentField) -> String -> State parentField -> Contact -> State parentField
+validateAllWith additionalValidations parentField parentKey (State state) data =
     State
         { state
-            | validations = validateFieldWith additionalValidations parentField data
+            | validations = validateFieldWith additionalValidations parentField parentKey data
         }
 
 
 {-| Validate a field with a function
 -}
-validateFieldWith : List (Validate.Validator ( parentField, Validation.ValidationStatus ) Contact) -> (ValidationField -> parentField) -> Contact -> ValidationErrors parentField
-validateFieldWith additionalValidations parentField data =
+validateFieldWith : List (Validate.Validator ( parentField, Validation.ValidationStatus ) Contact) -> (ValidationField -> parentField) -> String -> Contact -> ValidationErrors parentField
+validateFieldWith additionalValidations parentField parentKey data =
+    let
+        withParentFieldKey =
+            Field.withParentFieldKey parentKey
+    in
     Validation.validateField
-        ([ Validation.validateStringField (Validation.localizeRequired "FirstName") (parentField FirstName) .firstName
-         , Validation.validateStringField (Validation.localizeRequired "LastName") (parentField LastName) .lastName
-         , Validation.validateStringField (Validation.localizeRequired "Email") (parentField Email) .email
-         , Validation.validateStringField (Validation.localizeRequired "Address1") (parentField Address1) .address1
-         , Validation.validateMaybeField (Validation.localizeRequired "Country") (parentField Country) .country
-         , Validation.validateMaybeField (Validation.localizeRequired "Region") (parentField Region) .region
-         , Validation.validateStringField (Validation.localizeRequired "PostalCode") (parentField PostalCode) .postalCode
-         , Validation.validateStringField (Validation.localizeRequired "City") (parentField City) .city
-         , Validation.validateMaybeField (Validation.localizeRequired "ContactType") (parentField ContactType) .contactType
-         , Validation.validateStringField (Validation.localizeRequired "Phone") (parentField Phone) (.phone >> .phoneNumber)
+        ([ Validation.validateStringField (Validation.localizeRequired (withParentFieldKey "FirstName")) (parentField FirstName) .firstName
+         , Validation.validateStringField (Validation.localizeRequired (withParentFieldKey "LastName")) (parentField LastName) .lastName
+         , Validation.validateStringField (Validation.localizeRequired (withParentFieldKey "Email")) (parentField Email) .email
+         , Validation.validateStringField (Validation.localizeRequired (withParentFieldKey "Address1")) (parentField Address1) .address1
+         , Validation.validateMaybeField (Validation.localizeRequired (withParentFieldKey "Country")) (parentField Country) .country
+         , Validation.validateMaybeField (Validation.localizeRequired (withParentFieldKey ("Region." ++ countryModifier data))) (parentField Region) .region
+         , Validation.validateStringField (Validation.localizeRequired (withParentFieldKey ("ZipCode." ++ countryModifier data))) (parentField PostalCode) .postalCode
+         , Validation.validateStringField (Validation.localizeRequired (withParentFieldKey "City")) (parentField City) .city
+         , Validation.validateMaybeField (Validation.localizeRequired (withParentFieldKey "ContactType")) (parentField ContactType) .contactType
+         , Validation.validateStringField (Validation.localizeRequired (withParentFieldKey "Phone")) (parentField Phone) (.phone >> .phoneNumber)
          ]
             ++ additionalValidations
         )
@@ -928,14 +942,3 @@ validateFieldWith additionalValidations parentField data =
 isValid : State parentField -> Bool
 isValid (State state) =
     Validation.isValid state.validations
-
-
-{-| Convert RegionsCountry to Regions
--}
-toAllRegions : RegionsCountry -> Regions
-toAllRegions regionsCountry =
-    regionsCountry
-        |> Dict.values
-        |> List.map Dict.toList
-        |> List.concat
-        |> Dict.fromList

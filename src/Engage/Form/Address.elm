@@ -2,6 +2,7 @@ module Engage.Form.Address exposing
     ( Attribute, Msg, State, ValidationField(..)
     , addressTypes, completedView, completedViewWithAdditional, countriesToItems, form, initialState, isEmpty, isValid, regionsToItems, toAllRegions, update, validateAll, validateAllWith, validateFieldWith, view
     , countries, hideFax, hidePrimaryAddressCheckbox, hideWebsite, regions, required, showIncludeInExternalDirectory, showIncludeInInternalDirectory, phoneNumberRequired
+    , countryModifier
     )
 
 {-| Form.Address
@@ -15,6 +16,8 @@ module Engage.Form.Address exposing
 
 @docs countries, hideFax, hidePrimaryAddressCheckbox, hideWebsite, regions, required, showIncludeInExternalDirectory, showIncludeInInternalDirectory, phoneNumberRequired
 
+@docs countryModifier
+
 -}
 
 import Dict exposing (Dict)
@@ -25,7 +28,7 @@ import Engage.Entity.PhoneNumber exposing (PhoneNumber)
 import Engage.Form.Field as Field
 import Engage.Form.HideOrShow exposing (HideOrShow, Visibility(..))
 import Engage.Html.Extra as HtmlExtra
-import Engage.ListItem as ListItem
+import Engage.ListItem as ListItem exposing (ListItem)
 import Engage.Localization as Localization exposing (Localization)
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.String exposing (comma, space)
@@ -245,11 +248,6 @@ showIncludeInExternalDirectory =
 view : { a | namespace : Namespace, localization : Localization, countries : Countries, regions : RegionsCountry } -> AddressLike address -> Html msg
 view args data =
     let
-        class =
-            args.namespace
-                |> Namespace.toString
-                |> Engage.CssHelpers.withNamespace
-
         maybeCountry =
             data.country
                 |> Maybe.andThen (Tuple.first >> (\key -> Dict.get key args.countries))
@@ -337,8 +335,8 @@ isEmpty data =
 
 {-| Get the form view
 -}
-form : Namespace -> Localization -> (ValidationField -> parentField) -> (String -> String) -> List Attribute -> State parentField -> HideOrShow -> Address -> Html (Msg parentField)
-form originalNamespace localization field fieldKey attributes (State state) hideOrShow addressData =
+form : Namespace -> Localization -> (ValidationField -> parentField) -> String -> List Attribute -> State parentField -> HideOrShow -> Address -> Html (Msg parentField)
+form originalNamespace localization field parentKey attributes (State state) hideOrShow addressData =
     let
         attributeShow : InternalAttribute
         attributeShow =
@@ -395,6 +393,9 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                 |> Maybe.map Tuple.first
                 |> Maybe.map (\countryId -> Address.getRegionsForCountry countryId attribute.regions)
                 |> Maybe.withDefault Dict.empty
+
+        withParentFieldKey =
+            Field.withParentFieldKey parentKey
     in
     div
         []
@@ -407,7 +408,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                             , onChange = onAddressTypeChangeHandler
                             , localization = localization
                             , field = field AddressType
-                            , fieldKey = fieldKey "AddressType"
+                            , fieldKey = withParentFieldKey "AddressType"
                             , required = True
                             , items = newAddressTypes |> addressTypesToItems
                             }
@@ -425,7 +426,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                 , localization = localization
                 , required = False
                 , field = field Name
-                , fieldKey = fieldKey "Name"
+                , fieldKey = withParentFieldKey "Name"
                 }
                 state.validations
                 [ Html.Attributes.name "address-name", Html.Attributes.attribute "autocomplete" "address-name" ]
@@ -439,20 +440,18 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                 , localization = localization
                 , required = attribute.required && True
                 , field = field Address
-                , fieldKey = fieldKey "Address"
+                , fieldKey = withParentFieldKey "Address"
                 }
                 state.validations
                 [ Html.Attributes.name "address-line1", Html.Attributes.attribute "autocomplete" "address-line1" ]
                 state.address1
                 addressData.address1
-            ]
-        , div [ class [ "FieldGroup" ] ]
-            [ Field.textFieldWithAttributes
+            , Field.textFieldWithAttributes
                 { namespace = namespace
                 , onChange = UnitUpdated
                 , localization = localization
                 , field = field Unit
-                , fieldKey = fieldKey "Unit"
+                , fieldKey = withParentFieldKey "Unit"
                 , required = False
                 }
                 state.validations
@@ -466,7 +465,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                 , onChange = CountryUpdated
                 , localization = localization
                 , field = field Country
-                , fieldKey = fieldKey "Country"
+                , fieldKey = withParentFieldKey "Country"
                 , required = attribute.required
                 , items = attribute.countries |> countriesToItems
                 }
@@ -479,7 +478,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                 , onChange = RegionUpdated
                 , localization = localization
                 , field = field Region
-                , fieldKey = fieldKey "Region"
+                , fieldKey = withParentFieldKey ("Region." ++ countryModifier addressData)
                 , required = attribute.required
                 , items = regionsForCountry |> regionsToItems
                 }
@@ -494,7 +493,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                 , onChange = CityUpdated
                 , localization = localization
                 , field = field City
-                , fieldKey = fieldKey "City"
+                , fieldKey = withParentFieldKey "City"
                 , required = attribute.required && True
                 }
                 state.validations
@@ -506,7 +505,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                 , onChange = ZipCodeUpdated
                 , localization = localization
                 , field = field ZipCode
-                , fieldKey = fieldKey "ZipCode"
+                , fieldKey = withParentFieldKey ("ZipCode." ++ countryModifier addressData)
                 , required = attribute.required && True
                 }
                 state.validations
@@ -525,7 +524,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                         , isoCodeField = field PhoneIsoCode
                         , isoCodeFieldKey = "PhoneIsoCode"
                         , field = field Phone
-                        , fieldKey = fieldKey "Phone"
+                        , fieldKey = withParentFieldKey "Phone"
                         , required = attribute.phoneNumberRequired
                         }
                         state.validations
@@ -542,7 +541,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                         , isoCodeField = field FaxIsoCode
                         , isoCodeFieldKey = "FaxIsoCode"
                         , field = field Fax
-                        , fieldKey = fieldKey "Fax"
+                        , fieldKey = withParentFieldKey "Fax"
                         , required = False
                         }
                         state.validations
@@ -557,7 +556,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                         , onChange = WebsiteUpdated
                         , localization = localization
                         , field = field Website
-                        , fieldKey = fieldKey "Website"
+                        , fieldKey = withParentFieldKey "Website"
                         , required = False
                         }
                         state.validations
@@ -569,7 +568,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
             |> Engage.Bool.true HtmlExtra.none
             |> Engage.Bool.false
                 (div [ class [ "FieldGroup" ] ]
-                    [ primaryAddressCheckbox namespace localization field fieldKey (State state) addressData ]
+                    [ primaryAddressCheckbox namespace localization field parentKey (State state) addressData ]
                 )
         , attribute.showIncludeInInternalDirectory
             |> Engage.Bool.true
@@ -579,7 +578,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                         , localization = localization
                         , onCheck = IncludeInInternalDirectoryUpdated
                         , field = field IncludeInInternalDirectory
-                        , fieldKey = fieldKey "IncludeInInternalDirectory"
+                        , fieldKey = withParentFieldKey "IncludeInInternalDirectory"
                         , required = False
                         }
                         state.validations
@@ -596,7 +595,7 @@ form originalNamespace localization field fieldKey attributes (State state) hide
                         , localization = localization
                         , onCheck = IncludeInExternalDirectoryUpdated
                         , field = field IncludeInExternalDirectory
-                        , fieldKey = fieldKey "IncludeInExternalDirectory"
+                        , fieldKey = withParentFieldKey "IncludeInExternalDirectory"
                         , required = False
                         }
                         state.validations
@@ -608,11 +607,14 @@ form originalNamespace localization field fieldKey attributes (State state) hide
         ]
 
 
-primaryAddressCheckbox : Namespace -> Localization -> (ValidationField -> parentField) -> (String -> String) -> State parentField -> Address -> Html (Msg parentField)
-primaryAddressCheckbox originalNamespace localization field fieldKey (State state) addressData =
+primaryAddressCheckbox : Namespace -> Localization -> (ValidationField -> parentField) -> String -> State parentField -> Address -> Html (Msg parentField)
+primaryAddressCheckbox originalNamespace localization field parentKey (State state) addressData =
     let
         namespace =
             Namespace.namespace <| Namespace.toString originalNamespace ++ "Address"
+
+        withParentFieldKey =
+            Field.withParentFieldKey parentKey
     in
     case addressData.addressId of
         Nothing ->
@@ -621,7 +623,7 @@ primaryAddressCheckbox originalNamespace localization field fieldKey (State stat
                 , onCheck = IsPrimaryAddressUpdated
                 , localization = localization
                 , field = field IsPrimaryAddress
-                , fieldKey = fieldKey "IsPrimaryAddress"
+                , fieldKey = withParentFieldKey "IsPrimaryAddress"
                 , required = False
                 }
                 state.validations
@@ -634,7 +636,7 @@ primaryAddressCheckbox originalNamespace localization field fieldKey (State stat
                 , onCheck = IsPrimaryAddressUpdated
                 , localization = localization
                 , field = field IsPrimaryAddress
-                , fieldKey = fieldKey "IsPrimaryAddress"
+                , fieldKey = withParentFieldKey "IsPrimaryAddress"
                 , required = False
                 }
                 state.validations
@@ -910,44 +912,47 @@ regionsToItems newRegions =
 
 {-| Validate all fields
 -}
-validateAll : (ValidationField -> parentField) -> State parentField -> RegionsCountry -> Address -> State parentField
+validateAll : (ValidationField -> parentField) -> String -> State parentField -> RegionsCountry -> Address -> State parentField
 validateAll =
     validateAllWith []
 
 
 {-| Validate all fields with a function
 -}
-validateAllWith : List (Validate.Validator ( parentField, Validation.ValidationStatus ) Address) -> (ValidationField -> parentField) -> State parentField -> RegionsCountry -> Address -> State parentField
-validateAllWith additionalValidations parentField (State state) regionsData data =
+validateAllWith : List (Validate.Validator ( parentField, Validation.ValidationStatus ) Address) -> (ValidationField -> parentField) -> String -> State parentField -> RegionsCountry -> Address -> State parentField
+validateAllWith additionalValidations parentField parentKey (State state) regionsData data =
     State
         { state
-            | validations = validateFieldWith additionalValidations parentField regionsData data
+            | validations = validateFieldWith additionalValidations parentField parentKey regionsData data
         }
 
 
 {-| Validate a field with a function
 -}
-validateFieldWith : List (Validate.Validator ( parentField, Validation.ValidationStatus ) Address) -> (ValidationField -> parentField) -> RegionsCountry -> Address -> ValidationErrors parentField
-validateFieldWith additionalValidations parentField regionsData data =
+validateFieldWith : List (Validate.Validator ( parentField, Validation.ValidationStatus ) Address) -> (ValidationField -> parentField) -> String -> RegionsCountry -> Address -> ValidationErrors parentField
+validateFieldWith additionalValidations parentField parentKey regionsData data =
     let
         availableRegions =
             data.country
                 |> Maybe.map (\( countryId, _ ) -> Address.getRegionsForCountry countryId regionsData)
                 |> Maybe.withDefault Dict.empty
 
+        withParentFieldKey =
+            Field.withParentFieldKey parentKey
+
         regionValidation =
             if Dict.isEmpty availableRegions then
                 []
 
             else
-                [ Validation.validateMaybeField (Validation.localizeRequired "Region") (parentField Region) .region ]
+                [ Validation.validateMaybeField (Validation.localizeRequired (withParentFieldKey ("Region." ++ countryModifier data))) (parentField Region) .region ]
     in
     Validation.validateField
-        ([ Validation.validateStringField (Validation.localizeRequired "Address") (parentField Address) .address1
-         , Validation.validateMaybeField (Validation.localizeRequired "Country") (parentField Country) .country
-         , Validation.validateStringField (Validation.localizeRequired "City") (parentField City) .city
-         , Validation.validateStringField (Validation.localizeRequired "ZipCode") (parentField ZipCode) .postalCode
-         , Validation.validateMaybeField (Validation.localizeRequired "AddressType") (parentField AddressType) .addressType
+        ([ Validation.validateStringField (Validation.localizeRequired (withParentFieldKey "Address")) (parentField Address) .address1
+         , Validation.validateMaybeField (Validation.localizeRequired (withParentFieldKey "Country")) (parentField Country) .country
+         , Validation.validateStringField (Validation.localizeRequired (withParentFieldKey "City")) (parentField City) .city
+         , Validation.validateStringField (Validation.localizeRequired (withParentFieldKey ("ZipCode." ++ countryModifier data))) (parentField ZipCode) .postalCode
+         , Validation.validateMaybeField (Validation.localizeRequired (withParentFieldKey "AddressType")) (parentField AddressType) .addressType
          ]
             ++ regionValidation
             ++ additionalValidations
@@ -971,3 +976,12 @@ toAllRegions regionsCountry =
         |> List.map Dict.toList
         |> List.concat
         |> Dict.fromList
+
+
+countryModifier : { a | country : Maybe ListItem } -> String
+countryModifier addressData =
+    if (addressData.country |> Maybe.map Tuple.second |> Maybe.withDefault "") == "United States" then
+        "US"
+
+    else
+        "Other"

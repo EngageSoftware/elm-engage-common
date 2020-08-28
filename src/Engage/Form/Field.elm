@@ -6,7 +6,7 @@ module Engage.Form.Field exposing
     , dropdownField, dropdownFieldValueSort, dropdownFieldWithAttributes
     , phoneField
     , radioListField
-    , localizeHelp, localizeLabel, localizeInvalid
+    , localizeHelp, localizeLabel, localizeInvalid, withParentFieldKey
     , validate, fieldId
     )
 
@@ -52,7 +52,7 @@ Form fields with validation
 
 ## Localization helpers
 
-@docs localizeHelp, localizeLabel, localizeInvalid
+@docs localizeHelp, localizeLabel, localizeInvalid, withParentFieldKey
 
 
 ## Validation helpers
@@ -652,3 +652,9 @@ localizeHelp ({ fieldKey } as args) =
 localizeInvalid : { a | fieldKey : String, localization : Localization } -> String
 localizeInvalid ({ fieldKey } as args) =
     Localization.localizeStringWithDefault "" (fieldKey ++ ".invalid") args
+
+
+{-| Get a field key with the parent field key
+-}
+withParentFieldKey parentKey fieldKey =
+    parentKey ++ " " ++ fieldKey
