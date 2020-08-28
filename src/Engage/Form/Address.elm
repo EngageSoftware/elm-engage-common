@@ -978,6 +978,8 @@ toAllRegions regionsCountry =
         |> Dict.fromList
 
 
+{-| Get the country modifier
+-}
 countryModifier : { a | country : Maybe ListItem } -> String
 countryModifier addressData =
     if (addressData.country |> Maybe.map Tuple.second |> Maybe.withDefault "") == "United States" then

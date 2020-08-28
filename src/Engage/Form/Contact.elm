@@ -7,7 +7,7 @@ module Engage.Form.Contact exposing
 
 @docs Attribute, Msg, State, ValidationField
 
-@docs completedView, completedViewWithAdditional, contactTypes, countries, countriesToItems, form, initialState, isEmpty, isValid, regions, regionsToItems, required, toAllRegions, update, validateAll, validateAllWith, validateFieldWith, view
+@docs completedView, completedViewWithAdditional, contactTypes, countries, countriesToItems, form, initialState, isEmpty, isValid, regions, regionsToItems, required, update, validateAll, validateAllWith, validateFieldWith, view
 
 -}
 

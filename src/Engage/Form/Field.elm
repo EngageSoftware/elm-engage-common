@@ -656,5 +656,6 @@ localizeInvalid ({ fieldKey } as args) =
 
 {-| Get a field key with the parent field key
 -}
+withParentFieldKey : String -> String -> String
 withParentFieldKey parentKey fieldKey =
     parentKey ++ " " ++ fieldKey
