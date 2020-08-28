@@ -50,6 +50,7 @@
         "Engage.Form.Contact",
         "Engage.Form.Field",
         "Engage.Form.Gender",
+        "Engage.Form.Password",
         "Engage.Entity.Address",
         "Engage.Entity.Account",
         "Engage.Entity.Participant",

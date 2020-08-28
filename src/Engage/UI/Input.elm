@@ -309,6 +309,7 @@ textWithAttributes { namespace, id, labelText, helpText, onChange, status, requi
         , namespace = namespace
         , requiredText = requiredText
         , inputType = Nothing
+        , hasFocus = Nothing
         }
         attributes
         state
@@ -341,6 +342,7 @@ textWithSize { namespace, id, labelText, helpText, onChange, status, size, requi
         , namespace = namespace
         , requiredText = requiredText
         , inputType = Nothing
+        , hasFocus = Nothing
         }
         []
         state
@@ -359,12 +361,13 @@ inputWithSizeAndAttributes :
     , size : Size
     , requiredText : Maybe String
     , inputType : Maybe String
+    , hasFocus : Maybe (Bool -> msg)
     }
     -> List (Html.Attribute msg)
     -> State
     -> String
     -> Html msg
-inputWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, status, size, requiredText, inputType } attributes state value =
+inputWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, status, size, requiredText, inputType, hasFocus } attributes state value =
     let
         class =
             namespace
@@ -392,7 +395,7 @@ inputWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, statu
         }
         stateData
         (Input.Text.input
-            { options | type_ = inputType |> Maybe.withDefault "text" }
+            { options | type_ = inputType |> Maybe.withDefault "text", hasFocus = hasFocus }
             (attributes ++ [ Html.Attributes.id id, class [ "Input-" ++ getSizeString size ] ])
             value
         )
@@ -409,6 +412,7 @@ password :
     , status : Status
     , requiredText : Maybe String
     , strengthMeter : Maybe (List String)
+    , hasFocus : Maybe (Bool -> msg)
     }
     -> State
     -> String
@@ -428,12 +432,13 @@ passwordWithAttributes :
     , status : Status
     , requiredText : Maybe String
     , strengthMeter : Maybe (List String)
+    , hasFocus : Maybe (Bool -> msg)
     }
     -> List (Html.Attribute msg)
     -> State
     -> String
     -> Html msg
-passwordWithAttributes { namespace, id, labelText, helpText, onChange, status, requiredText, strengthMeter } attributes state value =
+passwordWithAttributes { namespace, id, labelText, helpText, onChange, status, requiredText, strengthMeter, hasFocus } attributes state value =
     let
         class =
             namespace
@@ -463,11 +468,12 @@ passwordWithAttributes { namespace, id, labelText, helpText, onChange, status, r
             , namespace = namespace
             , requiredText = requiredText
             , inputType = Just "password"
+            , hasFocus = hasFocus
             }
             attributes
             state
             value
-            :: (if Maybe.Extra.isJust strengthMeter then
+            :: (if Maybe.Extra.isJust strengthMeter && (String.isEmpty value |> not) then
                     [ Html.meter
                         [ Html.Attributes.max "4"
                         , Html.Attributes.value (String.fromInt passwordScore)

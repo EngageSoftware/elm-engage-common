@@ -75,7 +75,7 @@ import Html exposing (Html)
 
 type InputField field msg
     = TextField (InputFieldArgs field msg {})
-    | PasswordField (InputFieldArgs field msg PasswordFieldArgs)
+    | PasswordField (InputFieldArgs field msg (PasswordFieldArgs field msg))
 
 
 type alias InputFieldArgs field msg args =
@@ -99,8 +99,9 @@ inputFieldArgs inputField =
             { namespace = namespace, field = field, fieldKey = fieldKey, onChange = onChange, localization = localization, required = required }
 
 
-type alias PasswordFieldArgs =
+type alias PasswordFieldArgs field msg =
     { strengthMeter : Maybe (List String)
+    , hasFocus : Maybe (ValidationErrors field -> Bool -> msg)
     }
 
 
@@ -188,14 +189,14 @@ textFieldWithAttributes args validations attributes state value =
 
 {-| Get the password field view
 -}
-passwordField : InputFieldArgs field msg PasswordFieldArgs -> ValidationErrors field -> Input.State -> String -> Html msg
+passwordField : InputFieldArgs field msg (PasswordFieldArgs field msg) -> ValidationErrors field -> Input.State -> String -> Html msg
 passwordField args validations state value =
     passwordFieldWithAttributes args validations [] state value
 
 
 {-| Get the password field with attributes view
 -}
-passwordFieldWithAttributes : InputFieldArgs field msg PasswordFieldArgs -> ValidationErrors field -> List (Html.Attribute msg) -> Input.State -> String -> Html msg
+passwordFieldWithAttributes : InputFieldArgs field msg (PasswordFieldArgs field msg) -> ValidationErrors field -> List (Html.Attribute msg) -> Input.State -> String -> Html msg
 passwordFieldWithAttributes args validations attributes state value =
     inputFieldWithAttributes (PasswordField args) validations attributes state value
 
@@ -234,6 +235,10 @@ inputFieldWithAttributes inputField validations attributes state value =
     in
     case inputField of
         PasswordField passwordArgs ->
+            let
+                hasFocus =
+                    passwordArgs.hasFocus |> Maybe.map (\focus -> focus validations)
+            in
             Input.passwordWithAttributes
                 { namespace = Namespace.engagecore
                 , id = fieldId args.namespace args.fieldKey
@@ -243,6 +248,7 @@ inputFieldWithAttributes inputField validations attributes state value =
                 , onChange = onChange
                 , status = Validation.fieldError args.localization args.field validations
                 , strengthMeter = passwordArgs.strengthMeter
+                , hasFocus = hasFocus
                 }
                 attributes
                 state
