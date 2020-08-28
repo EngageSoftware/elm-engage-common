@@ -1,11 +1,8 @@
-module Engage.Form.Password exposing
-    ( PasswordSettings, passwordSettingsDecoder
-    , validatePasswordField
-    )
+module Engage.Form.Password exposing (PasswordSettings, passwordSettingsDecoder, validatePasswordField)
 
 {-| Form.Password
 
-@docs PasswordSettings, passwordSettingsDecoder
+@docs PasswordSettings, passwordSettingsDecoder, validatePasswordField
 
 -}
 
