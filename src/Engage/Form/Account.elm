@@ -1,18 +1,19 @@
 module Engage.Form.Account exposing
     ( Attribute
-    , address, edit, name, none, phone, view
+    , address, edit, name, none, phone, phoneNumber, view
     )
 
 {-| Form.Account
 
 @docs Attribute
 
-@docs address, edit, name, none, phone, view
+@docs address, edit, name, none, phone, phoneNumber, view
 
 -}
 
 import Engage.CssHelpers
 import Engage.Entity.Address exposing (Address, Countries, RegionsCountry)
+import Engage.Entity.PhoneNumber as PhoneNumber exposing (PhoneNumber)
 import Engage.Form.Address
 import Engage.Form.FormAction as FormAction
 import Engage.Html.Extra as HtmlExtra
@@ -23,12 +24,14 @@ import Engage.UI.Button as Button
 import Engage.UI.Info as Info
 import Html exposing (..)
 import Html.Events exposing (onClick)
+import IntlPhoneInput.Config
 import String
 
 
 type alias InternalAttribute msg =
     { name : Maybe String
     , phone : Maybe ( String, String )
+    , phoneNumber : Maybe ( String, PhoneNumber )
     , address : Maybe ( String, Address )
     , edit : Maybe ( String, msg )
     }
@@ -38,6 +41,7 @@ emptyAttribute : InternalAttribute msg
 emptyAttribute =
     { name = Nothing
     , phone = Nothing
+    , phoneNumber = Nothing
     , address = Nothing
     , edit = Nothing
     }
@@ -75,6 +79,13 @@ address label addressData =
 phone : String -> String -> Attribute msg
 phone label text =
     \attribute -> { attribute | phone = Just ( label, text ) }
+
+
+{-| Get the phone number Attribute
+-}
+phoneNumber : String -> PhoneNumber -> Attribute msg
+phoneNumber label phoneData =
+    \attribute -> { attribute | phoneNumber = Just ( label, phoneData ) }
 
 
 {-| Get the edit Attribute
@@ -153,8 +164,8 @@ phoneView namespace attribute =
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
     in
-    attribute.phone
-        |> Maybe.map (\( label, phoneValue ) -> div [ class [ "AccountPhone" ] ] [ Info.phone namespace (Info.getLabel label) phoneValue ])
+    attribute.phoneNumber
+        |> Maybe.map (\( label, phoneValue ) -> div [ class [ "AccountPhone" ] ] [ Info.phone namespace (Info.getLabel label) (PhoneNumber.format phoneConfig phoneValue) ])
         |> Maybe.withDefault HtmlExtra.none
 
 
@@ -181,3 +192,8 @@ actionView namespace attribute =
             |> Maybe.withDefault HtmlExtra.none
         ]
         []
+
+
+phoneConfig : IntlPhoneInput.Config.Config ()
+phoneConfig =
+    IntlPhoneInput.Config.config "accountPhone" (\_ _ _ -> ())
