@@ -1,7 +1,7 @@
 module Engage.Form.Address exposing
     ( Attribute, Msg, State, ValidationField(..)
     , addressTypes, completedView, completedViewWithAdditional, countriesToItems, form, initialState, isEmpty, isValid, regionsToItems, toAllRegions, update, validateAll, validateAllWith, validateFieldWith, view
-    , countries, hideFax, hidePrimaryAddressCheckbox, hideWebsite, regions, required, showIncludeInExternalDirectory, showIncludeInInternalDirectory, phoneNumberRequired
+    , countries, hideFax, hideAddressName, hideAddressPhone, hidePrimaryAddressCheckbox, hideWebsite, regions, required, showIncludeInExternalDirectory, showIncludeInInternalDirectory, phoneNumberRequired
     , countryModifier
     )
 
@@ -14,7 +14,7 @@ module Engage.Form.Address exposing
 
 # Attributes
 
-@docs countries, hideFax, hidePrimaryAddressCheckbox, hideWebsite, regions, required, showIncludeInExternalDirectory, showIncludeInInternalDirectory, phoneNumberRequired
+@docs countries, hideFax, hideAddressName, hideAddressPhone, hidePrimaryAddressCheckbox, hideWebsite, regions, required, showIncludeInExternalDirectory, showIncludeInInternalDirectory, phoneNumberRequired
 
 @docs countryModifier
 
@@ -137,6 +137,7 @@ type alias InternalAttribute =
     , addressTypes : Maybe AddressTypes
     , hideFax : Bool
     , hideWebsite : Bool
+    , hideAddressName : Bool
     , hideAddressPhone : Bool
     , hidePrimaryAddressCheckbox : Bool
     , showIncludeInInternalDirectory : Bool
@@ -153,6 +154,7 @@ emptyAttribute =
     , addressTypes = Nothing
     , hideFax = False
     , hideWebsite = False
+    , hideAddressName = False
     , hideAddressPhone = False
     , hidePrimaryAddressCheckbox = False
     , showIncludeInInternalDirectory = False
@@ -213,6 +215,13 @@ hideFax =
 hideWebsite : Attribute
 hideWebsite =
     \attribute -> { attribute | hideWebsite = True }
+
+
+{-| Get the hide address name Attribute
+-}
+hideAddressName : Attribute
+hideAddressName =
+    \attribute -> { attribute | hideAddressName = True }
 
 
 {-| Get the hide address phone Attribute
@@ -294,7 +303,7 @@ completedView args data =
 {-| Get the completed view with additional
 -}
 completedViewWithAdditional : { a | namespace : Namespace, localization : Localization } -> List String -> Address -> Html msg
-completedViewWithAdditional args additionalText data =
+completedViewWithAdditional args additionalText address =
     let
         class =
             args.namespace
@@ -302,19 +311,19 @@ completedViewWithAdditional args additionalText data =
                 |> Engage.CssHelpers.withNamespace
     in
     div [ class [ "Sections" ] ]
-        [ if isEmpty data then
+        [ if isEmpty address then
             ul [] [ li [] [ Localization.localizeText "N/A" args ] ]
 
           else
             ul []
-                ([ if String.isEmpty data.name then
+                ([ if String.isEmpty address.name then
                     text ""
 
                    else
-                    div [] [ text data.name ]
-                 , li [] [ text <| data.address1 ++ " " ++ data.address2 ]
-                 , li [] [ text <| data.city ++ " " ++ (Maybe.withDefault "" <| Maybe.map Tuple.second <| data.region) ++ ", " ++ data.postalCode ]
-                 , li [] [ text <| Maybe.withDefault "" <| Maybe.map Tuple.second <| data.country ]
+                    div [] [ text address.name ]
+                 , li [] [ text <| address.address1 ++ " " ++ address.address2 ]
+                 , li [] [ text <| address.city ++ " " ++ (Maybe.withDefault "" <| Maybe.map Tuple.second <| address.region) ++ ", " ++ address.postalCode ]
+                 , li [] [ text <| Maybe.withDefault "" <| Maybe.map Tuple.second <| address.country ]
                  ]
                     ++ List.map (\txt -> li [] [ text txt ]) additionalText
                 )
@@ -347,6 +356,7 @@ form originalNamespace localization field parentKey attributes (State state) hid
             , addressTypes = Nothing
             , hideFax = hideOrShow.fax == Hide
             , hideWebsite = hideOrShow.website == Hide
+            , hideAddressName = hideOrShow.addressName == Hide
             , hideAddressPhone = hideOrShow.addressPhone == Hide
             , hidePrimaryAddressCheckbox = False
             , showIncludeInInternalDirectory = False
@@ -420,18 +430,22 @@ form originalNamespace localization field parentKey attributes (State state) hid
                 )
             |> Maybe.withDefault HtmlExtra.none
         , div [ class [ "FieldGroup" ], addressNameDisplayStyle ]
-            [ Field.textFieldWithAttributes
-                { namespace = namespace
-                , onChange = NameUpdated
-                , localization = localization
-                , required = False
-                , field = field Name
-                , fieldKey = withParentFieldKey "Name"
-                }
-                state.validations
-                [ Html.Attributes.name "address-name", Html.Attributes.attribute "autocomplete" "address-name" ]
-                state.name
-                addressData.name
+            [ attribute.hideAddressName
+                |> Engage.Bool.true HtmlExtra.none
+                |> Engage.Bool.false
+                    (Field.textFieldWithAttributes
+                        { namespace = namespace
+                        , onChange = NameUpdated
+                        , localization = localization
+                        , required = False
+                        , field = field Name
+                        , fieldKey = withParentFieldKey "Name"
+                        }
+                        state.validations
+                        [ Html.Attributes.name "address-name", Html.Attributes.attribute "autocomplete" "address-name" ]
+                        state.name
+                        addressData.name
+                    )
             ]
         , div [ class [ "FieldGroup" ] ]
             [ Field.textFieldWithAttributes
