@@ -75,6 +75,7 @@ type alias AddressTypes =
 type alias RegionData =
     { regionId : Int
     , regionName : String
+    , regionCode : String
     }
 
 
@@ -254,6 +255,7 @@ regionDataDecoder =
     JD.succeed RegionData
         |> JDP.required "regionId" JD.int
         |> JDP.required "regionName" JD.string
+        |> JDP.required "regionCode" JD.string
 
 
 {-| The Address encoder
