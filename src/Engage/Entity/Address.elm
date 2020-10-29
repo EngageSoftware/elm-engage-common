@@ -48,7 +48,8 @@ type alias Countries =
 type alias CountryData =
     { countryId : Int
     , countryName : String
-    , countryIsoCode : String
+    , countryIsoAlpha2Code : String
+    , countryIsoAlpha3Code : String
     }
 
 
@@ -221,7 +222,8 @@ countryDataDecoder =
     JD.succeed CountryData
         |> JDP.required "countryId" JD.int
         |> JDP.required "countryName" JD.string
-        |> JDP.required "countryIsoCode" JD.string
+        |> JDP.required "countryIsoAlpha2Code" JD.string
+        |> JDP.required "countryIsoAlpha3Code" JD.string
 
 
 {-| The RegionsCountry decoder
