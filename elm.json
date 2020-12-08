@@ -78,7 +78,6 @@
         "NoRedInk/elm-json-decode-pipeline": "1.0.0 <= v < 2.0.0",
         "NoRedInk/elm-sortable-table": "1.0.0 <= v < 2.0.0",
         "SiriusStarr/elm-password-strength": "1.0.1 <= v < 2.0.0",
-        "Skinney/murmur3": "2.0.8 <= v < 3.0.0",
         "WhileTruu/elm-smooth-scroll": "1.0.1 <= v < 2.0.0",
         "abadi199/elm-creditcard": "10.0.1 <= v < 11.0.0",
         "abadi199/elm-input-extra": "5.2.3 <= v < 6.0.0",
@@ -109,7 +108,7 @@
         "miyamoen/select-list": "4.1.0 <= v < 5.0.0",
         "noahzgordon/elm-color-extra": "1.0.2 <= v < 2.0.0",
         "ohanhi/remotedata-http": "4.0.0 <= v < 5.0.0",
-        "rtfeldman/elm-css": "15.1.0 <= v < 17.0.0",
+        "rtfeldman/elm-css": "16.1.0 <= v < 17.0.0",
         "rtfeldman/elm-validate": "4.0.1 <= v < 5.0.0"
     },
     "test-dependencies": {}
