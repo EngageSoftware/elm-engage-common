@@ -60,131 +60,131 @@ fieldLabelClass field =
 fieldForm : Args a msg -> ( Form, Section, FieldGroup ) -> Field -> Html msg
 fieldForm args ( form, section, fieldGroup ) field =
     Html.div [ class [ fieldClass form section fieldGroup field, fieldLabelClass field ] ]
-        [ case field.fieldType of
-            TextBox { state } ->
-                textBox
-                    args
-                    state
-                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
+        [ case field.disable of
+            Hidden ->
+                HtmlExtra.none
 
-            LargeTextBox { state } ->
-                textBox
-                    args
-                    state
-                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
+            Disabled ->
+                HtmlExtra.none
 
-            TextArea { state } ->
-                textArea
-                    args
-                    state
-                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
+            None ->
+                case field.fieldType of
+                    TextBox { state } ->
+                        textBox
+                            args
+                            state
+                            { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
-            File { state } ->
-                file
-                    args
-                    state
-                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
+                    LargeTextBox { state } ->
+                        textBox
+                            args
+                            state
+                            { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
-            CheckBox { state } ->
-                checkbox
-                    args
-                    state
-                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
+                    TextArea { state } ->
+                        textArea
+                            args
+                            state
+                            { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
-            DropDown { state, fieldChoices } ->
-                dropdown
-                    { config = args.config
-                    , validations = args.validations
-                    , fieldChoices = fieldChoices
-                    }
-                    state
-                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
+                    File { state } ->
+                        file
+                            args
+                            state
+                            { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
-            RadioList { state, fieldChoices } ->
-                radioList
-                    { config = args.config
-                    , validations = args.validations
-                    , fieldChoices = fieldChoices
-                    }
-                    state
-                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
+                    CheckBox { state } ->
+                        checkbox
+                            args
+                            state
+                            { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
-            CheckBoxList { state, fieldChoices } ->
-                checkBoxList
-                    { config = args.config
-                    , validations = args.validations
-                    , fieldChoices = fieldChoices
-                    }
-                    state
-                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
+                    DropDown { state, fieldChoices } ->
+                        dropdown
+                            { config = args.config
+                            , validations = args.validations
+                            , fieldChoices = fieldChoices
+                            }
+                            state
+                            { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
-            Quantity { state } ->
-                number
-                    { config = args.config
-                    , validations = args.validations
-                    , maxValue = field.valueMax |> String.toInt
-                    , minValue = field.valueMin |> String.toInt
-                    }
-                    state
-                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
+                    RadioList { state, fieldChoices } ->
+                        radioList
+                            { config = args.config
+                            , validations = args.validations
+                            , fieldChoices = fieldChoices
+                            }
+                            state
+                            { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
-            Date { state } ->
-                datepicker
-                    args
-                    state
-                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
+                    CheckBoxList { state, fieldChoices } ->
+                        checkBoxList
+                            { config = args.config
+                            , validations = args.validations
+                            , fieldChoices = fieldChoices
+                            }
+                            state
+                            { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
-            Email ->
-                Html.text "email is not implemented"
+                    Quantity { state } ->
+                        number
+                            { config = args.config
+                            , validations = args.validations
+                            , maxValue = field.valueMax |> String.toInt
+                            , minValue = field.valueMin |> String.toInt
+                            }
+                            state
+                            { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
-            Phone ->
-                Html.text "phone is not implemented"
+                    Date { state } ->
+                        datepicker
+                            args
+                            state
+                            { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
-            ZipCode ->
-                Html.text "zip code is not implemented"
+                    Email ->
+                        Html.text "email is not implemented"
 
-            USState ->
-                Html.text "us state is not implemented"
+                    Phone ->
+                        Html.text "phone is not implemented"
 
-            Country { state } ->
-                countryDropdown
-                    args
-                    state
-                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
+                    ZipCode ->
+                        Html.text "zip code is not implemented"
 
-            Region { state } ->
-                regionDropdown
-                    args
-                    state
-                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
+                    USState ->
+                        Html.text "us state is not implemented"
 
-            Text ->
-                text field
+                    Country { state } ->
+                        countryDropdown
+                            args
+                            state
+                            { form = form, section = section, fieldGroup = fieldGroup, field = field }
 
-            StaticForm staticFormType ->
-                staticForm
-                    args
-                    { form = form, section = section, fieldGroup = fieldGroup, field = field }
-                    staticFormType
+                    Region { state } ->
+                        regionDropdown
+                            args
+                            state
+                            { form = form, section = section, fieldGroup = fieldGroup, field = field }
+
+                    Text ->
+                        text field
+
+                    StaticForm staticFormType ->
+                        staticForm
+                            args
+                            { form = form, section = section, fieldGroup = fieldGroup, field = field }
+                            staticFormType
         ]
 
 
 staticForm : Args a msg -> FieldData -> StaticFormType -> Html msg
 staticForm args { form, section, fieldGroup, field } staticFormType =
-    case field.disable of
-        Hidden ->
-            HtmlExtra.none
+    case staticFormType of
+        ParticipantForm ->
+            Html.text <| "ParticipantForm"
 
-        Disabled ->
-            HtmlExtra.none
-
-        None ->
-            case staticFormType of
-                ParticipantForm ->
-                    Html.text <| "ParticipantForm"
-
-                MembershipTypeList data ->
-                    membershipTypeList args { form = form, section = section, fieldGroup = fieldGroup, field = field } data
+        MembershipTypeList data ->
+            membershipTypeList args { form = form, section = section, fieldGroup = fieldGroup, field = field } data
 
 
 membershipTypeList : Args a msg -> FieldData -> { membershipTypeList : List MembershipTypeList.MembershipType, state : Accordion.State, entry : Maybe MembershipTypeList.MembershipType } -> Html msg
@@ -232,28 +232,16 @@ membershipTypeList args { form, section, fieldGroup, field } membership =
 
 text : Field -> Html msg
 text field =
-    let
-        defaultOptions =
-            Markdown.defaultOptions
-    in
-    case field.disable of
-        Hidden ->
-            HtmlExtra.none
+    Html.p []
+        [ Markdown.toHtml
+            []
+            (if String.isEmpty field.description then
+                field.label
 
-        Disabled ->
-            HtmlExtra.none
-
-        None ->
-            Html.p []
-                [ Markdown.toHtml
-                    []
-                    (if String.isEmpty field.description then
-                        field.label
-
-                     else
-                        field.description
-                    )
-                ]
+             else
+                field.description
+            )
+        ]
 
 
 type alias Args a msg =
@@ -641,9 +629,6 @@ viewCompletedEntries { config } { fields } =
 file : Args a msg -> Input.State -> FieldData -> Html msg
 file { config, validations } state { form, section, fieldGroup, field } =
     let
-        id =
-            Field.namespacedId field
-
         domId =
             Field.namespacedId field
 
