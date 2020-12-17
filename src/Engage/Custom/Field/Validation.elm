@@ -1,4 +1,4 @@
-module Engage.Custom.Field.Validation exposing (errorMessage, validateAllFieldGroup, validateCheckBox, validateCheckBoxList, validateDate, validateDropDown, validateEmail, validateField, validateFieldGroup, validateFile, validateNumber, validatePhone, validateQuantity, validateRadioList, validateText, validateUSState, validateZipCode)
+module Engage.Custom.Field.Validation exposing (errorMessage, validateAllFieldGroup, validateFieldGroup)
 
 import Dict
 import Engage.Custom.Field.Helpers as Helpers
@@ -24,7 +24,7 @@ validateAllFieldGroup fieldSet =
 
 validateField : { a | fieldId : Int } -> Field -> ValidationErrors { fieldId : Int }
 validateField { fieldId } field =
-    if field.fieldId == fieldId then
+    if field.fieldId == fieldId && (field.disable == None && field.required) then
         case field.fieldType of
             TextBox _ ->
                 validateText field
@@ -86,33 +86,23 @@ validateField { fieldId } field =
 
 validateCheckBoxList : Field -> ValidationErrors { fieldId : Int }
 validateCheckBoxList field =
-    case field.required of
-        True ->
-            let
-                values =
-                    Helpers.getValues field
-                        |> Maybe.map Set.toList
-                        |> Maybe.withDefault []
-            in
-            Validation.validateField [ Validation.validateListNotEmptyField (errorMessage field) { fieldId = field.fieldId } (always values) ] ()
-
-        False ->
-            []
+    let
+        values =
+            Helpers.getValues field
+                |> Maybe.map Set.toList
+                |> Maybe.withDefault []
+    in
+    Validation.validateField [ Validation.validateListNotEmptyField (errorMessage field) { fieldId = field.fieldId } (always values) ] ()
 
 
 validateText : Field -> ValidationErrors { fieldId : Int }
 validateText field =
-    case field.required of
-        True ->
-            let
-                value =
-                    Helpers.getValue field
-                        |> Maybe.andThen List.head
-            in
-            Validation.validateField [ Validation.validateMaybeStringField (errorMessage field) { fieldId = field.fieldId } (always value) ] ()
-
-        False ->
-            []
+    let
+        value =
+            Helpers.getValue field
+                |> Maybe.andThen List.head
+    in
+    Validation.validateField [ Validation.validateMaybeStringField (errorMessage field) { fieldId = field.fieldId } (always value) ] ()
 
 
 errorMessage : Field -> String
@@ -126,36 +116,26 @@ errorMessage field =
 
 validateFile : Field -> ValidationErrors { fieldId : Int }
 validateFile field =
-    case field.required of
-        True ->
-            let
-                fileInfo =
-                    Helpers.getFileInfo field
-                        |> Maybe.map .name
-            in
-            Validation.validateField
-                [ Validation.validateMaybeStringField field.errorMessage
-                    { fieldId = field.fieldId }
-                    (always fileInfo)
-                ]
-                ()
-
-        False ->
-            []
+    let
+        fileInfo =
+            Helpers.getFileInfo field
+                |> Maybe.map .name
+    in
+    Validation.validateField
+        [ Validation.validateMaybeStringField field.errorMessage
+            { fieldId = field.fieldId }
+            (always fileInfo)
+        ]
+        ()
 
 
 validateCheckBox : Field -> ValidationErrors { fieldId : Int }
 validateCheckBox field =
-    case field.required of
-        True ->
-            let
-                value =
-                    Helpers.getBoolValue field |> Maybe.withDefault False
-            in
-            Validation.validateField [ Validation.validateBoolField field.errorMessage { fieldId = field.fieldId } (always value) ] ()
-
-        False ->
-            []
+    let
+        value =
+            Helpers.getBoolValue field |> Maybe.withDefault False
+    in
+    Validation.validateField [ Validation.validateBoolField field.errorMessage { fieldId = field.fieldId } (always value) ] ()
 
 
 validateDropDown : Field -> ValidationErrors { fieldId : Int }
