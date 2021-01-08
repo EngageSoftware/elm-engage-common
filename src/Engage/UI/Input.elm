@@ -234,12 +234,19 @@ date { namespace, id, labelText, helpText, onChange, status, requiredText, onFoc
         safeId =
             Engage.String.toSafeId id
 
-        options =
-            { onInput = \dateString -> onChange state (dateString |> Date.fromIsoString |> Result.toMaybe)
-            , type_ = "date"
-            , hasFocus = onFocusChange
-            , maxLength = Nothing
-            }
+        onFocusAttribute =
+            onFocusChange
+                |> Maybe.map (\f -> f True)
+                |> Maybe.map onFocus
+                |> Maybe.map List.singleton
+                |> Maybe.withDefault []
+
+        onBlurAttribute =
+            onFocusChange
+                |> Maybe.map (\f -> f False)
+                |> Maybe.map onBlur
+                |> Maybe.map List.singleton
+                |> Maybe.withDefault []
 
         stateData =
             unwrap state
@@ -258,10 +265,17 @@ date { namespace, id, labelText, helpText, onChange, status, requiredText, onFoc
         , requiredText = requiredText
         }
         stateData
-        (Input.Text.input
-            options
-            [ Html.Attributes.id id, class [ "Input-Large" ] ]
-            (dateValue |> Maybe.map Date.toIsoString |> Maybe.withDefault "")
+        (Html.input
+            ([ Html.Attributes.id id
+             , class [ "Input-Large" ]
+             , Html.Attributes.attribute "type" "date"
+             , Html.Attributes.value (dateValue |> Maybe.map Date.toIsoString |> Maybe.withDefault "")
+             , Html.Events.onInput (\dateString -> onChange state (dateString |> Date.fromIsoString |> Result.toMaybe))
+             ]
+                |> List.append onFocusAttribute
+                |> List.append onBlurAttribute
+            )
+            []
         )
 
 
