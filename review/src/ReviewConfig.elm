@@ -14,9 +14,11 @@ when inside the directory containing this file.
 import Review.Rule exposing (Rule)
 import NoUnused.Dependencies
 import NoUnused.Exports
+import NoUnused.Modules
 
 config : List Rule
 config =
     [ NoUnused.Dependencies.rule
     , NoUnused.Exports.rule
+    , NoUnused.Modules.rule
     ]
