@@ -1,4 +1,4 @@
-module Engage.Custom.Field.Helpers exposing (fieldGroupHasAnswer, fieldHasAnswer, getBoolValue, getFileInfo, getProgressPercentage, getRelativeOrder, getStaticFormTypeText, getText, getValue, getValues, intToDisable, isCountryField, isCountryFieldType, isFileField, isFileFieldType, isRegionField, isRegionFieldType, isSameType, shouldUpdate, toCheckBoxEntryData, toDropdownItem, toDropdownItems, toEntryData, toError, toFileEntryData, toRadioItem, toRadioItems, updateAccordionState, updateDateState, updateDropdownState, updateFieldTypeState, updateInputState, updateOptionsToBool)
+module Engage.Custom.Field.Helpers exposing (fieldGroupHasAnswer, getBoolValue, getFileInfo, getRelativeOrder, getText, getValue, getValues, isCountryField, isCountryFieldType, isFileField, isRegionField, shouldUpdate, toDropdownItems, toError, toRadioItems, updateAccordionState, updateDateState, updateDropdownState, updateFieldTypeState, updateInputState)
 
 import Date
 import Dict

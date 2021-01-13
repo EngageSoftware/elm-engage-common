@@ -1,7 +1,6 @@
 module Engage.UI.Tooltip exposing
     ( State(..)
     , initialState
-    , not
     , tooltip
     )
 

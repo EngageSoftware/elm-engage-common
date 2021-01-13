@@ -1,4 +1,4 @@
-module Engage.UI.Link exposing (custom, standard)
+module Engage.UI.Link exposing (standard)
 
 import Engage.CssHelpers
 import Engage.Namespace as Namespace exposing (Namespace)

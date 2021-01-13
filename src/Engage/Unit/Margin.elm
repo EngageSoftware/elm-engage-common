@@ -1,4 +1,4 @@
-module Engage.Unit.Margin exposing (Margin(..), fromList, margin, margin2, margin3, margin4, notSet, toCss, toList)
+module Engage.Unit.Margin exposing (Margin(..), fromList, margin, margin2, margin4, notSet, toCss, toList)
 
 import Css
 import Engage.Unit.Size as Size exposing (..)

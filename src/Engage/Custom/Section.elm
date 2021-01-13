@@ -3,7 +3,6 @@ module Engage.Custom.Section exposing
     , completedView
     , findField
     , form
-    , sectionDecoder
     , sectionTupleDecoder
     , update
     , validate

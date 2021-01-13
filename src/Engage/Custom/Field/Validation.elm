@@ -1,4 +1,4 @@
-module Engage.Custom.Field.Validation exposing (errorMessage, validateAllFieldGroup, validateFieldGroup)
+module Engage.Custom.Field.Validation exposing (validateAllFieldGroup, validateFieldGroup)
 
 import Dict
 import Engage.Custom.Field.Helpers as Helpers

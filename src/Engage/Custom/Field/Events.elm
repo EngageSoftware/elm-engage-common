@@ -1,4 +1,4 @@
-module Engage.Custom.Field.Events exposing (onChangeHandler, onCheckHandler, onDateChangeHandler, onFileSelectHandler, onIntInputHandler, onMembershipTypeHandler, onMultipleAnswerChangeHandler)
+module Engage.Custom.Field.Events exposing (onChangeHandler, onCheckHandler, onDateChangeHandler, onFileSelectHandler, onMembershipTypeHandler, onMultipleAnswerChangeHandler)
 
 import Date exposing (Date)
 import Engage.Custom.Types exposing (..)
