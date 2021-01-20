@@ -16,5 +16,8 @@ jobs:
     - name: Setup Elm
       uses: justgook/setup-elm@1.2.0
     
+    - name: Run Elm Review
+      run: elm-review
+
     - name: Build the project
       run: elm make
