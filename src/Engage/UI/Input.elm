@@ -387,14 +387,25 @@ inputWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, statu
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
 
-        options =
-            Input.Text.defaultOptions (onChange { onlyStateChange = False } state)
-
         stateData =
             unwrap state
 
         onValidationStateChange validationState =
             onChange { onlyStateChange = True } (State validationState) value
+
+        onFocusAttribute =
+            hasFocus
+                |> Maybe.map (\f -> f True)
+                |> Maybe.map onFocus
+                |> Maybe.map List.singleton
+                |> Maybe.withDefault []
+
+        onBlurAttribute =
+            hasFocus
+                |> Maybe.map (\f -> f False)
+                |> Maybe.map onBlur
+                |> Maybe.map List.singleton
+                |> Maybe.withDefault []
     in
     FormControl.formControl
         { namespace = namespace
@@ -407,10 +418,18 @@ inputWithSizeAndAttributes { namespace, id, labelText, helpText, onChange, statu
         , requiredText = requiredText
         }
         stateData
-        (Input.Text.input
-            { options | type_ = inputType |> Maybe.withDefault "text", hasFocus = hasFocus }
-            (attributes ++ [ Html.Attributes.id id, class [ "Input-" ++ getSizeString size ] ])
-            value
+        (Html.input
+            ([ type_ (inputType |> Maybe.withDefault "text")
+             , onInput (onChange { onlyStateChange = False } state)
+             , Html.Attributes.value value
+             , Html.Attributes.id id
+             , class [ "Input-" ++ getSizeString size ]
+             ]
+                ++ attributes
+                ++ onFocusAttribute
+                ++ onBlurAttribute
+            )
+            []
         )
 
 
