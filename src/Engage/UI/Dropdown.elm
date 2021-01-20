@@ -13,13 +13,13 @@ module Engage.UI.Dropdown exposing
 
 import Dropdown
 import Engage.CssHelpers
-import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Class(..), Size(..), getSizeString)
 import Engage.UI.Error as Error exposing (Status(..))
 import Engage.UI.Message as Message
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Extra
 
 
 {-| The State type
@@ -128,7 +128,7 @@ dropdownWithSizeAndAttributes { id, labelText, requiredText, items, onChange, si
         requiredIndicator =
             requiredText
                 |> Maybe.map (\required -> span [ class [ "Required" ], title required ] [ text "*" ])
-                |> Maybe.withDefault HtmlExtra.none
+                |> Maybe.withDefault Html.Extra.nothing
 
         options =
             Dropdown.defaultOptions (onChange { onlyStateChange = False } state)

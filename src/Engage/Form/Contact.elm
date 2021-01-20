@@ -18,7 +18,6 @@ import Engage.Entity.Contact exposing (Contact, ContactType, ContactTypes)
 import Engage.Entity.PhoneNumber exposing (PhoneNumber)
 import Engage.Form.Address exposing (countryModifier)
 import Engage.Form.Field as Field
-import Engage.Html.Extra as HtmlExtra
 import Engage.ListItem as ListItem
 import Engage.Localization as Localization exposing (Localization)
 import Engage.Namespace as Namespace exposing (Namespace)
@@ -29,6 +28,7 @@ import Engage.UI.Input as Input
 import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (..)
 import Html.Attributes
+import Html.Extra
 import String
 import Validate
 
@@ -344,7 +344,7 @@ form originalNamespace localization field parentKey attributes (State state) con
                             (Maybe.map (.contactTypeId >> String.fromInt) contactData.contactType)
                         ]
                 )
-            |> Maybe.withDefault HtmlExtra.none
+            |> Maybe.withDefault Html.Extra.nothing
         , div [ class [ "FieldGroup" ] ]
             [ Field.textField
                 { namespace = namespace

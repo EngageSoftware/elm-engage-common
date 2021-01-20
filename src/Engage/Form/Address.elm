@@ -27,7 +27,6 @@ import Engage.Entity.Address as Address exposing (Address, AddressLike, AddressT
 import Engage.Entity.PhoneNumber exposing (PhoneNumber)
 import Engage.Form.Field as Field
 import Engage.Form.HideOrShow exposing (HideOrShow, Visibility(..))
-import Engage.Html.Extra as HtmlExtra
 import Engage.ListItem as ListItem exposing (ListItem)
 import Engage.Localization as Localization exposing (Localization)
 import Engage.Namespace as Namespace exposing (Namespace)
@@ -38,6 +37,7 @@ import Engage.UI.Input as Input
 import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Extra
 import String exposing (..)
 import Validate
 
@@ -428,10 +428,10 @@ form originalNamespace localization field parentKey attributes (State state) hid
                             (Maybe.map (.addressTypeId >> String.fromInt) addressData.addressType)
                         ]
                 )
-            |> Maybe.withDefault HtmlExtra.none
+            |> Maybe.withDefault Html.Extra.nothing
         , div [ class [ "FieldGroup" ], addressNameDisplayStyle ]
             [ attribute.hideAddressName
-                |> Engage.Bool.true HtmlExtra.none
+                |> Engage.Bool.true Html.Extra.nothing
                 |> Engage.Bool.false
                     (Field.textFieldWithAttributes
                         { namespace = namespace
@@ -529,7 +529,7 @@ form originalNamespace localization field parentKey attributes (State state) hid
             ]
         , div [ class [ "FieldGroup" ] ]
             [ attribute.hideAddressPhone
-                |> Engage.Bool.true HtmlExtra.none
+                |> Engage.Bool.true Html.Extra.nothing
                 |> Engage.Bool.false
                     (Field.phoneField
                         { namespace = namespace
@@ -546,7 +546,7 @@ form originalNamespace localization field parentKey attributes (State state) hid
                         addressData.phone
                     )
             , attribute.hideFax
-                |> Engage.Bool.true HtmlExtra.none
+                |> Engage.Bool.true Html.Extra.nothing
                 |> Engage.Bool.false
                     (Field.phoneField
                         { namespace = namespace
@@ -563,7 +563,7 @@ form originalNamespace localization field parentKey attributes (State state) hid
                         addressData.fax
                     )
             , attribute.hideWebsite
-                |> Engage.Bool.true HtmlExtra.none
+                |> Engage.Bool.true Html.Extra.nothing
                 |> Engage.Bool.false
                     (Field.textField
                         { namespace = namespace
@@ -579,7 +579,7 @@ form originalNamespace localization field parentKey attributes (State state) hid
                     )
             ]
         , attribute.hidePrimaryAddressCheckbox
-            |> Engage.Bool.true HtmlExtra.none
+            |> Engage.Bool.true Html.Extra.nothing
             |> Engage.Bool.false
                 (div [ class [ "FieldGroup" ] ]
                     [ primaryAddressCheckbox namespace localization field parentKey (State state) addressData ]
@@ -600,7 +600,7 @@ form originalNamespace localization field parentKey attributes (State state) hid
                         addressData.includeInInternalDirectory
                     ]
                 )
-            |> Engage.Bool.false HtmlExtra.none
+            |> Engage.Bool.false Html.Extra.nothing
         , attribute.showIncludeInExternalDirectory
             |> Engage.Bool.true
                 (div [ class [ "FieldGroup" ] ]
@@ -617,7 +617,7 @@ form originalNamespace localization field parentKey attributes (State state) hid
                         addressData.includeInExternalDirectory
                     ]
                 )
-            |> Engage.Bool.false HtmlExtra.none
+            |> Engage.Bool.false Html.Extra.nothing
         ]
 
 

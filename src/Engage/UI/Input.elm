@@ -56,7 +56,6 @@ module Engage.UI.Input exposing
 import Date exposing (Date)
 import Engage.CssHelpers
 import Engage.Entity.PhoneNumber exposing (PhoneNumber)
-import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.String
 import Engage.Styles.Class exposing (Class(..), Importance(..), Size(..), getSizeString)
@@ -67,6 +66,7 @@ import Engage.UI.Message as Message
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Html.Extra
 import Html.Styled.Attributes exposing (fromUnstyled)
 import Input.BigNumber
 import Input.Number
@@ -75,10 +75,9 @@ import IntlPhoneInput
 import IntlPhoneInput.Config
 import Json.Decode exposing (succeed)
 import Json.Decode.Pipeline exposing (requiredAt)
-import List.Extra
 import Maybe.Extra
 import Set exposing (Set)
-import Zxcvbn exposing (ZxcvbnResult)
+import Zxcvbn
 
 
 {-| A State type
@@ -793,7 +792,7 @@ checkboxWithAttributes { namespace, labelText, onCheck, status, state, requiredT
         requiredIndicator =
             requiredText
                 |> Maybe.map (\required -> span [ class [ "Required" ], title required ] [ Html.text "*" ])
-                |> Maybe.withDefault HtmlExtra.none
+                |> Maybe.withDefault Html.Extra.nothing
     in
     div [ class [ "CheckBoxContainer" ] ]
         [ Error.error { namespace = namespace } status
@@ -833,9 +832,6 @@ radioList ({ namespace, labelText, onChange, items } as args) state selectedValu
             namespace
                 |> Namespace.toString
                 |> Engage.CssHelpers.withNamespace
-
-        namespacedId =
-            Namespace.toString namespace ++ args.id
 
         stateData =
             unwrap state
@@ -986,7 +982,7 @@ file args (State state) fileInfo =
                 , progressIndicator args fileInfo
                 ]
             )
-            HtmlExtra.none
+            Html.Extra.nothing
         ]
 
 
@@ -996,7 +992,7 @@ progressIndicator : { a | namespace : Namespace } -> FileInfo -> Html msg
 progressIndicator args fileInfo =
     fileInfo.progressPercentage
         |> Maybe.map (\value -> Loading.progress args { max = 100.0, value = value })
-        |> Maybe.withDefault HtmlExtra.none
+        |> Maybe.withDefault Html.Extra.nothing
 
 
 toCheckBox : { namespace : Namespace, onChange : Set String -> msg, labelText : String } -> Set String -> { id : String, content : Html msg } -> Html msg

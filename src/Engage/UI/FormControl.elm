@@ -7,7 +7,6 @@ module Engage.UI.FormControl exposing (formControl, groupFormControl, labelWrapp
 -}
 
 import Engage.CssHelpers
-import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.Styles.Class exposing (Class(..), Size(..), getSizeString)
 import Engage.UI.Error as Error exposing (Status(..))
@@ -16,6 +15,7 @@ import Engage.UI.MessageType as MessageType
 import Html exposing (..)
 import Html.Attributes exposing (for, id, title)
 import Html.Attributes.Aria as Aria
+import Html.Extra
 import String
 
 
@@ -119,7 +119,7 @@ requiredIndicator args =
     in
     args.requiredText
         |> Maybe.map (\required -> span [ class [ "Required" ], title required ] [ text "*" ])
-        |> Maybe.withDefault HtmlExtra.none
+        |> Maybe.withDefault Html.Extra.nothing
 
 
 helpMessage : Args a msg -> Message.State -> Html msg
@@ -143,17 +143,17 @@ helpMessage args state =
                 help
 
             else
-                HtmlExtra.none
+                Html.Extra.nothing
 
         None { infos } ->
             if not isHelpTextEmpty && List.isEmpty infos then
                 help
 
             else
-                HtmlExtra.none
+                Html.Extra.nothing
 
         Error _ ->
-            HtmlExtra.none
+            Html.Extra.nothing
 
         Error.Ok ->
-            HtmlExtra.none
+            Html.Extra.nothing

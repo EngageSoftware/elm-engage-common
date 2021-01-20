@@ -12,14 +12,14 @@ import Html.Events
 import Json.Decode
 
 
-{-| Get an empty Html
+{-| DEPRECATED: To be removed in 9.0.0
 -}
 none : Html.Html msg
 none =
     Html.text ""
 
 
-{-| Get a stylesheet html tag
+{-| DEPRECATED: To be removed in 9.0.0
 -}
 stylesheet : String -> Html.Html msg
 stylesheet href =

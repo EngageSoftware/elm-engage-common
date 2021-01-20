@@ -13,7 +13,6 @@ module Engage.UI.Wizard exposing
 
 import Dict
 import Engage.CssHelpers
-import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.SelectDict as SelectDict exposing (SelectDict)
 import Engage.UI.Button as Button
@@ -22,6 +21,7 @@ import Engage.UI.Svg as Svg
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Html.Extra
 import Json.Decode
 import Maybe.Extra
 import Mustache
@@ -174,15 +174,12 @@ wizard ({ namespace, state, shoppingCart } as args) steps =
                 |> Engage.CssHelpers.withNamespace
     in
     section [ class [ "Wizard" ] ]
-        ([ wizardHeader args state steps
-         ]
-            ++ [ viewStep args state steps
-               , errorMessage args steps
-               , navigationControl args state steps
-               ]
-            ++ [ shoppingCart.content
-               ]
-        )
+        [ wizardHeader args state steps
+        , viewStep args state steps
+        , errorMessage args steps
+        , navigationControl args state steps
+        , shoppingCart.content
+        ]
 
 
 viewStep : { a | namespace : Namespace, config : Config msg model } -> State -> SelectDict Int (Step model) -> Html msg
@@ -429,7 +426,7 @@ previousButton { namespace, config } (State stateData) steps =
     in
     case prev of
         Nothing ->
-            HtmlExtra.none
+            Html.Extra.nothing
 
         Just ( prevStepId, prevStep ) ->
             if shouldReview prevStep config then
@@ -547,9 +544,6 @@ nextButton { namespace, config, isLoading } (State stateData) steps =
 renderTemplate : Config msg model -> SelectDict Int (Step model) -> String -> String
 renderTemplate config steps template =
     let
-        next =
-            SelectDict.getAfter steps |> Dict.values |> List.head
-
         before =
             SelectDict.getBefore steps
 
@@ -715,11 +709,6 @@ getNextStep steps =
         |> SelectDict.getAfter
         |> Dict.toList
         |> List.head
-
-
-isFirstPage : SelectDict Int (Page mode) -> Bool
-isFirstPage pages =
-    pages |> SelectDict.getBefore |> Dict.isEmpty
 
 
 getPrevTitle : SelectDict Int (Step model) -> Maybe String

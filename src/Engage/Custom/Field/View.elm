@@ -10,7 +10,6 @@ import Engage.Custom.Types exposing (..)
 import Engage.Entity.Address as Address
 import Engage.Form.Address as Address
 import Engage.Form.MembershipTypeList as MembershipTypeList
-import Engage.Html.Extra as HtmlExtra
 import Engage.Localization as Localization
 import Engage.Namespace as Namespace
 import Engage.String
@@ -21,6 +20,7 @@ import Engage.UI.Info as Info
 import Engage.UI.Input as Input
 import Engage.Validation exposing (ValidationErrors)
 import Html exposing (Html)
+import Html.Extra
 import Markdown
 import Set
 import String
@@ -62,10 +62,10 @@ fieldForm args ( form, section, fieldGroup ) field =
     Html.div [ class [ fieldClass form section fieldGroup field, fieldLabelClass field ] ]
         [ case field.disable of
             Hidden ->
-                HtmlExtra.none
+                Html.Extra.nothing
 
             Disabled ->
-                HtmlExtra.none
+                Html.Extra.nothing
 
             None ->
                 case field.fieldType of
@@ -582,14 +582,6 @@ dropdownWithItems { config, validations } state { form, section, fieldGroup, fie
         }
         state
         (FieldHelpers.getValue field |> Maybe.andThen List.head)
-
-
-viewEntry : { a | config : Config msg, validations : ValidationErrors { fieldId : Int } } -> Field -> Html msg
-viewEntry _ field =
-    field
-        |> FieldHelpers.getValue
-        |> Maybe.map (String.join ", " >> Html.text)
-        |> Maybe.withDefault HtmlExtra.none
 
 
 view : Config msg -> FieldGroup -> List (Html msg)

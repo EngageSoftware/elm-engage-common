@@ -11,10 +11,10 @@ import Engage.CssHelpers
 import Engage.Custom.Field exposing (FieldData)
 import Engage.Custom.Section as Section
 import Engage.Custom.Types exposing (..)
-import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace
 import Engage.Validation as Validation exposing (ValidationErrors)
 import Html exposing (Html)
+import Html.Extra
 
 
 class =
@@ -27,10 +27,6 @@ class =
 -}
 view : Config msg -> Form -> Html msg
 view config formValue =
-    let
-        showSectionName =
-            Dict.size formValue.sections > 1
-    in
     formValue.sections
         |> Dict.values
         |> List.sortBy .relativeOrder
@@ -54,7 +50,7 @@ formView config formValue =
 
         title =
             if Dict.isEmpty formValue.sections then
-                HtmlExtra.none
+                Html.Extra.nothing
 
             else
                 Html.h3 [] [ Html.text formValue.name ]

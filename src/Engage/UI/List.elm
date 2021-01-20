@@ -4,6 +4,7 @@ import Engage.CssHelpers
 import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Html exposing (..)
+import Html.Extra
 
 
 list : { namespace : Namespace } -> List (List (Html msg)) -> Html msg
@@ -15,7 +16,7 @@ list { namespace } items =
                 |> Engage.CssHelpers.withNamespace
     in
     if List.isEmpty items then
-        HtmlExtra.none
+        Html.Extra.nothing
 
     else
         ul [ class [ "List" ] ] (items |> List.map (listItem { namespace = namespace }))

@@ -16,7 +16,6 @@ import Engage.Entity.Address exposing (Address, Countries, RegionsCountry)
 import Engage.Entity.PhoneNumber as PhoneNumber exposing (PhoneNumber)
 import Engage.Form.Address
 import Engage.Form.FormAction as FormAction
-import Engage.Html.Extra as HtmlExtra
 import Engage.Localization exposing (Localization)
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.Attribute as Attribute
@@ -24,6 +23,7 @@ import Engage.UI.Button as Button
 import Engage.UI.Info as Info
 import Html exposing (..)
 import Html.Events exposing (onClick)
+import Html.Extra
 import IntlPhoneInput.Config
 import String
 
@@ -132,7 +132,7 @@ nameView namespace attribute =
             attribute.name |> Maybe.withDefault ""
     in
     if nameValue |> String.trim |> String.isEmpty then
-        HtmlExtra.none
+        Html.Extra.nothing
 
     else
         h3 [ class [ "AccountName" ] ] [ text nameValue ]
@@ -146,14 +146,14 @@ addressView ({ namespace } as args) attribute =
 
         do label addressValue =
             if isEmpty addressValue then
-                HtmlExtra.none
+                Html.Extra.nothing
 
             else
                 Info.multiple namespace (Info.getLabel label) [ Engage.Form.Address.view args addressValue ]
     in
     attribute.address
         |> Maybe.map (\( label, addressValue ) -> do label addressValue)
-        |> Maybe.withDefault HtmlExtra.none
+        |> Maybe.withDefault Html.Extra.nothing
 
 
 phoneView : Namespace -> InternalAttribute msg -> Html msg
@@ -166,7 +166,7 @@ phoneView namespace attribute =
     in
     attribute.phoneNumber
         |> Maybe.map (\( label, phoneValue ) -> div [ class [ "AccountPhone" ] ] [ Info.phone namespace (Info.getLabel label) (PhoneNumber.format phoneConfig phoneValue) ])
-        |> Maybe.withDefault HtmlExtra.none
+        |> Maybe.withDefault Html.Extra.nothing
 
 
 actionView : Namespace -> InternalAttribute msg -> Html msg
@@ -189,7 +189,7 @@ actionView namespace attribute =
                             }
                         ]
                 )
-            |> Maybe.withDefault HtmlExtra.none
+            |> Maybe.withDefault Html.Extra.nothing
         ]
         []
 

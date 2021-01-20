@@ -12,12 +12,12 @@ module Engage.UI.Error exposing
 -}
 
 import Engage.CssHelpers
-import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace exposing (Namespace)
 import Engage.UI.List as List
 import Engage.UI.Message as Message
 import Engage.UI.MessageType as MessageType
 import Html exposing (..)
+import Html.Extra
 
 
 
@@ -101,11 +101,11 @@ errorLocalized : { namespace : Namespace, localize : String -> String } -> Statu
 errorLocalized { namespace, localize } status =
     case status of
         Unknown ->
-            HtmlExtra.none
+            Html.Extra.nothing
 
         None { infos } ->
             if List.isEmpty infos then
-                HtmlExtra.none
+                Html.Extra.nothing
 
             else
                 Message.message
@@ -139,19 +139,13 @@ inlineError :
     -> Message.State
     -> Html msg
 inlineError { namespace, status, onChange } state =
-    let
-        class =
-            namespace
-                |> Namespace.toString
-                |> Engage.CssHelpers.withNamespace
-    in
     case status of
         Unknown ->
-            HtmlExtra.none
+            Html.Extra.nothing
 
         None { infos } ->
             if List.isEmpty infos then
-                HtmlExtra.none
+                Html.Extra.nothing
 
             else
                 Message.controlMessage
@@ -182,7 +176,7 @@ inlineError { namespace, status, onChange } state =
                 , onChange = onChange
                 }
                 state
-                HtmlExtra.none
+                Html.Extra.nothing
 
 
 

@@ -19,10 +19,10 @@ import Engage.Custom.Field.Json exposing (fieldGroupDecoder)
 import Engage.Custom.Field.Validation as Field
 import Engage.Custom.Field.View as Field
 import Engage.Custom.Types exposing (..)
-import Engage.Html.Extra as HtmlExtra
 import Engage.Namespace as Namespace
 import Engage.Validation exposing (ValidationErrors)
 import Html exposing (Html)
+import Html.Extra
 import Json.Decode as Decode exposing (..)
 import Json.Decode.Pipeline exposing (..)
 
@@ -60,7 +60,7 @@ form args formValue section =
                 Html.legend [] [ Html.text section.name ]
 
             else
-                HtmlExtra.none
+                Html.Extra.nothing
     in
     Html.fieldset [ class [ "FormSection" ] ]
         (legend
@@ -91,7 +91,7 @@ nameView args section =
         Html.li [] [ Html.strong [] [ Html.text section.name ] ]
 
     else
-        HtmlExtra.none
+        Html.Extra.nothing
 
 
 update : Query a -> (Field -> Field) -> Form -> Section -> Section

@@ -20,6 +20,7 @@ import Engage.UI.Svg as Svg
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
+import Html.Extra
 import Html.Keyed
 import Json.Decode
 import Svg.Attributes
@@ -205,7 +206,7 @@ dropZoneView namespace attribute domId =
             text ""
         , attribute.onLoad
             |> Maybe.map (\msg -> HtmlExtra.domLoadNotifier (msg domId))
-            |> Maybe.withDefault HtmlExtra.none
+            |> Maybe.withDefault Html.Extra.nothing
         ]
 
 
@@ -239,7 +240,7 @@ pictureView namespace pictureData =
                 |> Engage.CssHelpers.withNamespace
     in
     if String.isEmpty pictureData then
-        HtmlExtra.none
+        Html.Extra.nothing
 
     else
         img [ class [ "PictureUploadPreview" ], src pictureData ] []
@@ -249,4 +250,4 @@ browseButton : Namespace -> InternalAttribute msg -> Html msg
 browseButton namespace attribute =
     attribute.browseButton
         |> Maybe.map (\{ text, msg } -> Button.standardSmall { attributes = [ onClick msg ], text = text, namespace = namespace })
-        |> Maybe.withDefault HtmlExtra.none
+        |> Maybe.withDefault Html.Extra.nothing
