@@ -3,7 +3,7 @@
     "name": "EngageSoftware/elm-engage-common",
     "summary": "Engage's common UI framework components",
     "license": "Apache-2.0",
-    "version": "8.3.0",
+    "version": "8.2.8",
     "exposed-modules": [
         "Engage.ListData",
         "Engage.ListItem",
