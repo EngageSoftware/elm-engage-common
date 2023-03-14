@@ -86,13 +86,27 @@ format config phoneNumber =
         dialCode =
             case Dict.get (String.toUpper phoneNumber.isoCode) config.countries |> Maybe.map .dialCode of
                 Just code ->
-                    "+" ++ code
+                    if code /= "1" then
+                        "+" ++ code
+                    else
+                        ""
 
                 Nothing ->
                     ""
+        number = 
+            space (formatAmericanPhone phoneNumber.phoneNumber)
     in
     if isEmpty phoneNumber then
         ""
 
     else
-        dialCode |> space phoneNumber.phoneNumber |> String.trim
+        dialCode |> number |> String.trim
+
+
+formatAmericanPhone : String -> String
+formatAmericanPhone phoneNumber = 
+    if String.length phoneNumber == 10 then
+        String.join "-" [String.left 3 phoneNumber, String.slice 3 6 phoneNumber, String.slice 6 10 phoneNumber]
+
+    else
+        phoneNumber
