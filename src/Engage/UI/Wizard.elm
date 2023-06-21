@@ -250,8 +250,8 @@ renderBeforePage config state pageId page =
     page.model |> config.beforePageRenderer
 
 
-wizardHeader : { a | namespace : Namespace, config : Config msg model } -> State -> SelectDict Int (Step model) -> Html msg
-wizardHeader ({ namespace } as args) state steps =
+wizardHeader : { a | namespace : Namespace, config : Config msg model, localize : String -> String } -> State -> SelectDict Int (Step model) -> Html msg
+wizardHeader ({ namespace, localize } as args) state steps =
     let
         class =
             namespace
@@ -263,6 +263,7 @@ wizardHeader ({ namespace } as args) state steps =
             [ steps
                 |> SelectDict.selectedValue
                 |> getStepTitle
+                |> localize
                 |> text
             ]
         , navigation args state steps
