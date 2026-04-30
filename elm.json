@@ -4,6 +4,7 @@
     "summary": "Engage's common UI framework components",
     "license": "Apache-2.0",
     "version": "8.2.9",
+    "elm-version": "0.19.0 <= v < 0.20.0",
     "exposed-modules": [
         "Engage.ListData",
         "Engage.ListItem",
@@ -68,7 +69,6 @@
         "Engage.Pattern.CardCollector",
         "Engage.Svg.CssHelpers"
     ],
-    "elm-version": "0.19.0 <= v < 0.20.0",
     "dependencies": {
         "EngageSoftware/elm-dnn-http": "2.0.0 <= v < 3.0.0",
         "EngageSoftware/elm-dnn-localization": "1.0.2 <= v < 2.0.0",
@@ -102,5 +102,7 @@
         "rtfeldman/elm-css": "16.1.0 <= v < 17.0.0",
         "rtfeldman/elm-validate": "4.0.1 <= v < 5.0.0"
     },
-    "test-dependencies": {}
+    "test-dependencies": {
+        "elm-explorations/test": "2.0.0 <= v < 3.0.0"
+    }
 }
