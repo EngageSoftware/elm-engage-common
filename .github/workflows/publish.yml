@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Elm Publish
-      uses: dillonkearns/elm-publish-action@1.0.1
-      with:
-        github-token: ${{ GITHUB_TOKEN }}
+      - name: Elm Publish
+        uses: dillonkearns/elm-publish-action@1.0.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

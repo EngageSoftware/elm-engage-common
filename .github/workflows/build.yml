@@ -14,10 +14,12 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup Elm
-        uses: youcefs21/setup-elm@1.2.1
+        uses: mpizenberg/elm-tooling-action@289c229bc9d81512230e8b827df4c78398e08113 # v1.7
+        with:
+          cache-key: elm-home-${{ hashFiles('elm-tooling.json', 'elm.json', 'review/elm.json') }}
 
       - name: Run Elm Review
-        run: elm-review
+        run: npx --yes elm-review
 
       - name: Build the project
-        run: elm make
+        run: npx elm make

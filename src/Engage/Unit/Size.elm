@@ -1,4 +1,4 @@
-module Engage.Unit.Size exposing (Size(..), auto, em, fontSize, map, notSet, px, toCss, zero)
+module Engage.Unit.Size exposing (Size, auto, em, fontSize, map, notSet, px, toCss, zero)
 
 import Css
 
