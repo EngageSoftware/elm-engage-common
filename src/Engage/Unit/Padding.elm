@@ -1,4 +1,4 @@
-module Engage.Unit.Padding exposing (Padding(..), fromList, notSet, padding, padding2, padding3, padding4, toCss, toList)
+module Engage.Unit.Padding exposing (Padding, fromList, notSet, padding, padding2, padding3, padding4, toCss, toList)
 
 import Css
 import Engage.Unit.Size as Size exposing (..)

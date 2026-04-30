@@ -1,4 +1,4 @@
-module Engage.Unit.Relative exposing (Relative(..), applyToMargin, applyToPadding, applyToSize, relative, relative4)
+module Engage.Unit.Relative exposing (Relative, applyToMargin, applyToPadding, applyToSize, relative, relative4)
 
 import Engage.Unit.Margin as Margin exposing (Margin)
 import Engage.Unit.Padding as Padding exposing (Padding)
