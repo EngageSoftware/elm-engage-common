@@ -11,15 +11,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v2
 
       - name: Setup Elm
         uses: mpizenberg/elm-tooling-action@289c229bc9d81512230e8b827df4c78398e08113 # v1.7
         with:
           cache-key: elm-home-${{ hashFiles('elm-tooling.json', 'elm.json', 'review/elm.json') }}
 
-      - name: Run Elm Review
+      - name: elm-review
         run: npx --yes elm-review
 
-      - name: Build the project
+      - name: elm make
         run: npx elm make
+
+      - name: elm-test-rs
+        run: npx elm-test-rs
