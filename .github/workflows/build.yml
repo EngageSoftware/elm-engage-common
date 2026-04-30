@@ -2,22 +2,22 @@ name: Compile Elm Sources
 
 on:
   push:
-    branches: [ master ]
+    branches: [main]
   pull_request:
-    branches: [ master ]
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: Setup Elm
-      uses: youcefs21/setup-elm@1.2.1
-    
-    - name: Run Elm Review
-      run: elm-review
+      - uses: actions/checkout@v2
 
-    - name: Build the project
-      run: elm make
+      - name: Setup Elm
+        uses: youcefs21/setup-elm@1.2.1
+
+      - name: Run Elm Review
+        run: elm-review
+
+      - name: Build the project
+        run: elm make
