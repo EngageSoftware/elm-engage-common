@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: init
-        uses: ./.github/workflows/_init.yml
+        uses: ./.github/actions/init
 
       - name: elm-review
         run: pnpm run lint

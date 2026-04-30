@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: init
-        uses: ./.github/workflows/_init.yml
+        uses: ./.github/actions/init
 
       - name: Elm Publish
         uses: dillonkearns/elm-publish-action@deab1ae44c3ce214c27183060bbccd7c98d3b1f1 # v2.1.0
