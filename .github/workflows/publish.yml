@@ -1,5 +1,7 @@
 name: Publish Elm Package
 
+permissions: {}
+
 on:
   release:
     types: [published]
