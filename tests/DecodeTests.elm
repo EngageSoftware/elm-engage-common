@@ -32,5 +32,11 @@ suite =
                 "2026-04-30"
                 """
                         |> Expect.equal (Ok (Date.fromCalendarDate 2026 Apr 30))
+            , test "Decodes ISO date/time" <|
+                \_ ->
+                    Decode.decodeString isoDateDecoder """
+                "2025-05-27T10:21:00.607"
+                """
+                        |> Expect.equal (Ok (Date.fromCalendarDate 2025 May 27))
             ]
         ]
