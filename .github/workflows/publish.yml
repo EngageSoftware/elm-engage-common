@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - name: checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Setup Elm
         uses: mpizenberg/elm-tooling-action@289c229bc9d81512230e8b827df4c78398e08113 # v1.7
@@ -17,6 +18,6 @@ jobs:
           cache-key: elm-home-${{ hashFiles('elm-tooling.json', 'elm.json', 'review/elm.json') }}
 
       - name: Elm Publish
-        uses: dillonkearns/elm-publish-action@v2.1.0
+        uses: dillonkearns/elm-publish-action@deab1ae44c3ce214c27183060bbccd7c98d3b1f1 # v2.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
