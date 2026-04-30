@@ -11,6 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Setup Elm
+        uses: mpizenberg/elm-tooling-action@289c229bc9d81512230e8b827df4c78398e08113 # v1.7
+        with:
+          cache-key: elm-home-${{ hashFiles('elm-tooling.json', 'elm.json', 'review/elm.json') }}
+
       - name: Elm Publish
         uses: dillonkearns/elm-publish-action@v2.1.0
         with:
