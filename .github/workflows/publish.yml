@@ -13,6 +13,7 @@ concurrency:
 jobs:
   publish:
     name: Publish
+    runs-on: ubuntu-latest
     steps:
       - name: init
         uses: ./.github/workflows/_init.yml

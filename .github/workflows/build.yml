@@ -15,6 +15,7 @@ concurrency:
 jobs:
   build:
     name: Build, Lint, Test
+    runs-on: ubuntu-latest
     steps:
       - name: init
         uses: ./.github/workflows/_init.yml
