@@ -19,7 +19,7 @@ jobs:
           cache-key: elm-home-${{ hashFiles('elm-tooling.json', 'elm.json', 'review/elm.json') }}
 
       - name: Run Elm Review
-        run: npx elm-review --yes
+        run: npx --yes elm-review
 
       - name: Build the project
         run: npx elm make
