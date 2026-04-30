@@ -12,6 +12,6 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Elm Publish
-        uses: dillonkearns/elm-publish-action@1.0.1
+        uses: dillonkearns/elm-publish-action@v2.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
