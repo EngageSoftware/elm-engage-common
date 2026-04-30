@@ -53,3 +53,4 @@ jobs:
         uses: dillonkearns/elm-publish-action@deab1ae44c3ce214c27183060bbccd7c98d3b1f1 # v2.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-elm: ./node_modules/.bin/elm
