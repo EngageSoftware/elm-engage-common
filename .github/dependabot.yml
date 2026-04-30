@@ -9,11 +9,17 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
   - package-ecosystem: "elm"
     directory: "/"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
   - package-ecosystem: "elm"
     directory: "/review/"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
