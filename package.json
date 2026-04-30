@@ -1,0 +1,20 @@
+{
+  "name": "elm-engage-common",
+  "version": "8.2.10",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "build": "elm make",
+    "lint": "elm-review",
+    "test": "elm-test-rs"
+  },
+  "keywords": [
+    "elm"
+  ],
+  "author": "Engage Software",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@11.0.2+sha512.6926cf7cd7812b2800e3a210551b5ec845f77ebeba816424a95014de3021d193b3b55c5b4b74bac4eba106979e798aa0505646181ce67247507312532a661787",
+  "devDependencies": {
+    "elm-review": "^2.13.5"
+  }
+}
