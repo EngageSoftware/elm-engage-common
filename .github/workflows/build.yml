@@ -49,7 +49,7 @@ jobs:
           NO_ELM_TOOLING_INSTALL: 1
 
       - name: elm-tooling install
-        run: pnpm run elm-tooling install
+        run: pnpm exec elm-tooling install
 
       - name: elm-review
         run: pnpm run lint
