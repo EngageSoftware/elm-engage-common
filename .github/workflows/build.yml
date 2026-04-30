@@ -27,9 +27,12 @@ jobs:
 
       - name: elm-review
         run: pnpm run lint
+        shell: pwsh
 
       - name: elm make
         run: pnpm run build
+        shell: pwsh
 
       - name: elm-test-rs
         run: pnpm run test
+        shell: pwsh

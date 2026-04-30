@@ -7,7 +7,8 @@ runs:
   using: composite
   steps:
     - name: Set ELM_HOME
-      run: echo "ELM_HOME=${{ github.workspace }}/.elm" >> $GITHUB_ENV
+      run: "'ELM_HOME=${{ github.workspace }}/.elm' >> $GITHUB_ENV"
+      shell: pwsh
 
     - name: Setup pnpm
       uses: pnpm/action-setup@903f9c1a6ebcba6cf41d87230be49611ac97822e # v6.0.3
@@ -28,8 +29,10 @@ runs:
 
     - name: pnpm install
       run: pnpm install
+      shell: pwsh
       env:
         NO_ELM_TOOLING_INSTALL: 1
 
     - name: elm-tooling install
       run: pnpm exec elm-tooling install
+      shell: pwsh
