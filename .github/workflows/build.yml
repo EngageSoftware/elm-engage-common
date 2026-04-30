@@ -1,4 +1,4 @@
-name: Compile Elm Sources
+name: Build, Lint, Test Elm Package
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    name: Build, Lint, Test
     runs-on: ubuntu-latest
 
     env:
